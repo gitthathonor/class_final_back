@@ -18,4 +18,4 @@ spring:
 
 logging:
   level:
-    '[site.hobbyup.class_final_back]': INFO
+    '[site.hobbyup.class_final_back]': DEBUG

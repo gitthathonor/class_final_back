@@ -22,30 +22,29 @@ import site.hobbyup.class_final_back.domain.user.User;
 @Table(name = "profile")
 @Entity
 public class Profile extends AuditingTime {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-  private String file;
-  private String introduction;
-  private String region;
-  private String certification;
-  private String career_year;
-  private String career;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String file;
+    private String introduction;
+    private String region;
+    private String certification;
+    private String career_year;
+    private String career;
+    @OneToOne(fetch = FetchType.LAZY)
+    private User user;
 
-  @OneToOne(fetch = FetchType.LAZY)
-  private User user;
-
-  @Builder
-  public Profile(Long id, String file, String introduction, String region, String certification, String career_year,
-      String career, User user) {
-    this.id = id;
-    this.file = file;
-    this.introduction = introduction;
-    this.region = region;
-    this.certification = certification;
-    this.career_year = career_year;
-    this.career = career;
-    this.user = user;
-  }
+    @Builder
+    public Profile(Long id, String file, String introduction, String region, String certification, String career_year,
+            String career, User user) {
+        this.id = id;
+        this.file = file;
+        this.introduction = introduction;
+        this.region = region;
+        this.certification = certification;
+        this.career_year = career_year;
+        this.career = career;
+        this.user = user;
+    }
 
 }
