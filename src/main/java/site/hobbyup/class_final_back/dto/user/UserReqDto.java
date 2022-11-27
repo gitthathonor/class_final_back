@@ -1,5 +1,9 @@
 package site.hobbyup.class_final_back.dto.user;
 
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -34,5 +38,21 @@ public class UserReqDto {
     public static class LoginReqDto {
         private String username;
         private String password;
+    }
+
+    @Setter
+    @Getter
+    public static class UpdateReqDto {
+        private String password;
+        private String email;
+        private String phoneNum;
+
+        public User toEntity() {
+            return User.builder()
+                    .password(password)
+                    .email(email)
+                    .phoneNum(phoneNum)
+                    .build();
+        }
     }
 }

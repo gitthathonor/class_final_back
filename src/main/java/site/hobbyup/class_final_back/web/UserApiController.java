@@ -4,14 +4,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import site.hobbyup.class_final_back.dto.ResponseDto;
 import site.hobbyup.class_final_back.dto.user.UserReqDto.JoinReqDto;
+import site.hobbyup.class_final_back.dto.user.UserReqDto.UpdateReqDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.JoinRespDto;
+import site.hobbyup.class_final_back.dto.user.UserRespDto.UpdateRespDto;
 import site.hobbyup.class_final_back.service.UserService;
 
 @RequiredArgsConstructor
@@ -22,8 +27,16 @@ public class UserApiController {
 
     @PostMapping("/api/join")
     public ResponseEntity<?> join(@RequestBody JoinReqDto joinReqDto) {
-        log.debug("디버그 : UserApiController join 실행됨");
-        JoinRespDto joinRespDto = userService.회원가입(joinReqDto);
+        log.debug("디버그 : UserApiController-join 실행됨");
+        JoinRespDto joinRespDto = userService.join(joinReqDto);
         return new ResponseEntity<>(new ResponseDto<>("회원가입성공", joinRespDto), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/api/user/{id}")
+    public ResponseEntity<?> updateUser(@RequestBody UpdateReqDto updateUser, @PathVariable Long id) {
+        log.debug("디버그 : UserApiController-updateUser 실행됨");
+        log.debug("디버그 : " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        UpdateRespDto updateRespDto = userService.updateUser(updateUser, id);
+        return new ResponseEntity<>(new ResponseDto<>("회원정보 수정완료", updateRespDto), HttpStatus.OK);
     }
 }
