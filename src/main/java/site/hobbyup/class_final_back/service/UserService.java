@@ -57,4 +57,13 @@ public class UserService {
 
         return new UserUpdateRespDto(userRepository.save(userOP));
     }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void deleteUser(Long id) {
+        User userPS = userRepository.findById(id)
+                .orElseThrow(() -> new CustomApiException("가입되지 않은 유저입니다.", HttpStatus.FORBIDDEN));
+
+        userRepository.deleteById(userPS.getId());
+    }
+
 }
