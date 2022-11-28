@@ -79,19 +79,20 @@ public class UserApiControllerTest {
 
   // }
 
-  @Test
-  public void deleteById_test() throws Exception {
-    // given
-    Long id = 1L;
+  // @Test
+  // public void deleteById_test() throws Exception {
+  // // given
+  // Long id = 1L;
 
-    // when
-    ResultActions resultActions = mvc
-        .perform(delete("/api/user/" + id)
-            .contentType(APPLICATION_JSON_UTF8));
-    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-    System.out.println("디버그 : " + responseBody);
+  // // when
+  // ResultActions resultActions = mvc
+  // .perform(delete("/api/user/" + id)
+  // .contentType(APPLICATION_JSON_UTF8));
+  // String responseBody =
+  // resultActions.andReturn().getResponse().getContentAsString();
+  // System.out.println("디버그 : " + responseBody);
 
-    // then
-    resultActions.andExpect(status().isOk());
-  }
+  // // then
+  // resultActions.andExpect(status().isOk());
+  // }
 }
