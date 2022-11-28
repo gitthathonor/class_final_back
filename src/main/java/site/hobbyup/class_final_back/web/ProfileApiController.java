@@ -26,23 +26,11 @@ public class ProfileApiController {
     private final ProfileService profileService;
 
     @PostMapping("/api/profile")
-    public ResponseEntity<?> saveProfile(@RequestPart(value = "file") MultipartFile file,
-            @RequestPart(value = "profileSaveReqDto") ProfileSaveReqDto profileSaveReqDto,
+    public ResponseEntity<?> saveProfile(ProfileSaveReqDto profileSaveReqDto,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : controller - 프로필 등록 시작");
-
-        // base64 인코딩
-        try {
-            Base64.Encoder encoder = Base64.getEncoder();
-            byte[] photoEncode = encoder.encode(file.getBytes());
-            String fileEncode = new String(photoEncode, "UTF8");
-            profileSaveReqDto.setFilePath(fileEncode);
-        } catch (Exception e) {
-            throw new RuntimeException("error");
-        }
         profileSaveReqDto.setUserId(loginUser.getUser().getId());
         log.debug("디버그 : service전달");
-        log.debug("디버그 : " + profileSaveReqDto.getUserId());
         ProfileSaveRespDto profileSaveRespDto = profileService.saveProfile(profileSaveReqDto);
         log.debug("디버그 : controller - 프로필 등록 끝");
         return new ResponseEntity<>(new ResponseDto<>("프로필 등록", profileSaveRespDto), HttpStatus.CREATED);
@@ -73,7 +61,6 @@ public class ProfileApiController {
     // log.debug("디버그 : controller - 프로필 등록 끝");
     // return new ResponseEntity<>(new ResponseDto<>("프로필 등록", profileSaveRespDto),
     // HttpStatus.CREATED);
-
     // }
 
     // @GetMapping("/api/profile")
