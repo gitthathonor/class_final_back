@@ -50,4 +50,14 @@ public class Profile extends AuditingTime {
         this.user = user;
     }
 
+    // public void update(ProfileUpdateReqDto profileUpdateReqDto) {
+    //     this.filePath = filePath;    // get으로 변경
+    //     this.introduction = introduction;
+    //     this.region = region;
+    //     this.certification = certification;
+    //     this.careerYear = careerYear;
+    //     this.career = career;
+    //     this.user = user;
+    // }
+
 }
