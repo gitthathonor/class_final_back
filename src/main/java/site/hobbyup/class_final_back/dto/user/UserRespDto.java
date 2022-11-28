@@ -41,14 +41,12 @@ public class UserRespDto {
     public static class UserUpdateRespDto {
         private Long id;
         private String username;
-        private String password;
         private String email;
         private String phoneNum;
 
         public UserUpdateRespDto(User user) {
             this.id = user.getId();
             this.username = user.getUsername();
-            this.password = user.getPassword();
             this.email = user.getEmail();
             this.phoneNum = user.getPhoneNum();
         }
