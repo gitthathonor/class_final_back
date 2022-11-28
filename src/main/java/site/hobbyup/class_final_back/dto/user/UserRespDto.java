@@ -38,14 +38,14 @@ public class UserRespDto {
 
     @Setter
     @Getter
-    public static class UpdateRespDto {
+    public static class UserUpdateRespDto {
         private Long id;
         private String username;
         private String password;
         private String email;
         private String phoneNum;
 
-        public UpdateRespDto(User user) {
+        public UserUpdateRespDto(User user) {
             this.id = user.getId();
             this.username = user.getUsername();
             this.password = user.getPassword();

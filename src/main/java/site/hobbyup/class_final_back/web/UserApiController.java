@@ -4,7 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -12,11 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import site.hobbyup.class_final_back.config.auth.LoginUser;
 import site.hobbyup.class_final_back.dto.ResponseDto;
 import site.hobbyup.class_final_back.dto.user.UserReqDto.JoinReqDto;
-import site.hobbyup.class_final_back.dto.user.UserReqDto.UpdateReqDto;
+import site.hobbyup.class_final_back.dto.user.UserReqDto.UserUpdateReqDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.JoinRespDto;
-import site.hobbyup.class_final_back.dto.user.UserRespDto.UpdateRespDto;
+import site.hobbyup.class_final_back.dto.user.UserRespDto.UserUpdateRespDto;
 import site.hobbyup.class_final_back.service.UserService;
 
 @RequiredArgsConstructor
@@ -33,10 +35,15 @@ public class UserApiController {
     }
 
     @PutMapping("/api/user/{id}")
-    public ResponseEntity<?> updateUser(@RequestBody UpdateReqDto updateUser, @PathVariable Long id) {
+    public ResponseEntity<?> updateUser(@RequestBody UserUpdateReqDto userUpdateReqDto, @PathVariable Long id) {
         log.debug("디버그 : UserApiController-updateUser 실행됨");
-        log.debug("디버그 : " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        UpdateRespDto updateRespDto = userService.updateUser(updateUser, id);
-        return new ResponseEntity<>(new ResponseDto<>("회원정보 수정완료", updateRespDto), HttpStatus.OK);
+        UserUpdateRespDto userUpdateRespDto = userService.updateUser(userUpdateReqDto, id);
+        return new ResponseEntity<>(new ResponseDto<>("회원정보 수정완료", userUpdateRespDto), HttpStatus.OK);
     }
+
+    @GetMapping(value = "/api/user/session")
+    public String getSessionUser(@AuthenticationPrincipal LoginUser loginUser) {
+        return "role : " + loginUser.getUser().getRole();
+    }
+
 }

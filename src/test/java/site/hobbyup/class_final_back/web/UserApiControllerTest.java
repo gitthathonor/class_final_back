@@ -52,4 +52,29 @@ public class UserApiControllerTest {
     resultActions.andExpect(status().isCreated());
     resultActions.andExpect(jsonPath("$.data.username").value("ssar"));
   }
+
+  // @Test
+  // public void updateUser_test() throws Exception {
+  // // given
+  // Long id = 1L;
+  // UserUpdateReqDto userUpdateReqDto = new UserUpdateReqDto();
+  // userUpdateReqDto.setPassword("4567");
+  // userUpdateReqDto.setEmail("ssar@naver.com");
+  // userUpdateReqDto.setPhoneNum("0215158989");
+  // String requestBody = om.writeValueAsString(userUpdateReqDto);
+
+  // // when
+  // ResultActions resultActions = mvc
+  // .perform(put("/api/user/" + id).content(requestBody)
+  // .contentType(APPLICATION_JSON_UTF8));
+  // String responseBody =
+  // resultActions.andReturn().getResponse().getContentAsString();
+  // System.out.println("디버그 : " + responseBody);
+
+  // // then
+  // resultActions.andExpect(status().isOk());
+  // resultActions.andExpect(jsonPath("$.data.email").value("ssar@naver.com"));
+  // resultActions.andExpect(jsonPath("$.data.phoneNum").value("0215158989"));
+
+  // }
 }
