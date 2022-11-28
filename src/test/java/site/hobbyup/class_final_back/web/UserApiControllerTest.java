@@ -1,5 +1,6 @@
 package site.hobbyup.class_final_back.web;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -77,4 +78,20 @@ public class UserApiControllerTest {
   // resultActions.andExpect(jsonPath("$.data.phoneNum").value("0215158989"));
 
   // }
+
+  @Test
+  public void deleteById_test() throws Exception {
+    // given
+    Long id = 1L;
+
+    // when
+    ResultActions resultActions = mvc
+        .perform(delete("/api/user/" + id)
+            .contentType(APPLICATION_JSON_UTF8));
+    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+    System.out.println("디버그 : " + responseBody);
+
+    // then
+    resultActions.andExpect(status().isOk());
+  }
 }

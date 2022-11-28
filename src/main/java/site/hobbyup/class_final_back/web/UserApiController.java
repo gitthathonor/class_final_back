@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,4 +47,10 @@ public class UserApiController {
         return "role : " + loginUser.getUser().getRole();
     }
 
+    @DeleteMapping("/api/user/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        log.debug("디버그 : UserApiController-deleteUser 실행됨");
+        userService.deleteUser(id);
+        return new ResponseEntity<>(new ResponseDto<>("회원 탈퇴 완료", null), HttpStatus.OK);
+    }
 }
