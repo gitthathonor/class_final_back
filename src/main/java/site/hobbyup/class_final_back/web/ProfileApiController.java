@@ -1,5 +1,6 @@
 package site.hobbyup.class_final_back.web;
 
+import java.io.IOException;
 import java.util.Base64;
 
 import org.slf4j.Logger;
@@ -27,7 +28,7 @@ public class ProfileApiController {
 
     @PostMapping("/api/profile")
     public ResponseEntity<?> saveProfile(ProfileSaveReqDto profileSaveReqDto,
-            @AuthenticationPrincipal LoginUser loginUser) {
+            @AuthenticationPrincipal LoginUser loginUser) throws IOException {
         log.debug("디버그 : controller - 프로필 등록 시작");
         profileSaveReqDto.setUserId(loginUser.getUser().getId());
         log.debug("디버그 : service전달");

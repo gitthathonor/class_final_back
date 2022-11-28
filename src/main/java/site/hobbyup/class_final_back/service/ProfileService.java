@@ -1,7 +1,9 @@
 package site.hobbyup.class_final_back.service;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -40,14 +42,11 @@ public class ProfileService {
         byte[] stringToByte = encodeFile.getBytes();
         byte[] decodeByte = Base64.decodeBase64(stringToByte);
 
-        // 이미지
-        fos = new FileOutputStream("C:\\Temp\\upload\\image.jpg"); // 현위치에 path명으로 파일 생성
+        // 이미지 저장  ~
+        fos = new FileOutputStream("C:\\Temp\\upload\\image.jpg"); // 현위치에 path명으로 파일생성
         fos.write(decodeByte, 0, decodeByte.length); // 파일에 buffer의 모든 내용 출력
         fos.close();
 
-        // 이미지 저장
-
-        log.debug("디버그 : " + profileSaveReqDto.getUserId());
         User userPS = userRepository.findById(profileSaveReqDto.getUserId())
                 .orElseThrow(
                         () -> new RuntimeException("유저가 존재하지 않습니다."));
