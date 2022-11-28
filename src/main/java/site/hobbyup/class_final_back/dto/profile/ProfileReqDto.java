@@ -10,21 +10,21 @@ public class ProfileReqDto {
     @Setter
     @Getter
     public static class ProfileSaveReqDto {
-        private String file;
+        private String filePath;
         private String introduction;
         private String region;
         private String certification;
-        private String career_year;
+        private String careerYear;
         private String career;
         private Long userId;
 
         public Profile toEntity(User user) {
             return Profile.builder()
-                    .file(file)
+                    .filePath(filePath)
                     .introduction(introduction)
                     .region(region)
                     .certification(certification)
-                    .career_year(career_year)
+                    .careerYear(careerYear)
                     .career(career)
                     .user(user)
                     .build();
