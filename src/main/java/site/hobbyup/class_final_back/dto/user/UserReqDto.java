@@ -35,4 +35,20 @@ public class UserReqDto {
         private String username;
         private String password;
     }
+
+    @Setter
+    @Getter
+    public static class UserUpdateReqDto {
+        private String password;
+        private String email;
+        private String phoneNum;
+
+        public User toEntity() {
+            return User.builder()
+                    .password(password)
+                    .email(email)
+                    .phoneNum(phoneNum)
+                    .build();
+        }
+    }
 }
