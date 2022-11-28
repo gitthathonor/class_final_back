@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.AuditingTime;
+import site.hobbyup.class_final_back.dto.user.UserReqDto.UserUpdateReqDto;
 
 @ToString
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -32,7 +33,7 @@ public class User extends AuditingTime {
     private String phoneNum;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private UserEnum role;
 
     @Builder
@@ -43,6 +44,12 @@ public class User extends AuditingTime {
         this.email = email;
         this.phoneNum = phoneNum;
         this.role = role;
+    }
+
+    public void update(UserUpdateReqDto userUpdateReqDto) {
+        this.password = userUpdateReqDto.getPassword();
+        this.email = userUpdateReqDto.getEmail();
+        this.phoneNum = userUpdateReqDto.getPhoneNum();
     }
 
 }
