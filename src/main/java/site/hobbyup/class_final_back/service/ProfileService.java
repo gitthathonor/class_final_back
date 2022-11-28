@@ -35,6 +35,7 @@ public class ProfileService {
         return new ProfileSaveRespDto(profilePS);
     }
 
+    // @Transactional
     // public ProfileDetailRespDto profile(Long id) {
     // log.debug("디버그 : service - 프로필 상세보기 시작");
     // Optional<Profile> profileOP = profileRepository.findById(id);
