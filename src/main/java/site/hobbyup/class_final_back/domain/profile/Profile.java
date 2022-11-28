@@ -1,5 +1,6 @@
 package site.hobbyup.class_final_back.domain.profile;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -25,6 +26,7 @@ public class Profile extends AuditingTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(columnDefinition = "LONGTEXT")
     private String file;
     private String introduction;
     private String region;

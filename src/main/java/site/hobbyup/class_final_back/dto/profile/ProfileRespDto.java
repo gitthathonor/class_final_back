@@ -9,6 +9,28 @@ public class ProfileRespDto {
 
     @Setter
     @Getter
+    public static class ProfileSaveRespDto {
+        private Long id;
+        private UserDto userId;
+
+        @Setter
+        @Getter
+        public static class UserDto {
+            private Long id;
+
+            public UserDto(User user) {
+                this.id = user.getId();
+            }
+        }
+
+        public ProfileSaveRespDto(Profile profile) {
+            this.id = profile.getId();
+            this.userId = new UserDto(profile.getUser());
+        }
+    }
+
+    @Setter
+    @Getter
     public static class ProfileDetailRespDto {
         private Long id;
         private UserDto user;
@@ -26,28 +48,6 @@ public class ProfileRespDto {
         }
 
         public ProfileDetailRespDto(Profile profile) {
-            this.id = profile.getId();
-            this.user = new UserDto(profile.getUser());
-        }
-    }
-
-    @Setter
-    @Getter
-    public static class ProfileSaveRespDto {
-        private Long id;
-        private UserDto user;
-
-        @Setter
-        @Getter
-        public static class UserDto {
-            private Long id;
-
-            public UserDto(User user) {
-                this.id = user.getId();
-            }
-        }
-
-        public ProfileSaveRespDto(Profile profile) {
             this.id = profile.getId();
             this.user = new UserDto(profile.getUser());
         }

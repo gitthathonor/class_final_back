@@ -11,9 +11,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import lombok.RequiredArgsConstructor;
+import site.hobbyup.class_final_back.config.auth.LoginUser;
 import site.hobbyup.class_final_back.config.jwt.JwtAuthenticationFilter;
 import site.hobbyup.class_final_back.config.jwt.JwtAuthorizationFilter;
 
+@RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
     private final Logger log = LoggerFactory.getLogger(getClass());
