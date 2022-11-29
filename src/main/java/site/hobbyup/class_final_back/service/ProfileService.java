@@ -52,7 +52,6 @@ public class ProfileService extends DecodeUtil {
     public ProfileDetailRespDto detailProfile(Long userId) {
         log.debug("디버그 : service - 프로필 상세보기 시작");
         Profile profilePS = profileRepository.findByUserId(userId);
-        log.debug("디버그 : service - 프로필 상세보기 끝");
         return new ProfileDetailRespDto(profilePS);
     }
 }

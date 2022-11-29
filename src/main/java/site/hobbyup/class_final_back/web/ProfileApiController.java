@@ -34,7 +34,6 @@ public class ProfileApiController {
         log.debug("디버그 : controller - 프로필 등록 시작");
         ProfileSaveRespDto profileSaveRespDto = profileService.saveProfile(profileSaveReqDto,
                 loginUser.getUser().getId());
-        log.debug("디버그 : user");
         log.debug("디버그 : controller - 프로필 등록 끝");
         return new ResponseEntity<>(new ResponseDto<>("프로필 등록", profileSaveRespDto), HttpStatus.CREATED);
     }
