@@ -39,7 +39,6 @@ public class ProfileService extends DecodeUtil {
         String filePath = saveDecodingImage(profileSaveReqDto.getFilePath());
 
         profileSaveReqDto.setFilePath(filePath);
-
         Profile profilePS = profileRepository.save(profileSaveReqDto
                 .toEntity(userPS));
         log.debug("디버그 : service - 프로필 등록 끝");

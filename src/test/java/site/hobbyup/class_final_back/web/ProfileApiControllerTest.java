@@ -26,6 +26,7 @@ import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.profile.ProfileReqDto.ProfileSaveReqDto;
+import site.hobbyup.class_final_back.util.DecodeUtil;
 
 @Sql("classpath:db/truncate.sql") // 롤백 대신 사용 (auto_increment 초기화 + 데이터 비우기)
 @ActiveProfiles("test")
@@ -44,6 +45,8 @@ public class ProfileApiControllerTest extends DummyEntity {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private static DecodeUtil decodeUtil;
 
     @Autowired
     private ProfileRepository profileRepository;
@@ -58,7 +61,10 @@ public class ProfileApiControllerTest extends DummyEntity {
     public void saveProfile_test() throws Exception {
         // given
         ProfileSaveReqDto profileSaveReqDto = new ProfileSaveReqDto();
-        profileSaveReqDto.setFilePath("");
+        String encodeFile = "";
+        String filePath = decodeUtil.saveDecodingImage(encodeFile);
+
+        profileSaveReqDto.setFilePath(filePath);
         profileSaveReqDto.setIntroduction("안녕하세요");
         profileSaveReqDto.setRegion("부산");
         profileSaveReqDto.setCertification("컴활");
@@ -77,5 +83,6 @@ public class ProfileApiControllerTest extends DummyEntity {
         // then
         resultActions.andExpect(status().isCreated());
         resultActions.andExpect(jsonPath("$.data.id").value(1L));
+        // path경로 나오는지 확인
     }
 }
