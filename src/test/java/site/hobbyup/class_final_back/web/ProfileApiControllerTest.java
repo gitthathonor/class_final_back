@@ -4,8 +4,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.Base64;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +20,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import site.hobbyup.class_final_back.config.dummy.DummyEntity;
-import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.profile.ProfileReqDto.ProfileSaveReqDto;
@@ -45,11 +42,6 @@ public class ProfileApiControllerTest extends DummyEntity {
 
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private static DecodeUtil decodeUtil;
-
-    @Autowired
-    private ProfileRepository profileRepository;
 
     @BeforeEach
     public void setUp() {
@@ -62,7 +54,7 @@ public class ProfileApiControllerTest extends DummyEntity {
         // given
         ProfileSaveReqDto profileSaveReqDto = new ProfileSaveReqDto();
         String encodeFile = "";
-        String filePath = decodeUtil.saveDecodingImage(encodeFile);
+        String filePath = DecodeUtil.saveDecodingImage(encodeFile);
 
         profileSaveReqDto.setFilePath(filePath);
         profileSaveReqDto.setIntroduction("안녕하세요");
@@ -83,6 +75,5 @@ public class ProfileApiControllerTest extends DummyEntity {
         // then
         resultActions.andExpect(status().isCreated());
         resultActions.andExpect(jsonPath("$.data.id").value(1L));
-        // path경로 나오는지 확인
     }
 }
