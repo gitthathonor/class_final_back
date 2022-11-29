@@ -33,7 +33,7 @@ public class User extends AuditingTime {
     private String phoneNum;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
+    @Column(nullable = false)
     private UserEnum role;
 
     @Builder

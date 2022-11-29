@@ -26,7 +26,7 @@ public class JwtAuthorizationFilterTest {
   private MockMvc mvc;
 
   @Test
-  public void authorizaion_success_test() throws Exception {
+  public void authorization_success_test() throws Exception {
     // given
     User user = User.builder().id(1L).role(UserEnum.USER).build();
     LoginUser loginUser = new LoginUser(user);
@@ -39,5 +39,17 @@ public class JwtAuthorizationFilterTest {
 
     // then
     resultActions.andExpect(status().isNotFound());
+  }
+
+  @Test
+  public void authorization_fail_test() throws Exception {
+    // given
+
+    // when
+    ResultActions resultActions = mvc
+        .perform(get("/api/user/test"));
+
+    // then
+    resultActions.andExpect(status().isForbidden());
   }
 }
