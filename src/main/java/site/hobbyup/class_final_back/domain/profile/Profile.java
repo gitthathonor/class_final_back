@@ -27,26 +27,37 @@ public class Profile extends AuditingTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(columnDefinition = "LONGTEXT")
-    private String file;
+    private String filePath;
     private String introduction;
     private String region;
     private String certification;
-    private String career_year;
+    private String careerYear;
     private String career;
     @OneToOne(fetch = FetchType.LAZY)
     private User user;
 
     @Builder
-    public Profile(Long id, String file, String introduction, String region, String certification, String career_year,
+    public Profile(Long id, String filePath, String introduction, String region, String certification,
+            String careerYear,
             String career, User user) {
         this.id = id;
-        this.file = file;
+        this.filePath = filePath;
         this.introduction = introduction;
         this.region = region;
         this.certification = certification;
-        this.career_year = career_year;
+        this.careerYear = careerYear;
         this.career = career;
         this.user = user;
     }
+
+    // public void update(ProfileUpdateReqDto profileUpdateReqDto) {
+    //     this.filePath = filePath;    // get으로 변경
+    //     this.introduction = introduction;
+    //     this.region = region;
+    //     this.certification = certification;
+    //     this.careerYear = careerYear;
+    //     this.career = career;
+    //     this.user = user;
+    // }
 
 }
