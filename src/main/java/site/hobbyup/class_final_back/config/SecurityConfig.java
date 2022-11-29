@@ -47,12 +47,11 @@ public class SecurityConfig {
         http.headers().frameOptions().disable();
         http.csrf().disable();
 
-        // 인증권한 확인 필터
-        http.exceptionHandling().authenticationEntryPoint((request, response, authException) ->
-
-        {
-            CustomResponseUtil.forbidden(response, "권한없음");
-        });
+        // ExceptionTranslationFilter (인가처리를 하는 과정에서 발생하는 예외처리 필터)
+        http.exceptionHandling().authenticationEntryPoint(
+                (request, response, authException) -> {
+                    CustomResponseUtil.forbidden(response, "권한없음");
+                });
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.formLogin().disable();
