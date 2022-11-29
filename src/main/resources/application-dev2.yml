@@ -14,16 +14,11 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       #'[hibernate.default_batch_fetch_size]': 100
       "[hibernate.format_sql]": true
     show-sql: true
-  servlet:
-    multipart:
-      location: c:\\Temp\\upload
-      maxFileSize: 200MB
-      maxRequestSize: 100MB
 
 logging:
   level:
