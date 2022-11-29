@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,11 +29,10 @@ public class ProfileApiController {
     private final ProfileService profileService;
 
     @PostMapping("/api/profile")
-    public ResponseEntity<?> saveProfile(ProfileSaveReqDto profileSaveReqDto,
+    public ResponseEntity<?> saveProfile(@RequestBody ProfileSaveReqDto profileSaveReqDto,
             @AuthenticationPrincipal LoginUser loginUser) throws IOException {
         log.debug("디버그 : controller - 프로필 등록 시작");
         profileSaveReqDto.setUserId(loginUser.getUser().getId());
-        log.debug("디버그 : service전달");
         ProfileSaveRespDto profileSaveRespDto = profileService.saveProfile(profileSaveReqDto);
         log.debug("디버그 : controller - 프로필 등록 끝");
         return new ResponseEntity<>(new ResponseDto<>("프로필 등록", profileSaveRespDto), HttpStatus.CREATED);

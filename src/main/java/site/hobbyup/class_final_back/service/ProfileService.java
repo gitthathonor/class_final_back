@@ -12,10 +12,12 @@ import javax.imageio.ImageIO;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import site.hobbyup.class_final_back.config.exception.CustomApiException;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.user.User;
@@ -39,19 +41,24 @@ public class ProfileService {
 
         User userPS = userRepository.findById(profileSaveReqDto.getUserId())
                 .orElseThrow(
-                        () -> new RuntimeException("유저가 존재하지 않습니다."));
+                        () -> new CustomApiException("가입되지 않은 유저입니다.", HttpStatus.FORBIDDEN));
         log.debug("디버그 : 유저찾기");
 
         // base64 디코딩
         String encodeFile = profileSaveReqDto.getFilePath();
-        byte[] stringToByte = encodeFile.getBytes();
-        byte[] decodeByte = Base64.decodeBase64(stringToByte);
+        // byte[] stringToByte = encodeFile.getBytes(); // 문자열을 바이트로 변환
+        log.debug("디버그 : 디코딩1-" + encodeFile);
+        byte[] decodeByte = Base64.decodeBase64(encodeFile);
+        log.debug("디버그 : 디코딩2" + decodeByte);
 
         // 이미지 저장
-        fos = new FileOutputStream("C:\\Temp\\upload\\image.jpg"); // 현위치에 path명으로 파일생성
-        fos.write(decodeByte, 0, decodeByte.length); // 파일에 buffer의 모든 내용 출력
+        String filePath = "C:\\Temp\\upload\\" + decodeByte + ".jpg";
+        fos = new FileOutputStream(filePath); // 현위치에 path명으로 파일생성
+        fos.write(decodeByte); // 파일에 buffer의 모든 내용 출력
         fos.close();
+        log.debug("디버그 : 이미지 저장");
 
+        profileSaveReqDto.setFilePath(filePath);
         Profile profilePS = profileRepository.save(profileSaveReqDto.toEntity(userPS));
         log.debug("디버그 : service - 프로필 등록 끝");
         return new ProfileSaveRespDto(profilePS);
