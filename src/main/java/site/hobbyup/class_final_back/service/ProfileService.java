@@ -1,5 +1,6 @@
 package site.hobbyup.class_final_back.service;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.slf4j.Logger;

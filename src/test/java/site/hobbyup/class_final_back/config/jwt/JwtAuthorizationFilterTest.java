@@ -9,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -17,7 +16,6 @@ import site.hobbyup.class_final_back.config.auth.LoginUser;
 import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.user.User;
 
-@Sql("classpath:db/truncate.sql") // 롤백 대신 사용 (auto_increment 초기화 + 데이터 비우기)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
@@ -26,7 +24,7 @@ public class JwtAuthorizationFilterTest {
   private MockMvc mvc;
 
   @Test
-  public void authorizaion_success_test() throws Exception {
+  public void authorization_success_test() throws Exception {
     // given
     User user = User.builder().id(1L).role(UserEnum.USER).build();
     LoginUser loginUser = new LoginUser(user);
@@ -35,9 +33,21 @@ public class JwtAuthorizationFilterTest {
 
     // when
     ResultActions resultActions = mvc
-        .perform(get("/api/user/test").header(JwtProperties.HEADER_KEY, jwtToken));
+        .perform(get("/api/user/test/anything").header(JwtProperties.HEADER_KEY, jwtToken));
 
     // then
     resultActions.andExpect(status().isNotFound());
+  }
+
+  @Test
+  public void authorization_fail_test() throws Exception {
+    // given
+
+    // when
+    ResultActions resultActions = mvc
+        .perform(get("/api/user/test"));
+
+    // then
+    resultActions.andExpect(status().isForbidden());
   }
 }
