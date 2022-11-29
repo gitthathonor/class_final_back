@@ -43,14 +43,11 @@ public class ProfileService {
         User userPS = userRepository.findById(profileSaveReqDto.getUserId())
                 .orElseThrow(
                         () -> new CustomApiException("가입되지 않은 유저입니다.", HttpStatus.FORBIDDEN));
-        log.debug("디버그 : 유저찾기");
 
         // base64 디코딩
         String encodeFile = profileSaveReqDto.getFilePath();
         // byte[] stringToByte = encodeFile.getBytes(); // 문자열을 바이트로 변환
-        log.debug("디버그 : 디코딩1-" + encodeFile);
         byte[] decodeByte = Base64.decodeBase64(encodeFile);
-        log.debug("디버그 : 디코딩2" + decodeByte);
 
         // 이미지 이름
         String fileName = UUID.randomUUID().toString();
@@ -60,7 +57,6 @@ public class ProfileService {
         fos = new FileOutputStream(filePath); // 현위치에 path명으로 파일생성
         fos.write(decodeByte); // 파일에 buffer의 모든 내용 출력
         fos.close();
-        log.debug("디버그 : 이미지 저장");
 
         profileSaveReqDto.setFilePath(filePath);
         Profile profilePS = profileRepository.save(profileSaveReqDto.toEntity(userPS));
