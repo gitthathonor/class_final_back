@@ -31,50 +31,50 @@ import site.hobbyup.class_final_back.util.DecodeUtil;
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
 public class ProfileApiControllerTest extends DummyEntity {
 
-    private static final String APPLICATION_JSON_UTF8 = "application/json; charset=utf-8";
-    private static final String APPLICATION_FORM_URLENCODED = "application/x-www-form-urlencoded; charset=utf-8";
+        private static final String APPLICATION_JSON_UTF8 = "application/json; charset=utf-8";
+        private static final String APPLICATION_FORM_URLENCODED = "application/x-www-form-urlencoded; charset=utf-8";
 
-    @Autowired
-    private MockMvc mvc;
+        @Autowired
+        private MockMvc mvc;
 
-    @Autowired
-    private ObjectMapper om;
+        @Autowired
+        private ObjectMapper om;
 
-    @Autowired
-    private UserRepository userRepository;
+        @Autowired
+        private UserRepository userRepository;
 
-    @BeforeEach
-    public void setUp() {
-        User ssar = newUser("ssar");
-        userRepository.save(ssar);
-    }
+        @BeforeEach
+        public void setUp() {
+                User ssar = newUser("ssar");
+                userRepository.save(ssar);
+        }
 
-    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
-    @Test
-    public void saveProfile_test() throws Exception {
-        // given
-        ProfileSaveReqDto profileSaveReqDto = new ProfileSaveReqDto();
-        String encodeFile = "";
-        String filePath = DecodeUtil.saveDecodingImage(encodeFile);
+        @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+        @Test
+        public void saveProfile_test() throws Exception {
+                // given
+                ProfileSaveReqDto profileSaveReqDto = new ProfileSaveReqDto();
+                String encodeFile = "";
+                String filePath = DecodeUtil.saveDecodingImage(encodeFile);
 
-        profileSaveReqDto.setFilePath(filePath);
-        profileSaveReqDto.setIntroduction("안녕하세요");
-        profileSaveReqDto.setRegion("부산");
-        profileSaveReqDto.setCertification("컴활");
-        profileSaveReqDto.setCareerYear("신입");
-        profileSaveReqDto.setCareer("없음");
+                profileSaveReqDto.setFilePath(filePath);
+                profileSaveReqDto.setIntroduction("안녕하세요");
+                profileSaveReqDto.setRegion("부산");
+                profileSaveReqDto.setCertification("컴활");
+                profileSaveReqDto.setCareerYear("신입");
+                profileSaveReqDto.setCareer("없음");
 
-        String requestBody = om.writeValueAsString(profileSaveReqDto);
-        System.out.println("테스트 : " + requestBody);
+                String requestBody = om.writeValueAsString(profileSaveReqDto);
+                System.out.println("테스트 : " + requestBody);
 
-        // when
-        ResultActions resultActions = mvc
-                .perform(post("/api/profile").content(requestBody)
-                        .contentType(APPLICATION_JSON_UTF8));
-        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-        System.out.println("테스트 : " + responseBody);
-        // then
-        resultActions.andExpect(status().isCreated());
-        resultActions.andExpect(jsonPath("$.data.id").value(1L));
-    }
+                // when
+                ResultActions resultActions = mvc
+                                .perform(post("/api/profile").content(requestBody)
+                                                .contentType(APPLICATION_JSON_UTF8));
+                String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+                System.out.println("테스트 : " + responseBody);
+                // then
+                resultActions.andExpect(status().isCreated());
+                resultActions.andExpect(jsonPath("$.data.id").value(1L));
+        }
 }
