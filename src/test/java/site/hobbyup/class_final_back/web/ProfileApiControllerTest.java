@@ -45,7 +45,8 @@ public class ProfileApiControllerTest extends DummyEntity {
 
     @BeforeEach
     public void setUp() {
-        User ssar = userRepository.save(newUser("ssar"));
+        User ssar = newUser("ssar");
+        userRepository.save(ssar);
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
