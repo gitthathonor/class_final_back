@@ -15,18 +15,19 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.hobbyup.class_final_back.domain.AuditingTime;
 import site.hobbyup.class_final_back.domain.user.User;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Table(name = "lesson")
 @Entity
-public class Lesson {
+public class Lesson extends AuditingTime {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @Column(nullable = false, length = 50)
+  @Column(nullable = false, length = 100)
   private String name;
   private String photo;
   private Long price;
