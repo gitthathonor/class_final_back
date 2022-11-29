@@ -15,6 +15,7 @@ import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.profile.ProfileReqDto.ProfileSaveReqDto;
+import site.hobbyup.class_final_back.dto.profile.ProfileRespDto.ProfileDetailRespDto;
 import site.hobbyup.class_final_back.dto.profile.ProfileRespDto.ProfileSaveRespDto;
 import site.hobbyup.class_final_back.util.DecodeUtil;
 
@@ -35,29 +36,26 @@ public class ProfileService extends DecodeUtil {
                 .orElseThrow(
                         () -> new CustomApiException("탈퇴한 유저입니다.", HttpStatus.FORBIDDEN));
 
+        log.debug("디버그 : " + userPS.getId());
         // 디코딩해서 이미지 저장하고 경로 리턴
         String filePath = saveDecodingImage(profileSaveReqDto.getFilePath());
 
         profileSaveReqDto.setFilePath(filePath);
         Profile profilePS = profileRepository.save(profileSaveReqDto
                 .toEntity(userPS));
+
         log.debug("디버그 : service - 프로필 등록 끝");
         return new ProfileSaveRespDto(profilePS);
     }
 
+    @Transactional
+    public ProfileDetailRespDto detailProfile(Long userId) {
+        log.debug("디버그 : service - 프로필 상세보기 시작");
+        Profile profilePS = profileRepository.findByUserId(userId);
+        log.debug("디버그 : service - 프로필 상세보기 끝");
+        return new ProfileDetailRespDto(profilePS);
+    }
 }
-
-// @Transactional
-// public ProfileDetailRespDto profile(Long id) {
-// log.debug("디버그 : service - 프로필 상세보기 시작");
-// Optional<Profile> profileOP = profileRepository.findById(id);
-// if (profileOP.isPresent()) {
-// log.debug("디버그 : service - 프로필 상세보기 끝");
-// return new ProfileDetailRespDto(profileOP.get());
-// } else {
-// throw new RuntimeException("해당 " + id + " 를 찾을 수 없습니다.");
-// }
-// }
 
 // @Transactional
 // public ProfileUpdateRespDto updateProfile(ProfileUpdateReqDto

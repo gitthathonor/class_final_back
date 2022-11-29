@@ -25,6 +25,7 @@ public class ProfileReqDto {
                     .certification(certification)
                     .careerYear(careerYear)
                     .career(career)
+                    .user(user)
                     .build();
         }
     }

@@ -40,24 +40,6 @@ public class ProfileApiControllerTest extends DummyEntity {
         @Autowired
         private ObjectMapper om;
 
-<<<<<<< HEAD
-    @Autowired
-    private UserRepository userRepository;
-
-    @BeforeEach
-    public void setUp() {
-        User ssar = newUser("ssar");
-        userRepository.save(ssar);
-    }
-
-    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
-    @Test
-    public void saveProfile_test() throws Exception {
-        // given
-        ProfileSaveReqDto profileSaveReqDto = new ProfileSaveReqDto();
-        String encodeFile = "";
-        String filePath = DecodeUtil.saveDecodingImage(encodeFile);
-=======
         @Autowired
         private UserRepository userRepository;
 
@@ -81,26 +63,10 @@ public class ProfileApiControllerTest extends DummyEntity {
                 profileSaveReqDto.setCertification("컴활");
                 profileSaveReqDto.setCareerYear("신입");
                 profileSaveReqDto.setCareer("없음");
->>>>>>> d62d5037f5408804a9035cef96bd4c14f7cddcd3
 
                 String requestBody = om.writeValueAsString(profileSaveReqDto);
                 System.out.println("테스트 : " + requestBody);
 
-<<<<<<< HEAD
-        String requestBody = om.writeValueAsString(profileSaveReqDto);
-        System.out.println("테스트 : " + requestBody);
-
-        // when
-        ResultActions resultActions = mvc
-                .perform(post("/api/profile").content(requestBody)
-                        .contentType(APPLICATION_JSON_UTF8));
-        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-        System.out.println("테스트 : " + responseBody);
-        // then
-        resultActions.andExpect(status().isCreated());
-        resultActions.andExpect(jsonPath("$.data.id").value(1L));
-    }
-=======
                 // when
                 ResultActions resultActions = mvc
                                 .perform(post("/api/profile").content(requestBody)
@@ -111,5 +77,5 @@ public class ProfileApiControllerTest extends DummyEntity {
                 resultActions.andExpect(status().isCreated());
                 resultActions.andExpect(jsonPath("$.data.id").value(1L));
         }
->>>>>>> d62d5037f5408804a9035cef96bd4c14f7cddcd3
+
 }
