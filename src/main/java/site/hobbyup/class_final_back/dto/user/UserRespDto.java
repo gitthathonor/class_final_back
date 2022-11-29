@@ -35,4 +35,21 @@ public class UserRespDto {
             this.createdAt = user.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         }
     }
+
+    @Setter
+    @Getter
+    public static class UserUpdateRespDto {
+        private Long id;
+        private String username;
+        private String email;
+        private String phoneNum;
+
+        public UserUpdateRespDto(User user) {
+            this.id = user.getId();
+            this.username = user.getUsername();
+            this.email = user.getEmail();
+            this.phoneNum = user.getPhoneNum();
+        }
+
+    }
 }

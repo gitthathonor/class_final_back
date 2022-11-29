@@ -13,11 +13,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.AuditingTime;
+import site.hobbyup.class_final_back.dto.user.UserReqDto.UserUpdateReqDto;
 
-@ToString
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Table(name = "users")
@@ -26,7 +25,9 @@ public class User extends AuditingTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true, nullable = false, length = 20)
     private String username;
+    @Column(nullable = false, length = 60)
     private String password;
     private String email;
     private String phoneNum;
@@ -43,6 +44,12 @@ public class User extends AuditingTime {
         this.email = email;
         this.phoneNum = phoneNum;
         this.role = role;
+    }
+
+    public void update(UserUpdateReqDto userUpdateReqDto) {
+        this.password = userUpdateReqDto.getPassword();
+        this.email = userUpdateReqDto.getEmail();
+        this.phoneNum = userUpdateReqDto.getPhoneNum();
     }
 
 }

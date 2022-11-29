@@ -1,0 +1,101 @@
+package site.hobbyup.class_final_back.web;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import site.hobbyup.class_final_back.config.enums.UserEnum;
+import site.hobbyup.class_final_back.dto.user.UserReqDto.JoinReqDto;
+
+@Sql("classpath:db/truncate.sql") // 롤백 대신 사용 (auto_increment 초기화 + 데이터 비우기)
+@ActiveProfiles("test")
+@AutoConfigureMockMvc
+@SpringBootTest(webEnvironment = WebEnvironment.MOCK)
+public class UserApiControllerTest {
+  private static final String APPLICATION_JSON_UTF8 = "application/json; charset=utf-8";
+  private static final String APPLICATION_FORM_URLENCODED = "application/x-www-form-urlencoded; charset=utf-8";
+
+  @Autowired
+  private MockMvc mvc;
+
+  @Autowired
+  private ObjectMapper om;
+
+  @Test
+  public void join_test() throws Exception {
+    // given
+    JoinReqDto joinReqDto = new JoinReqDto();
+    joinReqDto.setUsername("ssar");
+    joinReqDto.setPassword("1234");
+    joinReqDto.setEmail("ssar@nate.com");
+    joinReqDto.setPhoneNum("01011112222");
+    joinReqDto.setRole(UserEnum.USER);
+    String requestBody = om.writeValueAsString(joinReqDto);
+
+    // when
+    ResultActions resultActions = mvc
+        .perform(post("/api/join").content(requestBody)
+            .contentType(APPLICATION_JSON_UTF8));
+    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+    System.out.println("디버그 : " + responseBody);
+
+    // then
+    resultActions.andExpect(status().isCreated());
+    resultActions.andExpect(jsonPath("$.data.username").value("ssar"));
+  }
+
+  // @Test
+  // public void updateUser_test() throws Exception {
+  // // given
+  // Long id = 1L;
+  // UserUpdateReqDto userUpdateReqDto = new UserUpdateReqDto();
+  // userUpdateReqDto.setPassword("4567");
+  // userUpdateReqDto.setEmail("ssar@naver.com");
+  // userUpdateReqDto.setPhoneNum("0215158989");
+  // String requestBody = om.writeValueAsString(userUpdateReqDto);
+
+  // // when
+  // ResultActions resultActions = mvc
+  // .perform(put("/api/user/" + id).content(requestBody)
+  // .contentType(APPLICATION_JSON_UTF8));
+  // String responseBody =
+  // resultActions.andReturn().getResponse().getContentAsString();
+  // System.out.println("디버그 : " + responseBody);
+
+  // // then
+  // resultActions.andExpect(status().isOk());
+  // resultActions.andExpect(jsonPath("$.data.email").value("ssar@naver.com"));
+  // resultActions.andExpect(jsonPath("$.data.phoneNum").value("0215158989"));
+
+  // }
+
+  // @Test
+  // public void deleteById_test() throws Exception {
+  // // given
+  // Long id = 1L;
+
+  // // when
+  // ResultActions resultActions = mvc
+  // .perform(delete("/api/user/" + id)
+  // .contentType(APPLICATION_JSON_UTF8));
+  // String responseBody =
+  // resultActions.andReturn().getResponse().getContentAsString();
+  // System.out.println("디버그 : " + responseBody);
+
+  // // then
+  // resultActions.andExpect(status().isOk());
+  // }
+}
