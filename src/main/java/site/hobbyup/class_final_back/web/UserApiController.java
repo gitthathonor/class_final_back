@@ -42,7 +42,7 @@ public class UserApiController {
         return new ResponseEntity<>(new ResponseDto<>("회원정보 수정완료", userUpdateRespDto), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/api/user/session")
+    @GetMapping("/api/user/session")
     public String getSessionUser(@AuthenticationPrincipal LoginUser loginUser) {
         return "role : " + loginUser.getUser().getRole();
     }

@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.dto.user.UserReqDto.JoinReqDto;
 
 @Sql("classpath:db/truncate.sql") // 롤백 대신 사용 (auto_increment 초기화 + 데이터 비우기)
@@ -40,6 +41,8 @@ public class UserApiControllerTest {
     joinReqDto.setUsername("ssar");
     joinReqDto.setPassword("1234");
     joinReqDto.setEmail("ssar@nate.com");
+    joinReqDto.setPhoneNum("01011112222");
+    joinReqDto.setRole(UserEnum.USER);
     String requestBody = om.writeValueAsString(joinReqDto);
 
     // when
