@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -71,5 +72,19 @@ public class ProfileApiController {
     // profileService.profile(loginUser.getUser().getId());
     // log.debug("디버그 : controller - 프로필 상세보기 끝");
     // return new ResponseDto<>("프로필 상세보기", profileDetailRespDto);
+    // }
+
+    // @PutMapping("/api/profile")
+    // public ResponseEntity<?> updateProfile(ProfileUpdateReqDto
+    // profileUpdateReqDto,
+    // @AuthenticationPrincipal LoginUser loginUser) throws IOException {
+    // log.debug("디버그 : controller - 프로필 등록 시작");
+    // profileUpdateReqDto.setUserId(loginUser.getUser().getId());
+    // log.debug("디버그 : service전달");
+    // ProfileUpdateRespDto profileUpdateRespDto =
+    // profileService.updateProfile(profileUpdateReqDto);
+    // log.debug("디버그 : controller - 프로필 등록 끝");
+    // return new ResponseEntity<>(new ResponseDto<>("프로필 등록",
+    // profileUpdateRespDto), HttpStatus.CREATED);
     // }
 }
