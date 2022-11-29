@@ -12,9 +12,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import lombok.RequiredArgsConstructor;
-import site.hobbyup.class_final_back.config.auth.LoginUser;
 import site.hobbyup.class_final_back.config.jwt.JwtAuthenticationFilter;
 import site.hobbyup.class_final_back.config.jwt.JwtAuthorizationFilter;
+import site.hobbyup.class_final_back.util.CustomResponseUtil;
 
 @RequiredArgsConstructor
 @Configuration
@@ -43,13 +43,19 @@ public class SecurityConfig {
         http.headers().frameOptions().disable();
         http.csrf().disable();
 
+        // 인증권한 확인 필터
+        http.exceptionHandling().authenticationEntryPoint((request, response, authException) ->
+
+        {
+            CustomResponseUtil.fail(response, "권한없음");
+        });
+
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.formLogin().disable();
         http.httpBasic().disable();
         http.apply(new MyCustomDsl());
         http.authorizeHttpRequests()
-                // .antMatchers("/api/user/**").authenticated()
-                // .antMatchers("/api/admin/**").hasRole("ROLE_" + UserEnum.ADMIN)
+                .antMatchers("/api/user/**").authenticated()
                 .anyRequest().permitAll();
 
         return http.build();
