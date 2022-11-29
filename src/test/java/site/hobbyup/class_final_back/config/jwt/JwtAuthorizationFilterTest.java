@@ -33,7 +33,7 @@ public class JwtAuthorizationFilterTest {
 
     // when
     ResultActions resultActions = mvc
-        .perform(get("/api/user/test").header(JwtProperties.HEADER_KEY, jwtToken));
+        .perform(get("/api/user/test/anything").header(JwtProperties.HEADER_KEY, jwtToken));
 
     // then
     resultActions.andExpect(status().isNotFound());
