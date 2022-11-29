@@ -1,6 +1,5 @@
 package site.hobbyup.class_final_back.service;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.slf4j.Logger;
@@ -29,12 +28,12 @@ public class ProfileService extends DecodeUtil {
     private final UserRepository userRepository;
 
     @Transactional
-    public ProfileSaveRespDto saveProfile(ProfileSaveReqDto profileSaveReqDto) throws IOException {
+    public ProfileSaveRespDto saveProfile(ProfileSaveReqDto profileSaveReqDto, Long userId) throws IOException {
         log.debug("디버그 : service - 프로필 등록 시작");
 
-        User userPS = userRepository.findById(profileSaveReqDto.getUserId())
+        User userPS = userRepository.findById(userId)
                 .orElseThrow(
-                        () -> new CustomApiException("가입되지 않은 유저입니다.", HttpStatus.FORBIDDEN));
+                        () -> new CustomApiException("탈퇴한 유저입니다.", HttpStatus.FORBIDDEN));
 
         // 디코딩해서 이미지 저장하고 경로 리턴
         String filePath = saveDecodingImage(profileSaveReqDto.getFilePath());
