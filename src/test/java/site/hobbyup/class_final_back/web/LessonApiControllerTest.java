@@ -17,7 +17,7 @@ import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
-public class LessonApiController {
+public class LessonApiControllerTest {
 
   @Autowired
   private MockMvc mvc;
