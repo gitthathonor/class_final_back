@@ -16,7 +16,6 @@ public class ProfileReqDto {
         private String certification;
         private String careerYear;
         private String career;
-        private Long userId;
 
         public Profile toEntity(User user) {
             return Profile.builder()
