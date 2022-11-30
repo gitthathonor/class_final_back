@@ -69,29 +69,26 @@ public class ProfileService extends DecodeUtil {
     @Transactional
     public ProfileUpdateRespDto updateProfile(ProfileUpdateReqDto profileUpdateReqDto, Long userId) throws IOException {
         log.debug("디버그 : service - 프로필 수정 시작");
-
         User userPS = userRepository.findById(userId)
                 .orElseThrow(
                         () -> new RuntimeException("유저가 존재하지 않습니다."));
-
-        Profile profilePS = profileRepository.findByUserId(userId);
-
+        // db에 있는 userId 이용해서 프로필 찾기
+        Profile profilePS = profileRepository.findByUserId(userPS.getId());
+        // 파일 디코딩
         byte[] decodeByte = Base64.decodeBase64(profileUpdateReqDto.getFilePath());
         String filePath = "C:\\Temp\\upload\\" + decodeByte + ".jpg";
-
+        // 파일 수정했는지 확인하고 수정됐다면 이미지 새로 저장
         if (profilePS.getFilePath() != filePath) {
             File file = new File(profilePS.getFilePath());
             file.delete();
             fos = new FileOutputStream(filePath);
             fos.write(decodeByte);
             fos.close();
-
             profileUpdateReqDto.setFilePath(filePath);
         }
 
         profilePS.update(profileUpdateReqDto);
-        log.debug("디버그 : " + profilePS.getUser().getId());
         log.debug("디버그 : service - 프로필 수정 끝");
-        return new ProfileUpdateRespDto(profilePS);
+        return new ProfileUpdateRespDto(profileRepository.save(profilePS));
     }
 }
