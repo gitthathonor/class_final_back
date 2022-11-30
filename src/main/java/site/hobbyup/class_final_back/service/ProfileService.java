@@ -51,6 +51,10 @@ public class ProfileService extends DecodeUtil {
     @Transactional
     public ProfileDetailRespDto detailProfile(Long userId) {
         log.debug("디버그 : service - 프로필 상세보기 시작");
+        User userPS = userRepository.findById(userId)
+                .orElseThrow(
+                        () -> new CustomApiException("탈퇴한 유저입니다.", HttpStatus.FORBIDDEN));
+
         Profile profilePS = profileRepository.findByUserId(userId);
         return new ProfileDetailRespDto(profilePS);
     }
