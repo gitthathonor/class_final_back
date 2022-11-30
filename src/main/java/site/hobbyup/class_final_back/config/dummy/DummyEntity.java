@@ -21,6 +21,7 @@ public class DummyEntity {
 
   protected Profile newProfile(User user) {
     Profile profile = Profile.builder()
+        .filePath("이미지경로")
         .introduction("안녕하세요")
         .region("부산")
         .certification("컴활")

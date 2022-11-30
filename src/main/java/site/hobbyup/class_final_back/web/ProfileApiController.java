@@ -1,24 +1,24 @@
 package site.hobbyup.class_final_back.web;
 
 import java.io.IOException;
-import java.util.Base64;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import site.hobbyup.class_final_back.config.auth.LoginUser;
+import site.hobbyup.class_final_back.config.exception.CustomApiException;
 import site.hobbyup.class_final_back.dto.ResponseDto;
 import site.hobbyup.class_final_back.dto.profile.ProfileReqDto.ProfileSaveReqDto;
+import site.hobbyup.class_final_back.dto.profile.ProfileRespDto.ProfileDetailRespDto;
 import site.hobbyup.class_final_back.dto.profile.ProfileRespDto.ProfileSaveRespDto;
 import site.hobbyup.class_final_back.service.ProfileService;
 
@@ -32,47 +32,24 @@ public class ProfileApiController {
     public ResponseEntity<?> saveProfile(@RequestBody ProfileSaveReqDto profileSaveReqDto,
             @AuthenticationPrincipal LoginUser loginUser) throws IOException {
         log.debug("디버그 : controller - 프로필 등록 시작");
-        profileSaveReqDto.setUserId(loginUser.getUser().getId());
-        ProfileSaveRespDto profileSaveRespDto = profileService.saveProfile(profileSaveReqDto);
+        ProfileSaveRespDto profileSaveRespDto = profileService.saveProfile(profileSaveReqDto,
+                loginUser.getUser().getId());
         log.debug("디버그 : controller - 프로필 등록 끝");
         return new ResponseEntity<>(new ResponseDto<>("프로필 등록", profileSaveRespDto), HttpStatus.CREATED);
     }
 
-    // @PostMapping("/api/profile")
-    // public ResponseEntity<?> saveProfile(@RequestPart(value = "file")
-    // MultipartFile file,
-    // @RequestPart(value = "profileSaveReqDto") ProfileSaveReqDto
-    // profileSaveReqDto,
-    // @AuthenticationPrincipal LoginUser loginUser) {
-    // log.debug("디버그 : controller - 프로필 등록 시작");
+    @GetMapping("/api/user/{userId}/profile")
+    public ResponseDto<?> detailProfile(@PathVariable Long userId,
+            @AuthenticationPrincipal LoginUser loginUser) {
+        log.debug("디버그 : controller - 프로필 상세보기 시작");
+        if (userId != loginUser.getUser().getId()) { // 권한체크 - 세션의 id, userid가 같으면 상세보기
+            throw new CustomApiException("권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
 
-    // // base64 인코딩
-    // try {
-    // Base64.Encoder encoder = Base64.getEncoder();
-    // byte[] photoEncode = encoder.encode(file.getBytes());
-    // String fileEncode = new String(photoEncode, "UTF8");
-    // profileSaveReqDto.setFile(fileEncode);
-    // } catch (Exception e) {
-    // throw new RuntimeException("error");
-    // }
-    // profileSaveReqDto.setUserId(loginUser.getUser().getId());
-    // log.debug("디버그 : service전달");
-    // log.debug("디버그 : " + profileSaveReqDto.getUserId());
-    // ProfileSaveRespDto profileSaveRespDto =
-    // profileService.saveProfile(profileSaveReqDto);
-    // log.debug("디버그 : controller - 프로필 등록 끝");
-    // return new ResponseEntity<>(new ResponseDto<>("프로필 등록", profileSaveRespDto),
-    // HttpStatus.CREATED);
-    // }
-
-    // @GetMapping("/api/profile")
-    // public ResponseDto<?> profile(@AuthenticationPrincipal LoginUser loginUser) {
-    // log.debug("디버그 : controller - 프로필 상세보기 시작");
-    // ProfileDetailRespDto profileDetailRespDto =
-    // profileService.profile(loginUser.getUser().getId());
-    // log.debug("디버그 : controller - 프로필 상세보기 끝");
-    // return new ResponseDto<>("프로필 상세보기", profileDetailRespDto);
-    // }
+        ProfileDetailRespDto profileDetailRespDto = profileService.detailProfile(userId);
+        log.debug("디버그 : controller - 프로필 상세보기 끝");
+        return new ResponseDto<>("프로필 상세보기", profileDetailRespDto);
+    }
 
     // @PutMapping("/api/profile")
     // public ResponseEntity<?> updateProfile(ProfileUpdateReqDto

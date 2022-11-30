@@ -6,6 +6,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -26,14 +27,20 @@ public class Profile extends AuditingTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(columnDefinition = "LONGTEXT")
+    @Column(nullable = false)
     private String filePath;
+    @Column(nullable = false, length = 50)
     private String introduction;
+    @Column(nullable = false, length = 20)
     private String region;
+    @Column(nullable = false, length = 50)
     private String certification;
+    @Column(nullable = false, length = 20)
     private String careerYear;
+    @Column(nullable = false, length = 50)
     private String career;
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(unique = true)
     private User user;
 
     @Builder
@@ -51,13 +58,13 @@ public class Profile extends AuditingTime {
     }
 
     // public void update(ProfileUpdateReqDto profileUpdateReqDto) {
-    //     this.filePath = filePath;    // get으로 변경
-    //     this.introduction = introduction;
-    //     this.region = region;
-    //     this.certification = certification;
-    //     this.careerYear = careerYear;
-    //     this.career = career;
-    //     this.user = user;
+    // this.filePath = filePath; // get으로 변경
+    // this.introduction = introduction;
+    // this.region = region;
+    // this.certification = certification;
+    // this.careerYear = careerYear;
+    // this.career = career;
+    // this.user = user;
     // }
 
 }

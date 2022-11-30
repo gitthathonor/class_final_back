@@ -1,5 +1,6 @@
 package site.hobbyup.class_final_back.web;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -20,6 +21,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import site.hobbyup.class_final_back.config.dummy.DummyEntity;
+import site.hobbyup.class_final_back.domain.profile.Profile;
+import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.profile.ProfileReqDto.ProfileSaveReqDto;
@@ -42,11 +45,14 @@ public class ProfileApiControllerTest extends DummyEntity {
 
         @Autowired
         private UserRepository userRepository;
+        @Autowired
+        private ProfileRepository profileRepository;
 
         @BeforeEach
         public void setUp() {
-                User ssar = newUser("ssar");
-                userRepository.save(ssar);
+                User ssar = userRepository.save(newUser("ssar"));
+                User cos = userRepository.save(newUser("cos"));
+                Profile cosProfile = profileRepository.save(newProfile(cos));
         }
 
         @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -75,6 +81,25 @@ public class ProfileApiControllerTest extends DummyEntity {
                 System.out.println("테스트 : " + responseBody);
                 // then
                 resultActions.andExpect(status().isCreated());
-                resultActions.andExpect(jsonPath("$.data.id").value(1L));
+                resultActions.andExpect(jsonPath("$.data.id").value(2L));
         }
+
+        @WithUserDetails(value = "cos", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+        @Test
+        public void detailProfile_test() throws Exception {
+                // given
+                Long userId = 2L;
+
+                // when
+                ResultActions resultActions = mvc
+                                .perform(get("/api/user/" + userId + "/profile"));
+                String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+                System.out.println("테스트 : " + responseBody);
+
+                // then
+                resultActions.andExpect(status().isOk());
+                resultActions.andExpect(jsonPath("$.data.user.id").value(2L));
+                resultActions.andExpect(jsonPath("$.data.careerYear").value("신입"));
+        }
+
 }
