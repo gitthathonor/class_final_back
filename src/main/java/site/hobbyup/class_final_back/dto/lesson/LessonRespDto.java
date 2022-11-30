@@ -1,8 +1,12 @@
 package site.hobbyup.class_final_back.dto.lesson;
 
+import lombok.Getter;
+import lombok.Setter;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 
 public class LessonRespDto {
+  @Setter
+  @Getter
   public static class LessonSaveRespDto {
     private Long id;
     private String name;

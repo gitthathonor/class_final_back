@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 import lombok.Getter;
 import lombok.Setter;
+import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 
 public class LessonReqDto {
@@ -30,6 +31,7 @@ public class LessonReqDto {
           .curriculum(curriculum)
           .policy(policy)
           .expiredAt(expiredAt)
+          .category(category)
           .build();
     }
   }
