@@ -11,7 +11,7 @@ public class LessonService {
   private final LessonRepository lessonRepository;
 
   // 클래스 생성하기
-  public void openLesson() {
+  public void saveLesson() {
     lessonRepository.save(null);
   }
 

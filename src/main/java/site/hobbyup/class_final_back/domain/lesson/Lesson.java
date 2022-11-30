@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
@@ -16,6 +17,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hobbyup.class_final_back.domain.AuditingTime;
+import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.user.User;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -42,9 +44,12 @@ public class Lesson extends AuditingTime {
   @ManyToOne(fetch = FetchType.LAZY)
   private User user;
 
+  @OneToOne(fetch = FetchType.LAZY)
+  private Category category;
+
   @Builder
   public Lesson(Long id, String name, String photo, Long price, String place, String possibleDays, String curriculum,
-      String policy, Timestamp expiredAt, User user) {
+      String policy, Timestamp expiredAt, User user, Category category) {
     this.id = id;
     this.name = name;
     this.photo = photo;
@@ -55,6 +60,7 @@ public class Lesson extends AuditingTime {
     this.policy = policy;
     this.expiredAt = expiredAt;
     this.user = user;
+    this.category = category;
   }
 
 }
