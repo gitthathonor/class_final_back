@@ -19,9 +19,9 @@ public class LessonReqDto {
     private String curriculum;
     private String policy;
     private Timestamp expiredAt;
-    private Category category;
+    private Long categoryId;
 
-    public Lesson toEntity() {
+    public Lesson toEntity(Category category) {
       return Lesson.builder()
           .name(name)
           .photo(photo)

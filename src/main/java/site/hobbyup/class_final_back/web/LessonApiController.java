@@ -1,5 +1,7 @@
 package site.hobbyup.class_final_back.web;
 
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -24,10 +26,10 @@ public class LessonApiController {
 
     @PostMapping("/api/lesson")
     public ResponseEntity<?> saveLesson(@RequestBody LessonSaveReqDto lessonSaveReqDto,
-            @AuthenticationPrincipal LoginUser loginUser) {
+            @AuthenticationPrincipal LoginUser loginUser) throws IOException {
         log.debug("디버그 : LessonApiController-saveLesson 실행됨");
         LessonSaveRespDto lessonSaveRespDto = lessonService.saveLesson(lessonSaveReqDto);
-        return new ResponseEntity<>(new ResponseDto<>("회원가입성공", lessonSaveRespDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ResponseDto<>("클래스 생성 성공", lessonSaveRespDto), HttpStatus.CREATED);
     }
 
 }
