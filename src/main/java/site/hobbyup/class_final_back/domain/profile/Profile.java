@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import site.hobbyup.class_final_back.domain.AuditingTime;
 import site.hobbyup.class_final_back.domain.user.User;
+import site.hobbyup.class_final_back.dto.profile.ProfileReqDto.ProfileUpdateReqDto;
 
 @ToString
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -57,14 +58,13 @@ public class Profile extends AuditingTime {
         this.user = user;
     }
 
-    // public void update(ProfileUpdateReqDto profileUpdateReqDto) {
-    // this.filePath = filePath; // get으로 변경
-    // this.introduction = introduction;
-    // this.region = region;
-    // this.certification = certification;
-    // this.careerYear = careerYear;
-    // this.career = career;
-    // this.user = user;
-    // }
+    public void update(ProfileUpdateReqDto profileUpdateReqDto) {
+        this.filePath = profileUpdateReqDto.getFilePath();
+        this.introduction = profileUpdateReqDto.getIntroduction();
+        this.region = profileUpdateReqDto.getRegion();
+        this.certification = profileUpdateReqDto.getCertification();
+        this.careerYear = profileUpdateReqDto.getCareerYear();
+        this.career = profileUpdateReqDto.getCareer();
+    }
 
 }
