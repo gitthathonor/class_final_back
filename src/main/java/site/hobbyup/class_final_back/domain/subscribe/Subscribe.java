@@ -23,7 +23,7 @@ import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 
 @ToString
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "subscribe")
 @Entity
@@ -31,7 +31,6 @@ public class Subscribe extends AuditingTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
@@ -44,6 +43,13 @@ public class Subscribe extends AuditingTime {
         this.id = id;
         this.user = user;
         this.lesson = lesson;
+    }
+
+    public Subscribe entity(User user, Lesson lesson) {
+        return Subscribe.builder()
+                .user(user)
+                .lesson(lesson)
+                .build();
     }
 
 }
