@@ -59,6 +59,8 @@ public class LessonService {
 
     // 영속화시킨 카테고리의 id로 where절을 걸어서 Lesson의 list를 반환
     List<Lesson> lessonListPS = lessonRepository.findByCategory(categoryPS.getId());
+
+    // 영속화시킨 lesson의
     return new LessonCategoryListRespDto(categoryPS, lessonListPS);
   }
 
