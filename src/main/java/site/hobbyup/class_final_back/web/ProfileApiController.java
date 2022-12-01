@@ -65,7 +65,6 @@ public class ProfileApiController {
 
         ProfileUpdateRespDto profileUpdateRespDto = profileService.updateProfile(profileUpdateReqDto, userId);
         log.debug("디버그 : controller - 프로필 수정 끝");
-        return new ResponseEntity<>(new ResponseDto<>("프로필 수정",
-                profileUpdateRespDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ResponseDto<>("프로필 수정", profileUpdateRespDto), HttpStatus.CREATED);
     }
 }
