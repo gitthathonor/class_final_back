@@ -54,15 +54,15 @@ public class LessonRespDto {
       private Long lessonId;
       private String lessonName;
       private String lessonPrice;
-      private Long lessonReviewCount;
+      private Long lessonReviewsCount;
       private boolean isSubscribed; // 로그인 되었을 때만
 
       public LessonDto(Lesson lesson) {
         this.lessonId = lesson.getId();
         this.lessonName = lesson.getName();
         this.lessonPrice = lesson.getPrice() + "원";
-        this.lessonReviewCount = 0L;
-        this.isSubscribed = true;
+        this.lessonReviewsCount = 0L;
+        this.isSubscribed = false;
       }
 
     }
