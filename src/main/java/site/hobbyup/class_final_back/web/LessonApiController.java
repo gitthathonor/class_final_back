@@ -35,8 +35,9 @@ public class LessonApiController {
     }
 
     // lesson 리스트 보기
-    @GetMapping("/api/lesson")
-    public ResponseEntity<?> getLessonList() {
-        return new ResponseEntity<>(new ResponseDto<>("클래스 리스트 불러오기 성공", null), HttpStatus.OK);
-    }
+    // @GetMapping("/api/lesson")
+    // public ResponseEntity<?> getLessonList() {
+    // return new ResponseEntity<>(new ResponseDto<>("클래스 리스트 불러오기 성공", null),
+    // HttpStatus.OK);
+    // }
 }
