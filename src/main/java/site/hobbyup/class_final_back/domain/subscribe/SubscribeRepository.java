@@ -7,5 +7,5 @@ import org.springframework.data.repository.query.Param;
 public interface SubscribeRepository extends JpaRepository<Subscribe, Long> {
 
     @Query("select s from Subscribe s join fetch s.user u where s.user.id = :userId")
-    void findByUserId(@Param("userId") Long userId);
+    Subscribe findByUserId(@Param("userId") Long userId);
 }

@@ -2,10 +2,12 @@ package site.hobbyup.class_final_back.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import site.hobbyup.class_final_back.config.exception.CustomApiException;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
 import site.hobbyup.class_final_back.domain.subscribe.Subscribe;
@@ -30,12 +32,18 @@ public class SubscribeService {
         // user가 lesson을 구독
         // 유저확인
         User userPS = userRepository.findById(userId).orElseThrow(
-                () -> new RuntimeException("유저가 존재하지 않습니다."));
+                () -> new CustomApiException("유저가 존재하지 않습니다.", HttpStatus.FORBIDDEN));
         // 클래스 확인
-        Lesson lessonsPS = lessonRepository.findById(subscribeSaveReqDto.getLesson().getId()).orElseThrow(
-                () -> new RuntimeException("클래스가 존재하지 않습니다."));
-        Subscribe subscribePS = subscribeSaveReqDto.toEntity(userPS);
-        return new SubscribeSaveRespDto(subscribeRepository.save(subscribePS));
+        Lesson lessonsPS = lessonRepository.findById(subscribeSaveReqDto.getLessonId()).orElseThrow(
+                () -> new CustomApiException("클래스가 존재하지 않습니다.", HttpStatus.FORBIDDEN));
+        // 이미 찜한 클래스면 exception
+        Subscribe subscribePS = subscribeRepository.findByUserId(userId);
+        if (subscribePS.getLesson().getId() == subscribeSaveReqDto.getLessonId()) {
+            throw new CustomApiException("이미 구독한 클래스입니다.", HttpStatus.FORBIDDEN);
+        }
+
+        Subscribe subscribe = subscribeSaveReqDto.toEntity(lessonsPS, userPS);
+        return new SubscribeSaveRespDto(subscribeRepository.save(subscribe));
     }
 
 }
