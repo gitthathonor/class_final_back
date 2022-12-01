@@ -65,4 +65,25 @@ public class ProfileRespDto {
         }
     }
 
+    @Setter
+    @Getter
+    public static class ProfileUpdateRespDto {
+        private Long id;
+        private UserDto userId;
+
+        @Setter
+        @Getter
+        public static class UserDto {
+            private Long id;
+
+            public UserDto(User user) {
+                this.id = user.getId();
+            }
+        }
+
+        public ProfileUpdateRespDto(Profile profile) {
+            this.id = profile.getId();
+            this.userId = new UserDto(profile.getUser());
+        }
+    }
 }

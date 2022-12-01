@@ -2,9 +2,11 @@ package site.hobbyup.class_final_back.web;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -26,6 +29,7 @@ import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.profile.ProfileReqDto.ProfileSaveReqDto;
+import site.hobbyup.class_final_back.dto.profile.ProfileReqDto.ProfileUpdateReqDto;
 import site.hobbyup.class_final_back.util.DecodeUtil;
 
 @Sql("classpath:db/truncate.sql") // 롤백 대신 사용 (auto_increment 초기화 + 데이터 비우기)
@@ -60,7 +64,7 @@ public class ProfileApiControllerTest extends DummyEntity {
         public void saveProfile_test() throws Exception {
                 // given
                 ProfileSaveReqDto profileSaveReqDto = new ProfileSaveReqDto();
-                String encodeFile = "";
+                String encodeFile = "aGVsbG8=";
                 String filePath = DecodeUtil.saveDecodingImage(encodeFile);
 
                 profileSaveReqDto.setFilePath(filePath);
@@ -102,4 +106,33 @@ public class ProfileApiControllerTest extends DummyEntity {
                 resultActions.andExpect(jsonPath("$.data.careerYear").value("신입"));
         }
 
+        // @WithUserDetails(value = "cos", setupBefore =
+        // TestExecutionEvent.TEST_EXECUTION)
+        // @Test
+        // public void updateProfile_test() throws Exception {
+        // // given
+        // Long userId = 2L;
+        // ProfileUpdateReqDto profileUpdateReqDto = new ProfileUpdateReqDto();
+        // String encodeFile = "aGVsbG8=";
+        // byte[] decodeByte = Base64.decodeBase64(encodeFile);
+        // String filePath = "C:\\Temp\\upload\\" + decodeByte + ".jpg";
+
+        // profileUpdateReqDto.setCertification("컴활");
+        // profileUpdateReqDto.setRegion("서울");
+        // profileUpdateReqDto.setFilePath(filePath);
+
+        // String requestBody = om.writeValueAsString(profileUpdateReqDto);
+
+        // // when
+        // ResultActions resultActions = mvc
+        // .perform(put("/api/user/" + userId + "/profile").content(requestBody)
+        // .contentType(APPLICATION_JSON_UTF8));
+        // String responseBody =
+        // resultActions.andReturn().getResponse().getContentAsString();
+        // System.out.println("디버그 : " + responseBody);
+
+        // // then
+        // resultActions.andExpect(status().isCreated());
+        // resultActions.andExpect(jsonPath("$.data.id").value(2L));
+        // }
 }
