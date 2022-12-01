@@ -8,7 +8,6 @@ import lombok.Setter;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.user.User;
-import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto.LessonDto;
 
 public class LessonRespDto {
   @Setter

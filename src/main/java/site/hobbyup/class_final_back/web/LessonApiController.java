@@ -38,7 +38,7 @@ public class LessonApiController {
 
     // lesson 리스트 보기
     @GetMapping("/api/category/{categoryId}")
-    public ResponseEntity<?> getLessonList(@PathVariable Long categoryId) {
+    public ResponseEntity<?> getLessonCategoryList(@PathVariable Long categoryId) {
         LessonCategoryListRespDto lessonCategoryListRespDto = lessonService.getLessonCategoryList(categoryId);
         return new ResponseEntity<>(new ResponseDto<>("클래스 리스트 불러오기 성공", lessonCategoryListRespDto),
                 HttpStatus.OK);
