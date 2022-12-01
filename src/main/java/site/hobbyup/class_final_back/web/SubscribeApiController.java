@@ -26,7 +26,7 @@ public class SubscribeApiController {
     @PostMapping("/api/subscribe")
     public ResponseEntity<?> saveSubscribe(@RequestBody SubscribeSaveReqDto subscribeSaveReqDto,
             @AuthenticationPrincipal LoginUser loginUser) {
-
+                log.debug("디버그 : 구독 controller시작");
         SubscribeSaveRespDto SubscribeSaveRespDto = subscribeService.saveSubscribe(subscribeSaveReqDto,
                 loginUser.getUser().getId());
 

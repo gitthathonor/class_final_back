@@ -1,5 +1,7 @@
 package site.hobbyup.class_final_back.service;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -28,19 +30,24 @@ public class SubscribeService {
     private final LessonRepository lessonRepository;
     private final UserRepository userRepository;
 
+    @Transactional
     public SubscribeSaveRespDto saveSubscribe(SubscribeSaveReqDto subscribeSaveReqDto, Long userId) {
         // user가 lesson을 구독
         // 유저확인
         User userPS = userRepository.findById(userId).orElseThrow(
                 () -> new CustomApiException("유저가 존재하지 않습니다.", HttpStatus.FORBIDDEN));
+        log.debug("디버그 : 1 확인완료");
         // 클래스 확인
         Lesson lessonsPS = lessonRepository.findById(subscribeSaveReqDto.getLessonId()).orElseThrow(
                 () -> new CustomApiException("클래스가 존재하지 않습니다.", HttpStatus.FORBIDDEN));
+        log.debug("디버그 : 2 확인완료");
         // 이미 찜한 클래스면 exception
-        Subscribe subscribePS = subscribeRepository.findByUserId(userId);
-        if (subscribePS.getLesson().getId() == subscribeSaveReqDto.getLessonId()) {
+        Optional<Subscribe> subscribeOP = subscribeRepository.findByUserId(userPS.getId());
+        if (subscribeOP.isPresent() && subscribeOP.get().getLesson().getId() == subscribeSaveReqDto.getLessonId()) {
+
             throw new CustomApiException("이미 구독한 클래스입니다.", HttpStatus.FORBIDDEN);
         }
+        log.debug("디버그 : 클래스 확인완료");
 
         Subscribe subscribe = subscribeSaveReqDto.toEntity(lessonsPS, userPS);
         return new SubscribeSaveRespDto(subscribeRepository.save(subscribe));
