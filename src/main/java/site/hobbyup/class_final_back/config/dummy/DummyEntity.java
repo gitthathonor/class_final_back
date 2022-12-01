@@ -25,14 +25,15 @@ public class DummyEntity {
     return user;
   }
 
-  protected Profile newProfile(User user) {
+  protected Profile newProfile(String filePath, String introduction, String region, String certification,
+      String careerYear, String career, User user) {
     Profile profile = Profile.builder()
-        .filePath("이미지경로")
-        .introduction("안녕하세요")
-        .region("부산")
-        .certification("컴활")
-        .careerYear("신입")
-        .career("없음")
+        .filePath(filePath)
+        .introduction(introduction)
+        .region(region)
+        .certification(certification)
+        .careerYear(careerYear)
+        .career(career)
         .user(user)
         .build();
     return profile;
