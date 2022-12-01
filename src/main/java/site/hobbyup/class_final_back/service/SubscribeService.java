@@ -36,21 +36,17 @@ public class SubscribeService {
         // 유저확인
         User userPS = userRepository.findById(userId).orElseThrow(
                 () -> new CustomApiException("유저가 존재하지 않습니다.", HttpStatus.FORBIDDEN));
-        log.debug("디버그 : 1 확인완료");
+
         // 클래스 확인
         Lesson lessonsPS = lessonRepository.findById(subscribeSaveReqDto.getLessonId()).orElseThrow(
                 () -> new CustomApiException("클래스가 존재하지 않습니다.", HttpStatus.FORBIDDEN));
-        log.debug("디버그 : 2 확인완료");
-        // 이미 찜한 클래스면 exception
-        Optional<Subscribe> subscribeOP = subscribeRepository.findByUserId(userPS.getId());
-        if (subscribeOP.isPresent() && subscribeOP.get().getLesson().getId() == subscribeSaveReqDto.getLessonId()) {
-
-            throw new CustomApiException("이미 구독한 클래스입니다.", HttpStatus.FORBIDDEN);
+        try {
+            Subscribe subscribe = subscribeSaveReqDto.toEntity(lessonsPS, userPS);
+            SubscribeSaveRespDto subscribeSaveRespDto = new SubscribeSaveRespDto(subscribeRepository.save(subscribe));
+            return subscribeSaveRespDto;
+        } catch (Exception e) {
+            throw new CustomApiException("이미 구독한 클래스 입니다.", HttpStatus.FORBIDDEN);
         }
-        log.debug("디버그 : 클래스 확인완료");
-
-        Subscribe subscribe = subscribeSaveReqDto.toEntity(lessonsPS, userPS);
-        return new SubscribeSaveRespDto(subscribeRepository.save(subscribe));
     }
 
 }

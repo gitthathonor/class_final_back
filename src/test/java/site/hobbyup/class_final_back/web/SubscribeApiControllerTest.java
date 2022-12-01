@@ -95,35 +95,25 @@ public class SubscribeApiControllerTest extends DummyEntity {
 
         }
 
-        @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+        @WithUserDetails(value = "cos", setupBefore = TestExecutionEvent.TEST_EXECUTION)
         @Test
-        public void saveProfile_test() throws Exception {
+        public void saveSubscribe_test() throws Exception {
                 // given
                 SubscribeSaveReqDto subscribeSaveReqDto = new SubscribeSaveReqDto();
+                subscribeSaveReqDto.setLessonId(1L);
 
-                ProfileSaveReqDto profileSaveReqDto = new ProfileSaveReqDto();
-                String encodeFile = "aGVsbG8=";
-                String filePath = DecodeUtil.saveDecodingImage(encodeFile);
-
-                profileSaveReqDto.setFilePath(filePath);
-                profileSaveReqDto.setIntroduction("안녕하세요");
-                profileSaveReqDto.setRegion("부산");
-                profileSaveReqDto.setCertification("컴활");
-                profileSaveReqDto.setCareerYear("신입");
-                profileSaveReqDto.setCareer("없음");
-
-                String requestBody = om.writeValueAsString(profileSaveReqDto);
+                String requestBody = om.writeValueAsString(subscribeSaveReqDto);
                 System.out.println("테스트 : " + requestBody);
 
                 // when
                 ResultActions resultActions = mvc
-                                .perform(post("/api/profile").content(requestBody)
+                                .perform(post("/api/subscribe").content(requestBody)
                                                 .contentType(APPLICATION_JSON_UTF8));
                 String responseBody = resultActions.andReturn().getResponse().getContentAsString();
                 System.out.println("테스트 : " + responseBody);
                 // then
                 resultActions.andExpect(status().isCreated());
-                resultActions.andExpect(jsonPath("$.data.id").value(2L));
+                resultActions.andExpect(jsonPath("$.data.id").value(1L));
         }
 
 }

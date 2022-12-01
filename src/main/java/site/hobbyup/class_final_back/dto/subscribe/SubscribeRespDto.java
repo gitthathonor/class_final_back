@@ -11,9 +11,9 @@ public class SubscribeRespDto {
     @Setter
     @Getter
     public static class SubscribeSaveRespDto {
-        private Long subscribeId;
-        private UserDto userId;
-        private LessonDto lessonId;
+        private Long id;
+        private UserDto user;
+        private LessonDto lesson;
 
         @Setter
         @Getter
@@ -36,9 +36,9 @@ public class SubscribeRespDto {
         }
 
         public SubscribeSaveRespDto(Subscribe subscribe) {
-            this.subscribeId = subscribe.getId();
-            this.userId = new UserDto(subscribe.getUser());
-            this.lessonId = new LessonDto(subscribe.getLesson());
+            this.id = subscribe.getId();
+            this.user = new UserDto(subscribe.getUser());
+            this.lesson = new LessonDto(subscribe.getLesson());
         }
 
     }

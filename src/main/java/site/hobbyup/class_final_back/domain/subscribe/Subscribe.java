@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.ManyToAny;
 
@@ -25,7 +26,8 @@ import site.hobbyup.class_final_back.domain.lesson.Lesson;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table(name = "subscribe")
+@Table(name = "subscribe", uniqueConstraints = {
+        @UniqueConstraint(name = "subscribeId", columnNames = { "userId", "lessonId" }) })
 @Entity
 public class Subscribe extends AuditingTime {
     @Id
@@ -33,9 +35,11 @@ public class Subscribe extends AuditingTime {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lessonId")
     private Lesson lesson;
 
     @Builder
