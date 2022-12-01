@@ -3,6 +3,7 @@ package site.hobbyup.class_final_back.config.dummy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import site.hobbyup.class_final_back.config.enums.UserEnum;
+import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.user.User;
 
@@ -30,5 +31,12 @@ public class DummyEntity {
         .user(user)
         .build();
     return profile;
+  }
+
+  protected Category newCategory(String name) {
+    Category category = Category.builder()
+        .name(name)
+        .build();
+    return category;
   }
 }
