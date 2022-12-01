@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,9 +36,10 @@ public class LessonApiController {
     }
 
     // lesson 리스트 보기
-    // @GetMapping("/api/lesson")
-    // public ResponseEntity<?> getLessonList() {
-    // return new ResponseEntity<>(new ResponseDto<>("클래스 리스트 불러오기 성공", null),
-    // HttpStatus.OK);
-    // }
+    @GetMapping("/api/category/{categoryId}")
+    public ResponseEntity<?> getLessonList(@PathVariable Long categoryId) {
+        lessonService.getLessonCategoryList(categoryId);
+        return new ResponseEntity<>(new ResponseDto<>("클래스 리스트 불러오기 성공", null),
+                HttpStatus.OK);
+    }
 }

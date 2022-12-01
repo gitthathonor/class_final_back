@@ -48,6 +48,13 @@ public class LessonService {
     return new LessonSaveRespDto(lessonPS);
   }
 
+  // 클래스 리스트 보기(카테고리별)
+  public void getLessonCategoryList(Long categoryId) {
+
+  }
+
+  public static class LessonCategoryListRespDto 
+
   // 클래스 수정하기
 
   // 클래스 삭제하기
