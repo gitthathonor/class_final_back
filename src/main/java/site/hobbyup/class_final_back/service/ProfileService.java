@@ -62,7 +62,11 @@ public class ProfileService extends DecodeUtil {
                 .orElseThrow(
                         () -> new CustomApiException("탈퇴한 유저입니다.", HttpStatus.FORBIDDEN));
 
-        Profile profilePS = profileRepository.findByUserId(userId);
+        Profile profilePS = profileRepository.findByUserId(userPS.getId());
+        if (profilePS == null) {
+            throw new CustomApiException("프로필이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
+        }
+
         return new ProfileDetailRespDto(profilePS);
     }
 
@@ -71,9 +75,14 @@ public class ProfileService extends DecodeUtil {
         log.debug("디버그 : service - 프로필 수정 시작");
         User userPS = userRepository.findById(userId)
                 .orElseThrow(
-                        () -> new RuntimeException("유저가 존재하지 않습니다."));
+                        () -> new CustomApiException("유저가 존재하지 않습니다.", HttpStatus.FORBIDDEN));
+
         // db에 있는 userId 이용해서 프로필 찾기
         Profile profilePS = profileRepository.findByUserId(userPS.getId());
+        if (profilePS == null) {
+            throw new CustomApiException("프로필이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
+        }
+
         // 파일 디코딩
         byte[] decodeByte = Base64.decodeBase64(profileUpdateReqDto.getFilePath());
         String filePath = "C:\\Temp\\upload\\" + decodeByte + ".jpg";
