@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import site.hobbyup.class_final_back.config.auth.LoginUser;
 import site.hobbyup.class_final_back.dto.ResponseDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
 import site.hobbyup.class_final_back.service.LessonService;
 
@@ -38,8 +39,8 @@ public class LessonApiController {
     // lesson 리스트 보기
     @GetMapping("/api/category/{categoryId}")
     public ResponseEntity<?> getLessonList(@PathVariable Long categoryId) {
-        lessonService.getLessonCategoryList(categoryId);
-        return new ResponseEntity<>(new ResponseDto<>("클래스 리스트 불러오기 성공", null),
+        LessonCategoryListRespDto lessonCategoryListRespDto = lessonService.getLessonCategoryList(categoryId);
+        return new ResponseEntity<>(new ResponseDto<>("클래스 리스트 불러오기 성공", lessonCategoryListRespDto),
                 HttpStatus.OK);
     }
 }

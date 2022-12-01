@@ -1,10 +1,14 @@
 package site.hobbyup.class_final_back.dto.lesson;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import lombok.Getter;
 import lombok.Setter;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.user.User;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto.LessonDto;
 
 public class LessonRespDto {
   @Setter
@@ -22,4 +26,47 @@ public class LessonRespDto {
       this.user = lesson.getUser();
     }
   }
+
+  @Setter
+  @Getter
+  public static class LessonCategoryListRespDto {
+    private CategoryDto categoryDto;
+    private List<LessonDto> lessonDtoList;
+
+    public LessonCategoryListRespDto(Category category, List<Lesson> lessonList) {
+      this.categoryDto = new CategoryDto(category);
+      this.lessonDtoList = lessonList.stream().map((lesson) -> new LessonDto(lesson)).collect(Collectors.toList());
+    }
+
+    @Setter
+    @Getter
+    public class CategoryDto {
+      private String categoryName;
+
+      public CategoryDto(Category category) {
+        this.categoryName = category.getName();
+      }
+
+    }
+
+    @Setter
+    @Getter
+    public class LessonDto {
+      private Long lessonId;
+      private String lessonName;
+      private String lessonPrice;
+      private Long lessonReviewCount;
+      private boolean isSubscribed; // 로그인 되었을 때만
+
+      public LessonDto(Lesson lesson) {
+        this.lessonId = lesson.getId();
+        this.lessonName = lesson.getName();
+        this.lessonPrice = lesson.getPrice() + "원";
+        this.lessonReviewCount = 0L;
+        this.isSubscribed = true;
+      }
+
+    }
+  }
+
 }

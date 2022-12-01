@@ -1,6 +1,7 @@
 package site.hobbyup.class_final_back.service;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
 import site.hobbyup.class_final_back.util.DecodeUtil;
 
@@ -49,11 +51,15 @@ public class LessonService {
   }
 
   // 클래스 리스트 보기(카테고리별)
-  public void getLessonCategoryList(Long categoryId) {
+  public LessonCategoryListRespDto getLessonCategoryList(Long categoryId) {
+    Category categoryPS = categoryRepository.findById(categoryId)
+        .orElseThrow(() -> new CustomApiException("존재하지 않는 카테고리 입니다.", HttpStatus.BAD_REQUEST));
 
+    List<Lesson> lessonListPS = lessonRepository.findByCategory(categoryPS.getId());
+    return new LessonCategoryListRespDto(categoryPS, lessonListPS);
   }
 
-  public static class LessonCategoryListRespDto 
+  // 클래스 상세보기
 
   // 클래스 수정하기
 
