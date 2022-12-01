@@ -20,7 +20,7 @@ import site.hobbyup.class_final_back.domain.AuditingTime;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.user.User;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "lesson")
 @Entity
@@ -44,7 +44,7 @@ public class Lesson extends AuditingTime {
   @ManyToOne(fetch = FetchType.LAZY)
   private User user;
 
-  @OneToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY)
   private Category category;
 
   @Builder

@@ -28,7 +28,7 @@ public class LessonApiController {
     public ResponseEntity<?> saveLesson(@RequestBody LessonSaveReqDto lessonSaveReqDto,
             @AuthenticationPrincipal LoginUser loginUser) throws IOException {
         log.debug("디버그 : LessonApiController-saveLesson 실행됨");
-        LessonSaveRespDto lessonSaveRespDto = lessonService.saveLesson(lessonSaveReqDto);
+        LessonSaveRespDto lessonSaveRespDto = lessonService.saveLesson(lessonSaveReqDto, loginUser);
         return new ResponseEntity<>(new ResponseDto<>("클래스 생성 성공", lessonSaveRespDto), HttpStatus.CREATED);
     }
 
