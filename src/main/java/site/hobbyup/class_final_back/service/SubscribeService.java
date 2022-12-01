@@ -1,10 +1,9 @@
 package site.hobbyup.class_final_back.service;
 
-import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,8 +15,9 @@ import site.hobbyup.class_final_back.domain.subscribe.Subscribe;
 import site.hobbyup.class_final_back.domain.subscribe.SubscribeRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
-import site.hobbyup.class_final_back.dto.subscribe.SubscribeReqDto;
+import site.hobbyup.class_final_back.dto.ResponseDto;
 import site.hobbyup.class_final_back.dto.subscribe.SubscribeReqDto.SubscribeSaveReqDto;
+import site.hobbyup.class_final_back.dto.subscribe.SubscribeRespDto.SubscribeDeleteRespDto;
 import site.hobbyup.class_final_back.dto.subscribe.SubscribeRespDto.SubscribeSaveRespDto;
 
 @RequiredArgsConstructor
@@ -40,6 +40,7 @@ public class SubscribeService {
         // 클래스 확인
         Lesson lessonsPS = lessonRepository.findById(subscribeSaveReqDto.getLessonId()).orElseThrow(
                 () -> new CustomApiException("클래스가 존재하지 않습니다.", HttpStatus.FORBIDDEN));
+
         try {
             Subscribe subscribe = subscribeSaveReqDto.toEntity(lessonsPS, userPS);
             SubscribeSaveRespDto subscribeSaveRespDto = new SubscribeSaveRespDto(subscribeRepository.save(subscribe));
@@ -47,6 +48,21 @@ public class SubscribeService {
         } catch (Exception e) {
             throw new CustomApiException("이미 구독한 클래스 입니다.", HttpStatus.FORBIDDEN);
         }
+    }
+
+    public SubscribeDeleteRespDto deleteSubscribe(Long lessonId, Long userId) {
+        // 유저확인
+        User userPS = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomApiException("유저가 존재하지 않습니다.", HttpStatus.FORBIDDEN));
+        // 클래스확인
+        Lesson lessonPS = lessonRepository.findById(lessonId)
+                .orElseThrow(() -> new CustomApiException("클래스가 존재하지 않습니다.", HttpStatus.FORBIDDEN));
+        // 해당 클래스 구독여부 확인
+
+        // 구독 취소
+        subscribeRepository.deleteByUserIdAndLessonId(userId, lessonId);
+
+        return null;
     }
 
 }
