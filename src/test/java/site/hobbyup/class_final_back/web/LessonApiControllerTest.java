@@ -1,10 +1,13 @@
 package site.hobbyup.class_final_back.web;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.sql.Timestamp;
+
+import javax.persistence.EntityManager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import site.hobbyup.class_final_back.config.dummy.DummyEntity;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
+import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
@@ -53,6 +57,9 @@ public class LessonApiControllerTest extends DummyEntity {
   @Autowired
   private CategoryRepository categoryRepository;
 
+  @Autowired
+  private EntityManager em;
+
   @BeforeEach
   public void setUp() {
     User ssar = userRepository.save(newUser("ssar"));
@@ -67,6 +74,12 @@ public class LessonApiControllerTest extends DummyEntity {
     Category game = categoryRepository.save(newCategory("게임"));
     Category others = categoryRepository.save(newCategory("기타"));
 
+    Lesson lesson1 = lessonRepository.save(newLesson("더미1", 10000L, ssar, beauty));
+    Lesson lesson2 = lessonRepository.save(newLesson("더미2", 20000L, ssar, sports));
+    Lesson lesson3 = lessonRepository.save(newLesson("더미3", 50000L, ssar, music));
+    Lesson lesson4 = lessonRepository.save(newLesson("더미4", 34500L, cos, music));
+    Lesson lesson5 = lessonRepository.save(newLesson("더미5", 2400L, cos, music));
+    Lesson lesson6 = lessonRepository.save(newLesson("더미6", 98000000L, cos, beauty));
   }
 
   @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -94,12 +107,30 @@ public class LessonApiControllerTest extends DummyEntity {
         .perform(post("/api/lesson").content(requestBody)
             .contentType(APPLICATION_JSON_UTF8));
     String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-    System.out.println("디버그 : " + responseBody);
+    System.out.println("테스트 : " + responseBody);
 
     // then
     resultActions.andExpect(status().isCreated());
     resultActions.andExpect(jsonPath("$.data.name").value("프로작곡가가 알려주는 하루만에 미디 작곡하는 법"));
     resultActions.andExpect(jsonPath("$.data.category.name").value("음악"));
     resultActions.andExpect(jsonPath("$.data.user.id").value(1L));
+    resultActions.andExpect(jsonPath("$.data.id").value(7L));
+  }
+
+  @Test
+  public void getLessonCategoryList_test() throws Exception {
+    // given
+    Long categoryId = 1L;
+
+    // when
+    ResultActions resultActions = mvc
+        .perform(get("/api/category/" + categoryId));
+    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+    System.out.println("테스트 : " + responseBody);
+
+    // then
+    resultActions.andExpect(status().isOk());
+    resultActions.andExpect(jsonPath("$.data.categoryDto.categoryName").value("뷰티"));
+    resultActions.andExpect(jsonPath("$.data.lessonDtoList[0].lessonPrice").value("10000원"));
   }
 }

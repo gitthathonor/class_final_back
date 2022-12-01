@@ -31,9 +31,11 @@ public class Lesson extends AuditingTime {
   private Long id;
   @Column(nullable = false, length = 100)
   private String name;
+  @Column(nullable = true)
   private String photo;
   private Long price;
   private String place;
+  @Column(nullable = true)
   private String possibleDays;
   @Column(columnDefinition = "LONGTEXT")
   private String curriculum;

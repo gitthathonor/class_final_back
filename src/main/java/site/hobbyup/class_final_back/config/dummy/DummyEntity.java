@@ -1,9 +1,12 @@
 package site.hobbyup.class_final_back.config.dummy;
 
+import java.sql.Timestamp;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.category.Category;
+import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.user.User;
 
@@ -41,4 +44,19 @@ public class DummyEntity {
         .build();
     return category;
   }
+
+  protected Lesson newLesson(String dummy, Long dummyNum, User user, Category category) {
+    return Lesson.builder()
+        .name(dummy)
+        .photo(dummy)
+        .price(dummyNum)
+        .place(dummy)
+        .user(user)
+        .curriculum("커리큘럼" + dummy)
+        .expiredAt(new Timestamp(50000))
+        .policy("취소 환불 정책" + dummy)
+        .category(category)
+        .build();
+  }
+
 }
