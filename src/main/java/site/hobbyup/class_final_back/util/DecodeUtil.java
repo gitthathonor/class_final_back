@@ -2,7 +2,6 @@ package site.hobbyup.class_final_back.util;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.UUID;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 
@@ -16,8 +15,8 @@ public class DecodeUtil {
         byte[] decodeByte = Base64.decodeBase64(encodeFile);
 
         // 이미지 이름
-        String fileName = UUID.randomUUID().toString();
-        String filePath = "C:\\Temp\\upload\\" + fileName + ".jpg";
+        // String fileName = UUID.randomUUID().toString();
+        String filePath = "C:\\Temp\\upload\\" + decodeByte + ".jpg";
 
         // 이미지 저장
         fos = new FileOutputStream(filePath); // 현위치에 path명으로 파일생성

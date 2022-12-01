@@ -46,6 +46,7 @@ public class SecurityConfig {
         log.debug("디버그 : SecurityConfig의 filterChain");
         http.headers().frameOptions().disable();
         http.csrf().disable();
+        http.cors().configurationSource(configurationSource());
 
         // ExceptionTranslationFilter (인가처리를 하는 과정에서 발생하는 예외처리 필터)
         http.exceptionHandling().authenticationEntryPoint(
@@ -65,7 +66,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
     public CorsConfigurationSource configurationSource() { // 공식문서 코드
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedHeader("*");

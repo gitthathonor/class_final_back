@@ -17,7 +17,7 @@ import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.AuditingTime;
 import site.hobbyup.class_final_back.dto.user.UserReqDto.UserUpdateReqDto;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "users")
 @Entity

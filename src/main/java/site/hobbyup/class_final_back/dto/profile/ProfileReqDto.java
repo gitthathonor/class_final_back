@@ -16,7 +16,29 @@ public class ProfileReqDto {
         private String certification;
         private String careerYear;
         private String career;
-        private Long userId;
+
+        public Profile toEntity(User user) {
+            return Profile.builder()
+                    .filePath(filePath)
+                    .introduction(introduction)
+                    .region(region)
+                    .certification(certification)
+                    .careerYear(careerYear)
+                    .career(career)
+                    .user(user)
+                    .build();
+        }
+    }
+
+    @Setter
+    @Getter
+    public static class ProfileUpdateReqDto {
+        private String filePath;
+        private String introduction;
+        private String region;
+        private String certification;
+        private String careerYear;
+        private String career;
 
         public Profile toEntity(User user) {
             return Profile.builder()
