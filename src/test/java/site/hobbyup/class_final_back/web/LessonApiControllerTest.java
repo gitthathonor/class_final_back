@@ -118,28 +118,11 @@ public class LessonApiControllerTest extends DummyEntity {
     resultActions.andExpect(jsonPath("$.data.name").value("프로작곡가가 알려주는 하루만에 미디 작곡하는 법"));
     resultActions.andExpect(jsonPath("$.data.category.name").value("음악"));
     resultActions.andExpect(jsonPath("$.data.user.id").value(1L));
-    resultActions.andExpect(jsonPath("$.data.id").value(7L));
+    resultActions.andExpect(jsonPath("$.data.id").value(11L));
   }
 
   @Test
   public void getLessonCategoryList_test() throws Exception {
-    // given
-    Long categoryId = 1L;
-
-    // when
-    ResultActions resultActions = mvc
-        .perform(get("/api/category/" + categoryId));
-    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-    System.out.println("테스트 : " + responseBody);
-
-    // then
-    resultActions.andExpect(status().isOk());
-    resultActions.andExpect(jsonPath("$.data.categoryDto.categoryName").value("뷰티"));
-    resultActions.andExpect(jsonPath("$.data.lessonDtoList[0].lessonPrice").value("10000원"));
-  }
-
-  @Test
-  public void getLessonBudgetList_test() throws Exception {
     // given
     Long categoryId = 2L;
     Long minPrice = 5000L;
@@ -147,7 +130,7 @@ public class LessonApiControllerTest extends DummyEntity {
 
     // when
     ResultActions resultActions = mvc
-        .perform(get("/api/category/" + categoryId + "/value/?min_price=" + minPrice + "&max_price=" + maxPrice));
+        .perform(get("/api/category/" + categoryId + "?min_price=" + minPrice + "&max_price=" + maxPrice));
     String responseBody = resultActions.andReturn().getResponse().getContentAsString();
     System.out.println("테스트 : " + responseBody);
 
@@ -155,7 +138,6 @@ public class LessonApiControllerTest extends DummyEntity {
     resultActions.andExpect(status().isOk());
     resultActions.andExpect(jsonPath("$.data.categoryDto.categoryName").value("스포츠"));
     resultActions.andExpect(jsonPath("$.data.lessonDtoList[0].lessonPrice").value("20000원"));
-    // resultActions.andExpect(jsonPath("$.data.lessonDtoList.size").value(3));
   }
 
 }
