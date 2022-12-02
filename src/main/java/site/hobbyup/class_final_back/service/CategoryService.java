@@ -13,6 +13,4 @@ public class CategoryService {
 
   private final CategoryRepository categoryRepository;
 
-  // 클래스 생성하기
-
 }

@@ -80,6 +80,10 @@ public class LessonApiControllerTest extends DummyEntity {
     Lesson lesson4 = lessonRepository.save(newLesson("더미4", 34500L, cos, music));
     Lesson lesson5 = lessonRepository.save(newLesson("더미5", 2400L, cos, music));
     Lesson lesson6 = lessonRepository.save(newLesson("더미6", 98000000L, cos, beauty));
+    Lesson lesson7 = lessonRepository.save(newLesson("더미7", 30000L, ssar, sports));
+    Lesson lesson8 = lessonRepository.save(newLesson("더미8", 40000L, ssar, sports));
+    Lesson lesson9 = lessonRepository.save(newLesson("더미9", 50000L, ssar, sports));
+    Lesson lesson10 = lessonRepository.save(newLesson("더미10", 70000L, ssar, sports));
   }
 
   @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -133,4 +137,25 @@ public class LessonApiControllerTest extends DummyEntity {
     resultActions.andExpect(jsonPath("$.data.categoryDto.categoryName").value("뷰티"));
     resultActions.andExpect(jsonPath("$.data.lessonDtoList[0].lessonPrice").value("10000원"));
   }
+
+  @Test
+  public void getLessonBudgetList_test() throws Exception {
+    // given
+    Long categoryId = 2L;
+    Long minPrice = 5000L;
+    Long maxPrice = 50000L;
+
+    // when
+    ResultActions resultActions = mvc
+        .perform(get("/api/category/" + categoryId + "/value/?min_price=" + minPrice + "&max_price=" + maxPrice));
+    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+    System.out.println("테스트 : " + responseBody);
+
+    // then
+    resultActions.andExpect(status().isOk());
+    resultActions.andExpect(jsonPath("$.data.categoryDto.categoryName").value("스포츠"));
+    resultActions.andExpect(jsonPath("$.data.lessonDtoList[0].lessonPrice").value("20000원"));
+    // resultActions.andExpect(jsonPath("$.data.lessonDtoList.size").value(3));
+  }
+
 }
