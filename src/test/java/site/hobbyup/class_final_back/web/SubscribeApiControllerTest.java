@@ -104,7 +104,7 @@ public class SubscribeApiControllerTest extends DummyEntity {
                 System.out.println("테스트 : " + responseBody);
                 // then
                 resultActions.andExpect(status().isCreated());
-                resultActions.andExpect(jsonPath("$.data.id").value(1L));
+                resultActions.andExpect(jsonPath("$.data.id").value(2L));
         }
 
         @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
