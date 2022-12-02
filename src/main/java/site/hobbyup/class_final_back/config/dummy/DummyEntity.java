@@ -9,6 +9,7 @@ import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.review.Review;
+import site.hobbyup.class_final_back.domain.subscribe.Subscribe;
 import site.hobbyup.class_final_back.domain.user.User;
 
 public class DummyEntity {
@@ -26,14 +27,15 @@ public class DummyEntity {
     return user;
   }
 
-  protected Profile newProfile(User user) {
+  protected Profile newProfile(String filePath, String introduction, String region, String certification,
+      String careerYear, String career, User user) {
     Profile profile = Profile.builder()
-        .filePath("이미지경로")
-        .introduction("안녕하세요")
-        .region("부산")
-        .certification("컴활")
-        .careerYear("신입")
-        .career("없음")
+        .filePath(filePath)
+        .introduction(introduction)
+        .region(region)
+        .certification(certification)
+        .careerYear(careerYear)
+        .career(career)
         .user(user)
         .build();
     return profile;
@@ -67,6 +69,14 @@ public class DummyEntity {
         .user(user)
         .lesson(lesson)
         .build();
+  }
+
+  protected Subscribe newSubscribe(User user, Lesson lesson) {
+    Subscribe subscribe = Subscribe.builder()
+        .user(null)
+        .lesson(null)
+        .build();
+    return subscribe;
   }
 
 }
