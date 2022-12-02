@@ -115,7 +115,7 @@ public class SubscribeApiControllerTest extends DummyEntity {
 
                 // when
                 ResultActions resultActions = mvc
-                                .perform(delete("/api/subscribe" + subscribeId)
+                                .perform(delete("/api/subscribe/" + subscribeId)
                                                 .contentType(APPLICATION_JSON_UTF8));
                 String responseBody = resultActions.andReturn().getResponse().getContentAsString();
                 System.out.println("테스트 : " + responseBody);

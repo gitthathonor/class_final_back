@@ -55,7 +55,6 @@ public class SubscribeApiController {
             throw new CustomApiException("권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
         SubscribeListRespDto subscribeListRespDto = subscribeService.getSubscribeList(userId);
-        log.debug("디버그 : " + subscribeListRespDto.getSubscribes().get(0).getLesson().getName());
         return new ResponseEntity<>(new ResponseDto<>("구독리스트보기", subscribeListRespDto), HttpStatus.OK);
     }
 }
