@@ -77,7 +77,6 @@ public class SubscribeService {
         if (subscribeList.size() == 0) {
             throw new CustomApiException("구독한 클래스가 존재하지 않습니다.", HttpStatus.FORBIDDEN);
         }
-        log.debug("디버그 : 구독리스트" + subscribeList.get(0).getLesson().getName());
         return new SubscribeListRespDto(subscribeList);
     }
 
