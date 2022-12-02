@@ -58,7 +58,7 @@ public class SubscribeService {
 
         // 해당 클래스 구독여부 확인
         Subscribe subscribePS = subscribeRepository.findById(subscribeId)
-                .orElseThrow(() -> new CustomApiException("구독하지 않은 클래스입니다..", HttpStatus.FORBIDDEN));
+                .orElseThrow(() -> new CustomApiException("구독하지 않은 클래스입니다.", HttpStatus.FORBIDDEN));
 
         // 구독 취소
         subscribeRepository.deleteById(subscribePS.getId());

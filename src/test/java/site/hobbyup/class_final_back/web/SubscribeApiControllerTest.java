@@ -1,5 +1,6 @@
 package site.hobbyup.class_final_back.web;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -30,6 +31,7 @@ import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
+import site.hobbyup.class_final_back.domain.subscribe.Subscribe;
 import site.hobbyup.class_final_back.domain.subscribe.SubscribeRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
@@ -79,20 +81,9 @@ public class SubscribeApiControllerTest extends DummyEntity {
                 Category game = categoryRepository.save(newCategory("게임"));
                 Category others = categoryRepository.save(newCategory("기타"));
 
-                LessonSaveReqDto lessonSaveReqDto = new LessonSaveReqDto();
-                String realPhoto = "";
-                String photo = DecodeUtil.saveDecodingImage(realPhoto);
-                lessonSaveReqDto.setName("프로작곡가가 알려주는 하루만에 미디 작곡하는 법");
-                lessonSaveReqDto.setCategoryId(4L);
-                lessonSaveReqDto.setCurriculum("1차 : 작곡가 소개, 2차 : 미디 사용법 숙지, 3차 : 실제 곡 만들기");
-                lessonSaveReqDto.setPhoto(photo);
-                lessonSaveReqDto.setPlace("부산진구");
-                lessonSaveReqDto.setExpiredAt(new Timestamp(700000000L));
-                lessonSaveReqDto.setPolicy("취소 및 환불정책");
-                lessonSaveReqDto.setPossibleDays("월,화,수");
-                lessonSaveReqDto.setPrice(500000L);
-                Lesson lesson1 = lessonRepository.save(lessonSaveReqDto.toEntity(others, cos));
+                Lesson lesson1 = lessonRepository.save(newLesson("더미1", 10000L, ssar, beauty));
 
+                Subscribe subscribe1 = subscribeRepository.save(newSubscribe(ssar, lesson1));
         }
 
         @WithUserDetails(value = "cos", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -114,6 +105,24 @@ public class SubscribeApiControllerTest extends DummyEntity {
                 // then
                 resultActions.andExpect(status().isCreated());
                 resultActions.andExpect(jsonPath("$.data.id").value(1L));
+        }
+
+        @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+        @Test
+        public void deleteSubscribe_test() throws Exception {
+                // given
+                Long subscribeId = 1L;
+
+                // when
+                ResultActions resultActions = mvc
+                                .perform(delete("/api/subscribe" + subscribeId)
+                                                .contentType(APPLICATION_JSON_UTF8));
+                String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+                System.out.println("테스트 : " + responseBody);
+
+                // then
+                resultActions.andExpect(status().isCreated());
+
         }
 
 }

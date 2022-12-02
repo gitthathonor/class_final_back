@@ -9,6 +9,7 @@ import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.review.Review;
+import site.hobbyup.class_final_back.domain.subscribe.Subscribe;
 import site.hobbyup.class_final_back.domain.user.User;
 
 public class DummyEntity {
@@ -68,6 +69,14 @@ public class DummyEntity {
         .user(user)
         .lesson(lesson)
         .build();
+  }
+
+  protected Subscribe newSubscribe(User user, Lesson lesson) {
+    Subscribe subscribe = Subscribe.builder()
+        .user(null)
+        .lesson(null)
+        .build();
+    return subscribe;
   }
 
 }
