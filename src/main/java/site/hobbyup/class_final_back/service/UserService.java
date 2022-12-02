@@ -58,6 +58,7 @@ public class UserService {
         return new UserUpdateRespDto(userRepository.save(userOP));
     }
 
+    // 회원탈퇴
     @Transactional(rollbackFor = RuntimeException.class)
     public void deleteUser(Long id) {
         User userPS = userRepository.findById(id)

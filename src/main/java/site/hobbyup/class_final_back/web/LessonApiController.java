@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import site.hobbyup.class_final_back.config.auth.LoginUser;
 import site.hobbyup.class_final_back.dto.ResponseDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonBudgetListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
 import site.hobbyup.class_final_back.service.LessonService;
@@ -41,6 +43,16 @@ public class LessonApiController {
     public ResponseEntity<?> getLessonCategoryList(@PathVariable Long categoryId) {
         LessonCategoryListRespDto lessonCategoryListRespDto = lessonService.getLessonCategoryList(categoryId);
         return new ResponseEntity<>(new ResponseDto<>("클래스 리스트 불러오기 성공", lessonCategoryListRespDto),
+                HttpStatus.OK);
+    }
+
+    // 예산별 필터링 리스트 테스트
+    @GetMapping("/api/category/{categoryId}/value")
+    public ResponseEntity<?> getLessonBudgetList(@PathVariable Long categoryId,
+            @RequestParam(name = "min_price") Long minPrice, @RequestParam(name = "max_price") Long maxPrice) {
+        LessonBudgetListRespDto LessonBudgetListRespDto = lessonService.getLessonBudgetList(categoryId, minPrice,
+                maxPrice);
+        return new ResponseEntity<>(new ResponseDto<>("클래스 리스트 필터링 성공", LessonBudgetListRespDto),
                 HttpStatus.OK);
     }
 }
