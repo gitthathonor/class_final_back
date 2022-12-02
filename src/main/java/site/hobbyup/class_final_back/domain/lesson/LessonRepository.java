@@ -12,4 +12,8 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
   List<Lesson> findByCategory(@Param("categoryId") Long categoryId, @Param("minPrice") Long minPrice,
       @Param("maxPrice") Long maxPrice);
 
+  // where절에 categoryId가 들어와서 걸린다.
+  @Query(value = "SELECT ", nativeQuery = true)
+  List<Lesson> findBy
+
 }

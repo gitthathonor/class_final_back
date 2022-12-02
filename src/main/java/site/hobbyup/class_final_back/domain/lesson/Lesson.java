@@ -2,6 +2,7 @@ package site.hobbyup.class_final_back.domain.lesson;
 
 import java.sql.Timestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -51,7 +52,7 @@ public class Lesson extends AuditingTime {
   private String policy;
   private Timestamp expiredAt;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private User user;
 
   @ManyToOne(fetch = FetchType.LAZY)
