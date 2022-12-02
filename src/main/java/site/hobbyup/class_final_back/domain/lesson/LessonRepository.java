@@ -13,7 +13,13 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
       @Param("maxPrice") Long maxPrice);
 
   // where절에 categoryId가 들어와서 걸린다.
-  @Query(value = "SELECT ", nativeQuery = true)
-  List<Lesson> findBy
+  @Query(value = "select l.title lessonName, l.price lessonPrice, s2.totalReview lessonReviewsCount, " +
+      "s2.totalGrade lessonAvgGrade, s2.isSubscribed isSubscribed" +
+      "from lesson l left outer join (select count(*) totalReview, AVG(grade) totalGrade, " +
+      "(select count(*) from subscribe s1 where s1.user_id = 1)>0 isSubscribed, r.lesson_id id" +
+      "from review r left outer join subscribe s on r.lesson_id = s.lesson_id where r.lesson_id = 1) s2" +
+      "ON l.id = s2.id" +
+      "WHERE l.id = 1;", nativeQuery = true)
+  List<Lesson> findAllLessonByCategoryId(@Param("categoryId") Long categoryId);
 
 }

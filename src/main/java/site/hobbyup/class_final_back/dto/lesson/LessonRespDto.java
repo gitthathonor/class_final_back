@@ -55,6 +55,7 @@ public class LessonRespDto {
       private String lessonName;
       private String lessonPrice;
       private Long lessonReviewsCount;
+      private Double lessonAvgGrade;
       private boolean isSubscribed; // 로그인 되었을 때만
 
       public LessonDto(Lesson lesson) {
@@ -62,6 +63,7 @@ public class LessonRespDto {
         this.lessonName = lesson.getName();
         this.lessonPrice = lesson.getPrice() + "원";
         this.lessonReviewsCount = 0L;
+        this.lessonAvgGrade = 0.0;
         this.isSubscribed = false;
       }
 
