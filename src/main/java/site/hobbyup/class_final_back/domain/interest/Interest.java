@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hobbyup.class_final_back.domain.category.Category;
@@ -33,4 +34,12 @@ public class Interest {
   @JoinColumn(foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
   @ManyToOne(fetch = FetchType.LAZY)
   private Category category;
+
+  @Builder
+  public Interest(Long id, User user, Category category) {
+    this.id = id;
+    this.user = user;
+    this.category = category;
+  }
+
 }

@@ -1,9 +1,13 @@
 package site.hobbyup.class_final_back.dto.user;
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import site.hobbyup.class_final_back.config.enums.UserEnum;
+import site.hobbyup.class_final_back.domain.category.Category;
+import site.hobbyup.class_final_back.domain.interest.Interest;
 import site.hobbyup.class_final_back.domain.user.User;
 
 public class UserReqDto {
@@ -17,6 +21,7 @@ public class UserReqDto {
         private String email;
         private String phoneNum;
         private UserEnum role;
+        private List<Long> categoryIds;
 
         public User toEntity() {
             return User.builder()
