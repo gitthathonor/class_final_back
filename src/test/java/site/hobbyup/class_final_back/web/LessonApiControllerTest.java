@@ -124,30 +124,13 @@ public class LessonApiControllerTest extends DummyEntity {
   @Test
   public void getLessonCategoryList_test() throws Exception {
     // given
-    Long categoryId = 1L;
-
-    // when
-    ResultActions resultActions = mvc
-        .perform(get("/api/category/" + categoryId));
-    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-    System.out.println("테스트 : " + responseBody);
-
-    // then
-    resultActions.andExpect(status().isOk());
-    resultActions.andExpect(jsonPath("$.data.categoryDto.categoryName").value("뷰티"));
-    resultActions.andExpect(jsonPath("$.data.lessonDtoList[0].lessonPrice").value("10000원"));
-  }
-
-  @Test
-  public void getLessonBudgetList_test() throws Exception {
-    // given
     Long categoryId = 2L;
     Long minPrice = 5000L;
     Long maxPrice = 50000L;
 
     // when
     ResultActions resultActions = mvc
-        .perform(get("/api/category/" + categoryId + "/value/?min_price=" + minPrice + "&max_price=" + maxPrice));
+        .perform(get("/api/category/" + categoryId + "?min_price=" + minPrice + "&max_price=" + maxPrice));
     String responseBody = resultActions.andReturn().getResponse().getContentAsString();
     System.out.println("테스트 : " + responseBody);
 
@@ -155,7 +138,6 @@ public class LessonApiControllerTest extends DummyEntity {
     resultActions.andExpect(status().isOk());
     resultActions.andExpect(jsonPath("$.data.categoryDto.categoryName").value("스포츠"));
     resultActions.andExpect(jsonPath("$.data.lessonDtoList[0].lessonPrice").value("20000원"));
-    // resultActions.andExpect(jsonPath("$.data.lessonDtoList.size").value(3));
   }
 
 }

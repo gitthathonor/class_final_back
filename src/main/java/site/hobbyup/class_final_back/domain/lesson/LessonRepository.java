@@ -8,11 +8,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
-  @Query("select l from Lesson l join fetch l.category c where l.category.id = :categoryId")
-  List<Lesson> findByCategory(@Param("categoryId") Long categoryId);
-
   @Query("select l from Lesson l join fetch l.category c where l.category.id = :categoryId and (l.price > :minPrice and l.price < :maxPrice)")
-  List<Lesson> findBybudget(@Param("categoryId") Long categoryId, @Param("minPrice") Long minPrice,
+  List<Lesson> findByCategory(@Param("categoryId") Long categoryId, @Param("minPrice") Long minPrice,
       @Param("maxPrice") Long maxPrice);
 
 }
