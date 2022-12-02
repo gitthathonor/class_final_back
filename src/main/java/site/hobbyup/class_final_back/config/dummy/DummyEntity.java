@@ -8,6 +8,7 @@ import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
+import site.hobbyup.class_final_back.domain.review.Review;
 import site.hobbyup.class_final_back.domain.user.User;
 
 public class DummyEntity {
@@ -57,6 +58,15 @@ public class DummyEntity {
         .expiredAt(new Timestamp(50000))
         .policy("취소 환불 정책" + dummy)
         .category(category)
+        .build();
+  }
+
+  protected Review newReivew(String text, Double grade, User user, Lesson lesson) {
+    return Review.builder()
+        .content(text)
+        .grade(grade)
+        .user(user)
+        .lesson(lesson)
         .build();
   }
 
