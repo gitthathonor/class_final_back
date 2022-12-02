@@ -1,10 +1,12 @@
 package site.hobbyup.class_final_back.dto.user;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import site.hobbyup.class_final_back.domain.interest.Interest;
 import site.hobbyup.class_final_back.domain.user.User;
 
 public class UserRespDto {
@@ -15,11 +17,19 @@ public class UserRespDto {
     public static class JoinRespDto {
         private Long id;
         private String username;
+        private List<Interest> interestList;
 
-        public JoinRespDto(User user) {
+        public JoinRespDto(User user, List<Interest> interestList) {
             this.id = user.getId();
             this.username = user.getUsername();
+            this.interestList = interestList;
         }
+
+        // @Setter
+        // @Getter
+        // public class InterestDto {
+        // private
+        // }
     }
 
     @Setter
