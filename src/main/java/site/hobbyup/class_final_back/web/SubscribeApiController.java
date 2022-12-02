@@ -40,13 +40,13 @@ public class SubscribeApiController {
         return new ResponseEntity<>(new ResponseDto<>("구독 완료", SubscribeSaveRespDto), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/api/lesson/{lessonId}/subscribe")
-    public ResponseEntity<?> deleteSubscribe(@PathVariable Long lessonId,
+    @DeleteMapping("/api/subscribe/{subscribeId}")
+    public ResponseEntity<?> deleteSubscribe(@PathVariable Long subscribeId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : 구독취소 controller시작");
-        SubscribeDeleteRespDto subscribeDeleteRespDto = subscribeService.deleteSubscribe(lessonId,
+        subscribeService.deleteSubscribe(subscribeId,
                 loginUser.getUser().getId());
-        return new ResponseEntity<>(new ResponseDto<>("구독 취소", subscribeDeleteRespDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ResponseDto<>("구독 취소", null), HttpStatus.CREATED);
     }
 
 }

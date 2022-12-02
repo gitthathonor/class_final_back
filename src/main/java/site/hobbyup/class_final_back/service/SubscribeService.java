@@ -50,19 +50,18 @@ public class SubscribeService {
         }
     }
 
-    public SubscribeDeleteRespDto deleteSubscribe(Long lessonId, Long userId) {
+    @Transactional
+    public void deleteSubscribe(Long subscribeId, Long userId) {
         // 유저확인
         User userPS = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomApiException("유저가 존재하지 않습니다.", HttpStatus.FORBIDDEN));
-        // 클래스확인
-        Lesson lessonPS = lessonRepository.findById(lessonId)
-                .orElseThrow(() -> new CustomApiException("클래스가 존재하지 않습니다.", HttpStatus.FORBIDDEN));
+
         // 해당 클래스 구독여부 확인
+        Subscribe subscribePS = subscribeRepository.findById(subscribeId)
+                .orElseThrow(() -> new CustomApiException("구독하지 않은 클래스입니다..", HttpStatus.FORBIDDEN));
 
         // 구독 취소
-        subscribeRepository.deleteByUserIdAndLessonId(userId, lessonId);
-
-        return null;
+        subscribeRepository.deleteById(subscribePS.getId());
     }
 
 }
