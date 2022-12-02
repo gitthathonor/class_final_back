@@ -24,6 +24,12 @@ public class UserRespDto {
             this.username = user.getUsername();
             this.interestList = interestList;
         }
+
+        // @Setter
+        // @Getter
+        // public class InterestDto {
+        // private
+        // }
     }
 
     @Setter
