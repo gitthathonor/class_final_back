@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,17 +28,12 @@ import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
-import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.subscribe.Subscribe;
 import site.hobbyup.class_final_back.domain.subscribe.SubscribeRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
-import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
-import site.hobbyup.class_final_back.dto.profile.ProfileReqDto.ProfileSaveReqDto;
-import site.hobbyup.class_final_back.dto.subscribe.SubscribeReqDto;
 import site.hobbyup.class_final_back.dto.subscribe.SubscribeReqDto.SubscribeSaveReqDto;
-import site.hobbyup.class_final_back.util.DecodeUtil;
 
 @Sql("classpath:db/truncate.sql") // 롤백 대신 사용 (auto_increment 초기화 + 데이터 비우기)
 @ActiveProfiles("test")
@@ -82,8 +76,10 @@ public class SubscribeApiControllerTest extends DummyEntity {
                 Category others = categoryRepository.save(newCategory("기타"));
 
                 Lesson lesson1 = lessonRepository.save(newLesson("더미1", 10000L, ssar, beauty));
+                Lesson lesson2 = lessonRepository.save(newLesson("더미1", 10000L, ssar, beauty));
 
                 Subscribe subscribe1 = subscribeRepository.save(newSubscribe(ssar, lesson1));
+                Subscribe subscribe2 = subscribeRepository.save(newSubscribe(ssar, lesson2));
         }
 
         @WithUserDetails(value = "cos", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -104,7 +100,7 @@ public class SubscribeApiControllerTest extends DummyEntity {
                 System.out.println("테스트 : " + responseBody);
                 // then
                 resultActions.andExpect(status().isCreated());
-                resultActions.andExpect(jsonPath("$.data.id").value(1L));
+                resultActions.andExpect(jsonPath("$.data.id").value(3L));
         }
 
         @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -115,14 +111,31 @@ public class SubscribeApiControllerTest extends DummyEntity {
 
                 // when
                 ResultActions resultActions = mvc
-                                .perform(delete("/api/subscribe" + subscribeId)
-                                                .contentType(APPLICATION_JSON_UTF8));
+                                .perform(delete("/api/subscribe/" + subscribeId));
                 String responseBody = resultActions.andReturn().getResponse().getContentAsString();
                 System.out.println("테스트 : " + responseBody);
 
                 // then
                 resultActions.andExpect(status().isCreated());
 
+        }
+
+        @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+        @Test
+        public void getSubscribeList_test() throws Exception {
+                // given
+                Long userId = 1L;
+
+                // when
+                ResultActions resultActions = mvc
+                                .perform(get("/api/user/" + userId + "/subscribe"));
+
+                String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+                System.out.println("테스트 : " + responseBody);
+
+                // then
+                resultActions.andExpect(status().isOk());
+                resultActions.andExpect(jsonPath("$.data.subscribes.length()").value(2));
         }
 
 }
