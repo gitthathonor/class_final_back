@@ -16,6 +16,8 @@ public class LessonReqDto {
     private String photo;
     private Long price;
     private String place;
+    private Long lessonTime;
+    private Long lessonCount;
     private String possibleDays;
     private String curriculum;
     private String policy;
@@ -29,6 +31,8 @@ public class LessonReqDto {
           .photo(photo)
           .price(price)
           .place(place)
+          .lessonTime(lessonTime)
+          .lessonCount(lessonCount)
           .possibleDays(possibleDays)
           .curriculum(curriculum)
           .policy(policy)
