@@ -7,12 +7,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import site.hobbyup.class_final_back.domain.user.User;
 
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -30,4 +32,6 @@ public class Coupon {
     private Timestamp expiredDate;
     private Timestamp createdAt;
 
+    @ManyToOne
+    private User user;
 }
