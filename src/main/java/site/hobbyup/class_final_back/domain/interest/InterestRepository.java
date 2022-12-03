@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface InterestRepository extends JpaRepository<Interest, Long> {
 
-  @Query("select i from Interest i where i.userId = :userId, nativeQuery = true")
+  @Query("select i from Interest i where i.user.id = :userId")
   List<Interest> findAllByUserId(@Param("userId") Long userId);
 
 }
