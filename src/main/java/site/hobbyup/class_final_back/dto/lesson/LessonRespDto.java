@@ -55,6 +55,7 @@ public class LessonRespDto {
       private String lessonName;
       private String lessonPrice;
       private Long lessonReviewsCount;
+      private Double lessonAvgGrade;
       private boolean isSubscribed; // 로그인 되었을 때만
 
       public LessonDto(Lesson lesson) {
@@ -62,48 +63,7 @@ public class LessonRespDto {
         this.lessonName = lesson.getName();
         this.lessonPrice = lesson.getPrice() + "원";
         this.lessonReviewsCount = 0L;
-        this.isSubscribed = false;
-      }
-
-    }
-  }
-
-  @Setter
-  @Getter
-  public static class LessonBudgetListRespDto {
-    private CategoryDto categoryDto;
-    private List<LessonDto> lessonDtoList;
-
-    public LessonBudgetListRespDto(Category category, List<Lesson> lessonList) {
-      this.categoryDto = new CategoryDto(category);
-      this.lessonDtoList = lessonList.stream().map((lesson) -> new LessonDto(lesson)).collect(Collectors.toList());
-    }
-
-    @Setter
-    @Getter
-    public class CategoryDto {
-      private String categoryName;
-
-      public CategoryDto(Category category) {
-        this.categoryName = category.getName();
-      }
-
-    }
-
-    @Setter
-    @Getter
-    public class LessonDto {
-      private Long lessonId;
-      private String lessonName;
-      private String lessonPrice;
-      private Long lessonReviewsCount;
-      private boolean isSubscribed; // 로그인 되었을 때만
-
-      public LessonDto(Lesson lesson) {
-        this.lessonId = lesson.getId();
-        this.lessonName = lesson.getName();
-        this.lessonPrice = lesson.getPrice() + "원";
-        this.lessonReviewsCount = 0L;
+        this.lessonAvgGrade = 0.0;
         this.isSubscribed = false;
       }
 

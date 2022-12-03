@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import site.hobbyup.class_final_back.config.auth.LoginUser;
 import site.hobbyup.class_final_back.dto.ResponseDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
-import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonBudgetListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
 import site.hobbyup.class_final_back.service.LessonService;
@@ -38,21 +37,14 @@ public class LessonApiController {
         return new ResponseEntity<>(new ResponseDto<>("클래스 생성 성공", lessonSaveRespDto), HttpStatus.CREATED);
     }
 
-    // lesson 리스트 보기
+    // lesson 리스트 보기(쿼리스트링으로 예산별 필터까지 적용)
     @GetMapping("/api/category/{categoryId}")
-    public ResponseEntity<?> getLessonCategoryList(@PathVariable Long categoryId) {
-        LessonCategoryListRespDto lessonCategoryListRespDto = lessonService.getLessonCategoryList(categoryId);
+    public ResponseEntity<?> getLessonCategoryList(@PathVariable Long categoryId,
+            @RequestParam(name = "min_price") Long minPrice, @RequestParam(name = "max_price") Long maxPrice) {
+        LessonCategoryListRespDto lessonCategoryListRespDto = lessonService.getLessonCategoryList(categoryId, minPrice,
+                maxPrice);
         return new ResponseEntity<>(new ResponseDto<>("클래스 리스트 불러오기 성공", lessonCategoryListRespDto),
                 HttpStatus.OK);
     }
 
-    // 예산별 필터링 리스트 테스트
-    @GetMapping("/api/category/{categoryId}/value")
-    public ResponseEntity<?> getLessonBudgetList(@PathVariable Long categoryId,
-            @RequestParam(name = "min_price") Long minPrice, @RequestParam(name = "max_price") Long maxPrice) {
-        LessonBudgetListRespDto LessonBudgetListRespDto = lessonService.getLessonBudgetList(categoryId, minPrice,
-                maxPrice);
-        return new ResponseEntity<>(new ResponseDto<>("클래스 리스트 필터링 성공", LessonBudgetListRespDto),
-                HttpStatus.OK);
-    }
 }
