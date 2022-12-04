@@ -52,7 +52,7 @@ public class Lesson extends AuditingTime {
   private String policy;
   private Timestamp expiredAt;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
   private User user;
 
   @ManyToOne(fetch = FetchType.LAZY)
