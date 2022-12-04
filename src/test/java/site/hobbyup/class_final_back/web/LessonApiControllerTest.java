@@ -25,10 +25,15 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import site.hobbyup.class_final_back.config.dummy.DummyEntity;
+import site.hobbyup.class_final_back.config.enums.DayEnum;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
+import site.hobbyup.class_final_back.domain.profile.Profile;
+import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
+import site.hobbyup.class_final_back.domain.review.Review;
+import site.hobbyup.class_final_back.domain.review.ReviewRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
@@ -58,6 +63,12 @@ public class LessonApiControllerTest extends DummyEntity {
   private CategoryRepository categoryRepository;
 
   @Autowired
+  private ReviewRepository reviewRepository;
+
+  @Autowired
+  private ProfileRepository profileRepository;
+
+  @Autowired
   private EntityManager em;
 
   @BeforeEach
@@ -74,6 +85,9 @@ public class LessonApiControllerTest extends DummyEntity {
     Category game = categoryRepository.save(newCategory("게임"));
     Category others = categoryRepository.save(newCategory("기타"));
 
+    Profile ssarProfile = profileRepository
+        .save(newProfile("", "안녕하세요 부산에서 가장 뷰티한 강사 ssar입니다.", "부산", "미용사", "5년", "박준 뷰티랩 양정점 원장 10년", ssar));
+
     Lesson lesson1 = lessonRepository.save(newLesson("더미1", 10000L, ssar, beauty));
     Lesson lesson2 = lessonRepository.save(newLesson("더미2", 20000L, ssar, sports));
     Lesson lesson3 = lessonRepository.save(newLesson("더미3", 50000L, ssar, music));
@@ -84,6 +98,12 @@ public class LessonApiControllerTest extends DummyEntity {
     Lesson lesson8 = lessonRepository.save(newLesson("더미8", 40000L, ssar, sports));
     Lesson lesson9 = lessonRepository.save(newLesson("더미9", 50000L, ssar, sports));
     Lesson lesson10 = lessonRepository.save(newLesson("더미10", 70000L, ssar, sports));
+
+    Review review1 = reviewRepository.save(newReivew("너무 좋은 강의입니다.", 4.5, ssar, lesson1));
+    Review review2 = reviewRepository.save(newReivew("생각했던 것보다 더 좋네요!", 4.0, cos, lesson1));
+    Review review3 = reviewRepository.save(newReivew("별로네요", 3.0, ssar, lesson2));
+    Review review4 = reviewRepository.save(newReivew("도대체 이 강의 하시는 이유가 뭐죠?", 2.5, ssar, lesson2));
+
   }
 
   @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -101,7 +121,7 @@ public class LessonApiControllerTest extends DummyEntity {
     lessonSaveReqDto.setPlace("부산진구");
     lessonSaveReqDto.setExpiredAt(new Timestamp(700000000L));
     lessonSaveReqDto.setPolicy("취소 및 환불정책");
-    lessonSaveReqDto.setPossibleDays("월,화,수");
+    lessonSaveReqDto.setPossibleDays(DayEnum.MONDAY);
     lessonSaveReqDto.setPrice(500000L);
 
     String requestBody = om.writeValueAsString(lessonSaveReqDto);
@@ -153,7 +173,8 @@ public class LessonApiControllerTest extends DummyEntity {
 
     // then
     resultActions.andExpect(status().isOk());
-    resultActions.andExpect(jsonPath("$.data.categoryDto.categoryName").value("스포츠"));
+    resultActions.andExpect(jsonPath("$.data.lessonName").value("더미1"));
+    resultActions.andExpect(jsonPath("$.data.lessonReviewList[0].reviewContent").value("너무 좋은 강의입니다."));
   }
 
 }
