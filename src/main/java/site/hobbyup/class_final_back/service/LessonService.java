@@ -67,7 +67,6 @@ public class LessonService {
   public void getLessonDetail(Long id) {
     Lesson lessonPS = lessonRepository.findById(id)
         .orElseThrow(() -> new CustomApiException("해당 수업 없읍", HttpStatus.BAD_REQUEST));
-    LessonDetailRespDto 
   }
 
   // 클래스 상세보기

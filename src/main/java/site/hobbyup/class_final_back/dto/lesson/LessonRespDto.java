@@ -94,7 +94,7 @@ public class LessonRespDto {
       this.lessonPlace = lesson.getPlace();
       this.possibleDays = lesson.getPossibleDays();
       this.lessonPolicy = lesson.getPolicy();
-      this.totalCompleted = lesson.;
+      this.totalCompleted = totalCompleted;
       this.satisfication = satisfication;
       this.lessonReviewList = lessonReviewList.stream().map((review) -> new ReviewDto(review))
           .collect(Collectors.toList());
