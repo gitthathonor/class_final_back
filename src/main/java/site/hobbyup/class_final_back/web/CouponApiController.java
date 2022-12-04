@@ -3,6 +3,7 @@ package site.hobbyup.class_final_back.web;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +23,7 @@ public class CouponApiController {
     private final CouponService couponService;
 
     @GetMapping("/api/user/{userId}/coupon")
-    public ResponseDto<?> getCouponList(@PathVariable Long userId,
+    public ResponseEntity<?> getCouponList(@PathVariable Long userId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : controller - 쿠폰 리스트보기 시작");
         if (userId != loginUser.getUser().getId()) {
@@ -30,7 +31,7 @@ public class CouponApiController {
         }
 
         CouponListRespDto couponListRespDto = couponService.getCouponList(userId);
-        return new ResponseDto<>("쿠폰 리스트보기", couponListRespDto);
+        return new ResponseEntity<>(new ResponseDto<>("쿠폰 리스트보기", couponListRespDto), HttpStatus.CREATED);
     }
 
 }

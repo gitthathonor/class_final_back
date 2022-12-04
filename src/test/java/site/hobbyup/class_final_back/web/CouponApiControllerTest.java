@@ -73,25 +73,26 @@ public class CouponApiControllerTest extends DummyEntity {
         Lesson lesson1 = lessonRepository.save(newLesson("더미1", 10000L, ssar, beauty));
         Lesson lesson2 = lessonRepository.save(newLesson("더미1", 10000L, ssar, beauty));
 
+        Coupon coupon1 = couponRepository.save(newCoupon("회원가입 쿠폰", 10000L, null, null, cos));
         Coupon coupon2 = couponRepository.save(newCoupon("회원가입 쿠폰", 10000L, null, null, cos));
     }
 
-    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value = "cos", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
-    public void getSubscribeList_test() throws Exception {
+    public void getCouponList_test() throws Exception {
         // given
-        Long userId = 1L;
+        Long userId = 2L;
 
         // when
         ResultActions resultActions = mvc
-                .perform(get("/api/user/" + userId + "/subscribe"));
+                .perform(get("/api/user/" + userId + "/coupon"));
 
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
         // then
-        resultActions.andExpect(status().isOk());
-        resultActions.andExpect(jsonPath("$.data.subscribes.length()").value(2));
+        resultActions.andExpect(status().isCreated());
+        resultActions.andExpect(jsonPath("$.data.couponList.length()").value(2));
     }
 
 }

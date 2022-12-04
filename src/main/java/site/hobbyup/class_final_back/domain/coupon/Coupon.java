@@ -32,10 +32,8 @@ public class Coupon {
     private String title;
     @Column(nullable = false, length = 20)
     private Long price;
-    @Column(nullable = false)
     private Timestamp expiredDate;
     @CreatedDate
-    @Column(nullable = false)
     private Timestamp createdAt;
 
     @ManyToOne
