@@ -29,6 +29,8 @@ import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
+import site.hobbyup.class_final_back.domain.profile.Profile;
+import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.review.Review;
 import site.hobbyup.class_final_back.domain.review.ReviewRepository;
 import site.hobbyup.class_final_back.domain.user.User;
@@ -63,6 +65,9 @@ public class LessonApiControllerTest extends DummyEntity {
   private ReviewRepository reviewRepository;
 
   @Autowired
+  private ProfileRepository profileRepository;
+
+  @Autowired
   private EntityManager em;
 
   @BeforeEach
@@ -78,6 +83,9 @@ public class LessonApiControllerTest extends DummyEntity {
     Category crafts = categoryRepository.save(newCategory("공예"));
     Category game = categoryRepository.save(newCategory("게임"));
     Category others = categoryRepository.save(newCategory("기타"));
+
+    Profile ssarProfile = profileRepository
+        .save(newProfile("", "안녕하세요 부산에서 가장 뷰티한 강사 ssar입니다.", "부산", "미용사", "5년", "박준 뷰티랩 양정점 원장 10년", ssar));
 
     Lesson lesson1 = lessonRepository.save(newLesson("더미1", 10000L, ssar, beauty));
     Lesson lesson2 = lessonRepository.save(newLesson("더미2", 20000L, ssar, sports));
