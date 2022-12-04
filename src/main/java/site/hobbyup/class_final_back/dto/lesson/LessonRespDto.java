@@ -36,7 +36,8 @@ public class LessonRespDto {
 
     public LessonCategoryListRespDto(Category category, List<Lesson> lessonList) {
       this.categoryDto = new CategoryDto(category);
-      this.lessonDtoList = lessonList.stream().map((lesson) -> new LessonDto(lesson)).collect(Collectors.toList());
+      this.lessonDtoList = lessonList.stream().map((lesson) -> new LessonDto(lesson))
+          .collect(Collectors.toList());
     }
 
     @Setter
