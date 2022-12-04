@@ -73,8 +73,8 @@ public class DummyEntity {
 
   protected Subscribe newSubscribe(User user, Lesson lesson) {
     Subscribe subscribe = Subscribe.builder()
-        .user(null)
-        .lesson(null)
+        .user(user)
+        .lesson(lesson)
         .build();
     return subscribe;
   }
