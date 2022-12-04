@@ -72,12 +72,13 @@ public class LessonService {
   }
 
   // 클래스 상세보기
-  public void getLessonDetail(Long id) {
+  public LessonDetailRespDto getLessonDetail(Long id) {
     log.debug("디버그 : LessonService-getLessonDetail 실행");
     Lesson lessonPS = lessonRepository.findById(id)
         .orElseThrow(() -> new CustomApiException("해당 수업 없읍", HttpStatus.BAD_REQUEST));
     List<Review> reviewListPS = reviewRepository.findAllByLessonId(lessonPS.getId());
     LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, reviewListPS);
+    return lessonDetailRespDto;
   }
 
   // 클래스 수정하기
