@@ -11,6 +11,8 @@ import site.hobbyup.class_final_back.domain.coupon.Coupon;
 
 public class CouponRespDto {
 
+    @Setter
+    @Getter
     public static class CouponListRespDto {
         private List<CouponDto> couponList = new ArrayList<>();
 
@@ -30,6 +32,7 @@ public class CouponRespDto {
                 this.id = coupon.getId();
                 this.title = coupon.getTitle();
                 this.price = coupon.getPrice();
+                this.expiredDate = coupon.getExpiredDate();
             }
         }
     }

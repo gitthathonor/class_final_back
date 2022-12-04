@@ -22,10 +22,10 @@ public class CouponApiController {
     private final CouponService couponService;
 
     @GetMapping("/api/user/{userId}/coupon")
-    public ResponseDto<?> detailProfile(@PathVariable Long userId,
+    public ResponseDto<?> getCouponList(@PathVariable Long userId,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : controller - 쿠폰 리스트보기 시작");
-        if (userId != loginUser.getUser().getId()) { // 권한체크 - 세션의 id, userid가 같으면 상세보기
+        if (userId != loginUser.getUser().getId()) {
             throw new CustomApiException("권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
 

@@ -28,7 +28,7 @@ public class CouponService extends DecodeUtil {
 
     @Transactional
     public CouponListRespDto getCouponList(Long userId) {
-        log.debug("디버그 : service - 프로필 상세보기 시작");
+        log.debug("디버그 : service - 쿠폰 리스트보기 시작");
         User userPS = userRepository.findById(userId)
                 .orElseThrow(
                         () -> new CustomApiException("존재하지 않는 유저입니다.", HttpStatus.FORBIDDEN));

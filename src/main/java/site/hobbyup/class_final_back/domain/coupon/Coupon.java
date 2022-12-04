@@ -10,7 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.data.annotation.CreatedDate;
+
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -29,9 +32,23 @@ public class Coupon {
     private String title;
     @Column(nullable = false, length = 20)
     private Long price;
+    @Column(nullable = false)
     private Timestamp expiredDate;
+    @CreatedDate
+    @Column(nullable = false)
     private Timestamp createdAt;
 
     @ManyToOne
     private User user;
+
+    @Builder
+    public Coupon(Long id, String title, Long price, Timestamp expiredDate, Timestamp createdAt, User user) {
+        this.id = id;
+        this.title = title;
+        this.price = price;
+        this.expiredDate = expiredDate;
+        this.createdAt = createdAt;
+        this.user = user;
+    }
+
 }
