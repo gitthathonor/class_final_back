@@ -33,7 +33,7 @@ public class ProfileRepositoryTest extends DummyEntity {
     public void setUp() {
         // 유저 만들기
         User ssar = userRepository.save(newUser("ssar"));
-        Profile ssarProfile = profileRepository.save(newProfile(ssar));
+        Profile ssarProfile = profileRepository.save(newProfile("", "안녕", "부산", "없음", "신입", "없음", ssar));
     }
 
     // 후

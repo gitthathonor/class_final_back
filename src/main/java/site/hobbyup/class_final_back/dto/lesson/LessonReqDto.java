@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 import lombok.Getter;
 import lombok.Setter;
+import site.hobbyup.class_final_back.config.enums.DayEnum;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.user.User;
@@ -16,7 +17,9 @@ public class LessonReqDto {
     private String photo;
     private Long price;
     private String place;
-    private String possibleDays;
+    private Long lessonTime;
+    private Long lessonCount;
+    private DayEnum possibleDays;
     private String curriculum;
     private String policy;
     private Timestamp expiredAt;
@@ -29,6 +32,8 @@ public class LessonReqDto {
           .photo(photo)
           .price(price)
           .place(place)
+          .lessonTime(lessonTime)
+          .lessonCount(lessonCount)
           .possibleDays(possibleDays)
           .curriculum(curriculum)
           .policy(policy)
