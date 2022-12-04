@@ -140,4 +140,20 @@ public class LessonApiControllerTest extends DummyEntity {
     resultActions.andExpect(jsonPath("$.data.lessonDtoList[0].lessonPrice").value("20000원"));
   }
 
+  @Test
+  public void getLessonDetail_test() throws Exception {
+    // given
+    Long lessonId = 1L;
+
+    // when
+    ResultActions resultActions = mvc
+        .perform(get("/api/lesson/" + lessonId));
+    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+    System.out.println("테스트 : " + responseBody);
+
+    // then
+    resultActions.andExpect(status().isOk());
+    resultActions.andExpect(jsonPath("$.data.categoryDto.categoryName").value("스포츠"));
+  }
+
 }
