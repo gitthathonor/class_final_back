@@ -16,6 +16,8 @@ import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
+import site.hobbyup.class_final_back.domain.profile.Profile;
+import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.review.Review;
 import site.hobbyup.class_final_back.domain.review.ReviewRepository;
 import site.hobbyup.class_final_back.domain.user.User;
@@ -35,6 +37,7 @@ public class LessonService {
   private final CategoryRepository categoryRepository;
   private final UserRepository userRepository;
   private final ReviewRepository reviewRepository;
+  private final ProfileRepository profileRepository;
 
   // 클래스 생성하기
   @Transactional
@@ -76,8 +79,9 @@ public class LessonService {
     log.debug("디버그 : LessonService-getLessonDetail 실행");
     Lesson lessonPS = lessonRepository.findById(id)
         .orElseThrow(() -> new CustomApiException("해당 수업 없읍", HttpStatus.BAD_REQUEST));
+    Profile profilePS = profileRepository.findByUserId(lessonPS.getId());
     List<Review> reviewListPS = reviewRepository.findAllByLessonId(lessonPS.getId());
-    LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, reviewListPS);
+    LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, profilePS, reviewListPS);
     return lessonDetailRespDto;
   }
 

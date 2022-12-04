@@ -6,7 +6,9 @@ import java.util.stream.Collectors;
 
 import lombok.Getter;
 import lombok.Setter;
+import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.interest.Interest;
+import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.user.User;
 
 public class UserRespDto {
@@ -67,5 +69,21 @@ public class UserRespDto {
             this.phoneNum = user.getPhoneNum();
         }
 
+    }
+
+    @Setter
+    @Getter
+    public static class MyPageRespDto {
+        private Long id;
+        private String username;
+        private UserEnum role;
+        private String filePath;
+
+        public MyPageRespDto(User user, Profile profile) {
+            this.id = user.getId();
+            this.username = user.getUsername();
+            this.role = user.getRole();
+            this.filePath = profile.getFilePath();
+        }
     }
 }

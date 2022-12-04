@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import site.hobbyup.class_final_back.config.enums.DayEnum;
 import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.coupon.Coupon;
@@ -55,6 +56,7 @@ public class DummyEntity {
                 .photo(dummy)
                 .price(dummyNum)
                 .place(dummy)
+                .possibleDays(DayEnum.MONDAY)
                 .user(user)
                 .curriculum("커리큘럼" + dummy)
                 .expiredAt(new Timestamp(50000))
