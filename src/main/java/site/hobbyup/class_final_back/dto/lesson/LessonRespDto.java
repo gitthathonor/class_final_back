@@ -80,12 +80,12 @@ public class LessonRespDto {
     private String lessonPlace;
     private String possibleDays;
     private String lessonPolicy;
-    private String totalCompleted;
-    private String satisfication;
+    private String masterName;
+    private String masterIntroduction;
     private Double avgGrade;
     private List<ReviewDto> lessonReviewList = new ArrayList<>();
 
-    public LessonDetailRespDto(Lesson lesson, String totalCompleted, String satisfication,
+    public LessonDetailRespDto(Lesson lesson,
         List<Review> lessonReviewList) {
       this.lessonName = lesson.getName();
       this.lessonPrice = lesson.getPrice();
@@ -94,8 +94,6 @@ public class LessonRespDto {
       this.lessonPlace = lesson.getPlace();
       this.possibleDays = lesson.getPossibleDays();
       this.lessonPolicy = lesson.getPolicy();
-      this.totalCompleted = totalCompleted;
-      this.satisfication = satisfication;
       this.lessonReviewList = lessonReviewList.stream().map((review) -> new ReviewDto(review))
           .collect(Collectors.toList());
     }
