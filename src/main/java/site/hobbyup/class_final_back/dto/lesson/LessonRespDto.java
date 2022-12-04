@@ -83,11 +83,10 @@ public class LessonRespDto {
     private String lessonPolicy;
     private String masterName;
     private String masterIntroduction;
-    private Double avgGrade;
     private List<ReviewDto> lessonReviewList = new ArrayList<>();
 
     public LessonDetailRespDto(Lesson lesson,
-        List<Review> lessonReviewList) {
+        List<Review> reviewList) {
       this.lessonName = lesson.getName();
       this.lessonPrice = lesson.getPrice();
       this.lessonTime = lesson.getLessonTime();
@@ -95,7 +94,7 @@ public class LessonRespDto {
       this.lessonPlace = lesson.getPlace();
       this.possibleDays = lesson.getPossibleDays();
       this.lessonPolicy = lesson.getPolicy();
-      this.lessonReviewList = lessonReviewList.stream().map((review) -> new ReviewDto(review))
+      this.lessonReviewList = reviewList.stream().map((review) -> new ReviewDto(review))
           .collect(Collectors.toList());
     }
 

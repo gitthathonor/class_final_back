@@ -3,6 +3,8 @@ package site.hobbyup.class_final_back.service;
 import java.io.IOException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +16,8 @@ import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
+import site.hobbyup.class_final_back.domain.review.Review;
+import site.hobbyup.class_final_back.domain.review.ReviewRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
@@ -26,9 +30,11 @@ import site.hobbyup.class_final_back.util.DecodeUtil;
 @Transactional(readOnly = true)
 @Service
 public class LessonService {
+  private final Logger log = LoggerFactory.getLogger(getClass());
   private final LessonRepository lessonRepository;
   private final CategoryRepository categoryRepository;
   private final UserRepository userRepository;
+  private final ReviewRepository reviewRepository;
 
   // 클래스 생성하기
   @Transactional
@@ -65,12 +71,14 @@ public class LessonService {
     return new LessonCategoryListRespDto(categoryPS, lessonListPS);
   }
 
+  // 클래스 상세보기
   public void getLessonDetail(Long id) {
+    log.debug("디버그 : LessonService-getLessonDetail 실행");
     Lesson lessonPS = lessonRepository.findById(id)
         .orElseThrow(() -> new CustomApiException("해당 수업 없읍", HttpStatus.BAD_REQUEST));
+    List<Review> reviewListPS = reviewRepository.findAllByLessonId(lessonPS.getId());
+    LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, reviewListPS);
   }
-
-  // 클래스 상세보기
 
   // 클래스 수정하기
 
