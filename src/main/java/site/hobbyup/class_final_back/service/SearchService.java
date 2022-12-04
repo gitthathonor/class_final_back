@@ -21,7 +21,7 @@ public class SearchService {
     private final LessonRepository lessonRepository;
 
     @Transactional
-    public SearchListRespDto searchClass(String keyword) {
+    public SearchListRespDto getSearchClass(String keyword) {
         List<Lesson> lessonList = lessonRepository.findByKeyword(keyword);
         return new SearchListRespDto(lessonList);
     }
