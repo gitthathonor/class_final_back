@@ -15,11 +15,14 @@ import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
 import site.hobbyup.class_final_back.domain.interest.Interest;
 import site.hobbyup.class_final_back.domain.interest.InterestRepository;
+import site.hobbyup.class_final_back.domain.profile.Profile;
+import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.user.UserReqDto.JoinReqDto;
 import site.hobbyup.class_final_back.dto.user.UserReqDto.UserUpdateReqDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.JoinRespDto;
+import site.hobbyup.class_final_back.dto.user.UserRespDto.MyPageRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.UserUpdateRespDto;
 
 @Transactional(readOnly = true)
@@ -31,6 +34,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final InterestRepository interestRepository;
     private final CategoryRepository categoryRepository;
+    private final ProfileRepository profileRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     // 회원가입
@@ -87,6 +91,18 @@ public class UserService {
                 .orElseThrow(() -> new CustomApiException("가입되지 않은 유저입니다.", HttpStatus.FORBIDDEN));
 
         userRepository.deleteById(userPS.getId());
+    }
+
+    @Transactional
+    public MyPageRespDto getMyPage(Long userId) {
+        User userPS = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomApiException("가입되지 않은 유저입니다.", HttpStatus.FORBIDDEN));
+
+        Profile profilePS = profileRepository.findByUserId(userPS.getId());
+        if (profilePS == null) {
+            throw new CustomApiException("프로필 사진이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
+        }
+        return new MyPageRespDto(userPS, profilePS);
     }
 
 }
