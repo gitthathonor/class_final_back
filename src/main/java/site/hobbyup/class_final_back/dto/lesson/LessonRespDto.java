@@ -73,6 +73,8 @@ public class LessonRespDto {
     }
   }
 
+  @Setter
+  @Getter
   public static class LessonDetailRespDto {
     private String lessonName;
     private Long lessonPrice;
