@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
+import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.review.Review;
 import site.hobbyup.class_final_back.domain.user.User;
 
@@ -84,10 +85,11 @@ public class LessonRespDto {
     private String possibleDays;
     private String lessonPolicy;
     private String masterName;
+    private String masterImg;
     private String masterIntroduction;
     private List<ReviewDto> lessonReviewList = new ArrayList<>();
 
-    public LessonDetailRespDto(Lesson lesson,
+    public LessonDetailRespDto(Lesson lesson, Profile profile,
         List<Review> reviewList) {
       this.lessonName = lesson.getName();
       this.lessonPrice = lesson.getPrice();
@@ -96,8 +98,21 @@ public class LessonRespDto {
       this.lessonPlace = lesson.getPlace();
       this.possibleDays = lesson.getPossibleDays();
       this.lessonPolicy = lesson.getPolicy();
+      this.masterName = lesson.getUser().getUsername();
+      this.masterImg = profile.getFilePath();
+      this.masterIntroduction = profile.getIntroduction();
       this.lessonReviewList = reviewList.stream().map((review) -> new ReviewDto(review))
           .collect(Collectors.toList());
+    }
+
+    public class ProfileDto {
+      private String masterImg;
+      private String masterIntroduction;
+
+      public ProfileDto(Profile profile) {
+        this.masterImg = profile.getFilePath();
+        this.masterIntroduction = profile.getIntroduction();
+      }
     }
 
     @Setter
