@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import lombok.Getter;
 import lombok.Setter;
+import site.hobbyup.class_final_back.config.enums.DayEnum;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
@@ -96,7 +97,7 @@ public class LessonRespDto {
       this.lessonTime = lesson.getLessonTime();
       this.lessonCount = lesson.getLessonCount();
       this.lessonPlace = lesson.getPlace();
-      this.possibleDays = lesson.getPossibleDays();
+      this.possibleDays = lesson.getPossibleDays().getValue();
       this.lessonPolicy = lesson.getPolicy();
       this.masterName = lesson.getUser().getUsername();
       this.masterImg = profile.getFilePath();

@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import site.hobbyup.class_final_back.config.dummy.DummyEntity;
+import site.hobbyup.class_final_back.config.enums.DayEnum;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
@@ -120,7 +121,7 @@ public class LessonApiControllerTest extends DummyEntity {
     lessonSaveReqDto.setPlace("부산진구");
     lessonSaveReqDto.setExpiredAt(new Timestamp(700000000L));
     lessonSaveReqDto.setPolicy("취소 및 환불정책");
-    lessonSaveReqDto.setPossibleDays("월,화,수");
+    lessonSaveReqDto.setPossibleDays(DayEnum.MONDAY);
     lessonSaveReqDto.setPrice(500000L);
 
     String requestBody = om.writeValueAsString(lessonSaveReqDto);
