@@ -132,4 +132,18 @@ public class LessonRespDto {
 
   }
 
+  @Setter
+  @Getter
+  public static class LessonLatestRespDto {
+    private String name;
+    private Long price;
+    private String photo;
+
+    public LessonLatestRespDto(Lesson lesson) {
+      this.name = lesson.getName();
+      this.price = lesson.getPrice();
+      this.photo = lesson.getPhoto();
+    }
+  }
+
 }
