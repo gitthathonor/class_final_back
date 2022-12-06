@@ -73,8 +73,8 @@ public class UserApiController {
         if (userId != loginUser.getUser().getId()) {
             throw new CustomApiException("권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
+
         MyLessonListRespDto myLessonRespDto = userService.getMyLesson(userId);
         return new ResponseEntity<>(new ResponseDto<>("수강중인 클래스 보기", myLessonRespDto), HttpStatus.OK);
     }
-
 }
