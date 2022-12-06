@@ -2,34 +2,42 @@ package site.hobbyup.class_final_back.dto.user;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
+import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.interest.Interest;
+import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.user.User;
 
 public class UserRespDto {
 
-    @ToString
     @Getter
     @Setter
     public static class JoinRespDto {
         private Long id;
         private String username;
-        private List<Interest> interestList;
+        private List<InterestDto> interestList;
 
         public JoinRespDto(User user, List<Interest> interestList) {
             this.id = user.getId();
             this.username = user.getUsername();
-            this.interestList = interestList;
+            this.interestList = interestList.stream().map((interest) -> new InterestDto(interest))
+                    .collect(Collectors.toList());
         }
 
-        // @Setter
-        // @Getter
-        // public class InterestDto {
-        // private
-        // }
+        @Setter
+        @Getter
+        public class InterestDto {
+            private Long userId;
+            private String categoryName;
+
+            public InterestDto(Interest interest) {
+                this.userId = interest.getUser().getId();
+                this.categoryName = interest.getCategory().getName();
+            }
+        }
     }
 
     @Setter
@@ -61,5 +69,21 @@ public class UserRespDto {
             this.phoneNum = user.getPhoneNum();
         }
 
+    }
+
+    @Setter
+    @Getter
+    public static class MyPageRespDto {
+        private Long id;
+        private String username;
+        private UserEnum role;
+        private String filePath;
+
+        public MyPageRespDto(User user, Profile profile) {
+            this.id = user.getId();
+            this.username = user.getUsername();
+            this.role = user.getRole();
+            this.filePath = profile.getFilePath();
+        }
     }
 }
