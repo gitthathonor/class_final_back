@@ -26,7 +26,7 @@ public class CouponRespDto {
             private Long id;
             private String title;
             private Long price;
-            private Timestamp expiredDate;
+            private String expiredDate;
 
             public CouponDto(Coupon coupon) {
                 this.id = coupon.getId();

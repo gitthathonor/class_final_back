@@ -50,10 +50,7 @@ public class ProfileService extends DecodeUtil {
                 String filePath = saveDecodingImage(profileSaveReqDto.getFilePath());
 
                 profileSaveReqDto.setFilePath(filePath);
-                Profile profilePS = profileRepository.save(profileSaveReqDto
-                                .toEntity(userPS));
-
-                log.debug("디버그 : service - 프로필 등록 끝");
+                Profile profilePS = profileRepository.save(profileSaveReqDto.toEntity(userPS));
                 return new ProfileSaveRespDto(profilePS);
         }
 
@@ -61,14 +58,12 @@ public class ProfileService extends DecodeUtil {
         public ProfileDetailRespDto detailProfile(Long userId) {
                 log.debug("디버그 : service - 프로필 상세보기 시작");
                 User userPS = userRepository.findById(userId)
-                                .orElseThrow(
-                                                () -> new CustomApiException("탈퇴한 유저입니다.", HttpStatus.FORBIDDEN));
+                                .orElseThrow(() -> new CustomApiException("탈퇴한 유저입니다.", HttpStatus.FORBIDDEN));
 
                 Profile profilePS = profileRepository.findByUserId(userPS.getId());
                 if (profilePS == null) {
                         throw new CustomApiException("프로필이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
                 }
-
                 return new ProfileDetailRespDto(profilePS);
         }
 
@@ -77,8 +72,7 @@ public class ProfileService extends DecodeUtil {
                         throws IOException {
                 log.debug("디버그 : service - 프로필 수정 시작");
                 User userPS = userRepository.findById(userId)
-                                .orElseThrow(
-                                                () -> new CustomApiException("유저가 존재하지 않습니다.", HttpStatus.FORBIDDEN));
+                                .orElseThrow(() -> new CustomApiException("유저가 존재하지 않습니다.", HttpStatus.FORBIDDEN));
 
                 // db에 있는 userId 이용해서 프로필 찾기
                 Profile profilePS = profileRepository.findByUserId(userPS.getId());
@@ -100,7 +94,6 @@ public class ProfileService extends DecodeUtil {
                 }
 
                 profilePS.update(profileUpdateReqDto);
-                log.debug("디버그 : service - 프로필 수정 끝");
                 return new ProfileUpdateRespDto(profileRepository.save(profilePS));
         }
 }
