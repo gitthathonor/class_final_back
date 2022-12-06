@@ -33,7 +33,7 @@ public class CouponService extends DecodeUtil {
                 .orElseThrow(
                         () -> new CustomApiException("존재하지 않는 유저입니다.", HttpStatus.FORBIDDEN));
 
-        List<Coupon> couponList = couponRepository.findByUserId(userPS.getId());
+        List<Coupon> couponList = couponRepository.findAllByUserId(userPS.getId());
         if (couponList.size() == 0) {
             throw new CustomApiException("쿠폰이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
         }
