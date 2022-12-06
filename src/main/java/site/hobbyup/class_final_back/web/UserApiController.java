@@ -57,7 +57,7 @@ public class UserApiController {
         return new ResponseEntity<>(new ResponseDto<>("회원 탈퇴 완료", null), HttpStatus.OK);
     }
 
-    @GetMapping("/api/user/{userId}/myPage")
+    @GetMapping("/api/user/{userId}/mypage")
     public ResponseEntity<?> getMyPage(@PathVariable Long userId, @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : UserApiController-getMyPage 실행됨");
         if (userId != loginUser.getUser().getId()) {
@@ -75,6 +75,6 @@ public class UserApiController {
         }
 
         MyLessonListRespDto myLessonRespDto = userService.getMyLesson(userId);
-        return new ResponseEntity<>(new ResponseDto<>("수강중인 클래스 보기", myLessonRespDto), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto<>("마이페이지 클래스 보기", myLessonRespDto), HttpStatus.OK);
     }
 }

@@ -27,6 +27,6 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
         List<Lesson> findByKeyword(@Param("keyword") String keyword);
 
         @Query("select l from Lesson l join fetch l.user u where l.user.id = :userId")
-        List<Lesson> findByUserId(@Param("id") Long id);
+        List<Lesson> findByUserId(@Param("userId") Long userId);
 
 }

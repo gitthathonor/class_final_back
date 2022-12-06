@@ -117,14 +117,14 @@ public class UserService {
                 .orElseThrow(() -> new CustomApiException("가입되지 않은 유저입니다.", HttpStatus.FORBIDDEN));
 
         // 일반 유저일 때
-        if (UserEnum.valueOf(userPS.getRole().getValue()) == UserEnum.USER) {
+        if (userPS.getRole().getValue() == UserEnum.USER.getValue()) {
             // 구매 테이블에서 구매한 내역이 있는지 id로 조회 - 없으면 exception
 
             // 있으면 list로 출력
             return new MyLessonListRespDto(null);
 
             // 전문가일 때
-        } else if (UserEnum.valueOf(userPS.getRole().getValue()) == UserEnum.MASTER) {
+        } else if (userPS.getRole().getValue() == UserEnum.MASTER.getValue()) {
             // 레슨 테이블에서 생성한 레슨이 있는지 id로 조회 - 없으면 exception
             List<Lesson> lessonList = lessonRepository.findByUserId(userPS.getId());
             // 있으면 list로 출력
