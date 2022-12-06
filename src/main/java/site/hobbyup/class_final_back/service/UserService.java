@@ -22,6 +22,7 @@ import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.user.UserReqDto.JoinReqDto;
 import site.hobbyup.class_final_back.dto.user.UserReqDto.UserUpdateReqDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.JoinRespDto;
+import site.hobbyup.class_final_back.dto.user.UserRespDto.MyLessonListRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.MyPageRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.UserUpdateRespDto;
 
@@ -103,6 +104,18 @@ public class UserService {
             throw new CustomApiException("프로필 사진이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
         }
         return new MyPageRespDto(userPS, profilePS);
+    }
+
+    @Transactional
+    public MyLessonListRespDto getMyLesson(Long userId) {
+        // 유저 검증
+        User userPS = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomApiException("가입되지 않은 유저입니다.", HttpStatus.FORBIDDEN));
+
+        // 구매 테이블에서 구매한 내역이 있는지 확인 - 없으면 exception
+
+        // 있으면 list로 출력
+        return new MyLessonListRespDto(null);
     }
 
 }

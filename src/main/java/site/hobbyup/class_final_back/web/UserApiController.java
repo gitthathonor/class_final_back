@@ -20,6 +20,7 @@ import site.hobbyup.class_final_back.dto.ResponseDto;
 import site.hobbyup.class_final_back.dto.user.UserReqDto.JoinReqDto;
 import site.hobbyup.class_final_back.dto.user.UserReqDto.UserUpdateReqDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.JoinRespDto;
+import site.hobbyup.class_final_back.dto.user.UserRespDto.MyLessonListRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.MyPageRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.UserUpdateRespDto;
 import site.hobbyup.class_final_back.service.UserService;
@@ -63,6 +64,17 @@ public class UserApiController {
             throw new CustomApiException("권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
         MyPageRespDto myPageRespDto = userService.getMyPage(userId);
-        return new ResponseEntity<>(new ResponseDto<>("마이페이지 보기", myPageRespDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ResponseDto<>("마이페이지 보기", myPageRespDto), HttpStatus.OK);
     }
+
+    @GetMapping("/api/user/{userId}/mypage/lesson")
+    public ResponseEntity<?> getMyLesson(@PathVariable Long userId, @AuthenticationPrincipal LoginUser loginUser) {
+        log.debug("디버그 : UserApiController-getMyLesson 실행됨");
+        if (userId != loginUser.getUser().getId()) {
+            throw new CustomApiException("권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
+        MyLessonListRespDto myLessonRespDto = userService.getMyLesson(userId);
+        return new ResponseEntity<>(new ResponseDto<>("수강중인 클래스 보기", myLessonRespDto), HttpStatus.OK);
+    }
+
 }

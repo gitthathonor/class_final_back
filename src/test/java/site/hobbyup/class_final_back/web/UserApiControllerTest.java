@@ -113,7 +113,7 @@ public class UserApiControllerTest extends DummyEntity {
         System.out.println("테스트 : " + responseBody);
 
         // then
-        resultActions.andExpect(status().isCreated());
+        resultActions.andExpect(status().isOk());
         resultActions.andExpect(jsonPath("$.data.id").value(1L));
         resultActions.andExpect(jsonPath("$.data.username").value("cos"));
     }
