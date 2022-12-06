@@ -127,6 +127,9 @@ public class UserService {
         } else if (userPS.getRole().getValue() == UserEnum.MASTER.getValue()) {
             // 레슨 테이블에서 생성한 레슨이 있는지 id로 조회 - 없으면 exception
             List<Lesson> lessonList = lessonRepository.findByUserId(userPS.getId());
+            if (lessonList.size() == 0) {
+                throw new CustomApiException("등록한 클래스가 없습니다.", HttpStatus.FORBIDDEN);
+            }
             // 있으면 list로 출력
             return new MyLessonListRespDto(lessonList);
         } else {
