@@ -24,7 +24,7 @@ public class Payment {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id; // pk
-  private Long totalPrice; // 총 강의 금액
+  private Long totalPrice; // 총 금액
   private Integer totalCount; // 총 수량
   private Long discountPrice; // 할인 금액
   private Long finalPrice; // 총 결제 금액
