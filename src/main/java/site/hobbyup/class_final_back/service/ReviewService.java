@@ -23,10 +23,14 @@ public class ReviewService {
   private final LessonRepository lessonRepository;
 
   public ReviewSaveRespDto saveReview(ReviewSaveReqDto reviewSaveReqDto, Long userId, Long lessonId) {
+    // 유저가 있는지 없는지
     User userPS = userRepository.findById(userId)
         .orElseThrow(() -> new CustomApiException("해당 유저가 없습니다.", HttpStatus.BAD_REQUEST));
     Lesson lessonPS = lessonRepository.findById(lessonId)
         .orElseThrow(() -> new CustomApiException("해당 강의가 없습니다.", HttpStatus.BAD_REQUEST));
+
+    // 현재 강의를 구입했는지 안 했는지 여부
+
     Review review = reviewSaveReqDto.toEntity(userPS, lessonPS);
     Review reviewPS = reviewRepository.save(review);
     return new ReviewSaveRespDto(reviewPS);
