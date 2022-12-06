@@ -1,6 +1,7 @@
 package site.hobbyup.class_final_back.domain.coupon;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +18,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import site.hobbyup.class_final_back.domain.AuditingTime;
 import site.hobbyup.class_final_back.domain.user.User;
 
 @ToString
@@ -24,7 +26,7 @@ import site.hobbyup.class_final_back.domain.user.User;
 @Getter
 @Table(name = "coupon")
 @Entity
-public class Coupon {
+public class Coupon extends AuditingTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,20 +34,17 @@ public class Coupon {
     private String title;
     @Column(nullable = false, length = 20)
     private Long price;
-    private Timestamp expiredDate;
-    @CreatedDate
-    private Timestamp createdAt;
+    private String expiredDate;
 
     @ManyToOne
     private User user;
 
     @Builder
-    public Coupon(Long id, String title, Long price, Timestamp expiredDate, Timestamp createdAt, User user) {
+    public Coupon(Long id, String title, Long price, String expiredDate, User user) {
         this.id = id;
         this.title = title;
         this.price = price;
         this.expiredDate = expiredDate;
-        this.createdAt = createdAt;
         this.user = user;
     }
 

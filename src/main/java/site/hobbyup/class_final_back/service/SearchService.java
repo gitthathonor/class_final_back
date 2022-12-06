@@ -22,7 +22,7 @@ public class SearchService {
 
     @Transactional
     public SearchListRespDto getSearchClass(String keyword) {
-        List<Lesson> lessonList = lessonRepository.findByKeyword(keyword);
+        List<Lesson> lessonList = lessonRepository.findAllByKeyword(keyword);
         return new SearchListRespDto(lessonList);
     }
 

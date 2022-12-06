@@ -73,8 +73,8 @@ public class CouponApiControllerTest extends DummyEntity {
         Lesson lesson1 = lessonRepository.save(newLesson("더미1", 10000L, ssar, beauty));
         Lesson lesson2 = lessonRepository.save(newLesson("더미1", 10000L, ssar, beauty));
 
-        Coupon coupon1 = couponRepository.save(newCoupon("회원가입 쿠폰", 10000L, null, null, cos));
-        Coupon coupon2 = couponRepository.save(newCoupon("회원가입 쿠폰", 10000L, null, null, cos));
+        Coupon coupon1 = couponRepository.save(newCoupon("회원가입 쿠폰", 10000L, "2022-12-22", cos));
+        Coupon coupon2 = couponRepository.save(newCoupon("회원가입 쿠폰", 10000L, "2022-12-22", cos));
     }
 
     @WithUserDetails(value = "cos", setupBefore = TestExecutionEvent.TEST_EXECUTION)
