@@ -25,7 +25,7 @@ import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDto;
-import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonLatestRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonLatestListRepDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
 import site.hobbyup.class_final_back.util.DecodeUtil;
 
@@ -87,8 +87,9 @@ public class LessonService {
   }
 
   // 클래스 최신순 정렬
-  public LessonLatestRespDto getLatestLessonList() {
-    return null;
+  public LessonLatestListRepDto getLatestLessonList() {
+    List<Lesson> lesson = lessonRepository.findAllLatest();
+    return new LessonLatestListRepDto(lesson);
   }
 
   // 클래스 수정하기

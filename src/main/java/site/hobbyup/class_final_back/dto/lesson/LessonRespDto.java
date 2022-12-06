@@ -2,6 +2,7 @@ package site.hobbyup.class_final_back.dto.lesson;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import lombok.Getter;
@@ -134,16 +135,26 @@ public class LessonRespDto {
 
   @Setter
   @Getter
-  public static class LessonLatestRespDto {
-    private String name;
-    private Long price;
-    private String photo;
+  public static class LessonLatestListRepDto {
+    List<LessonLatestRespDto> lessonList = new ArrayList<>();
 
-    public LessonLatestRespDto(Lesson lesson) {
-      this.name = lesson.getName();
-      this.price = lesson.getPrice();
-      this.photo = lesson.getPhoto();
+    public LessonLatestListRepDto(List<Lesson> lessonList) {
+      this.lessonList = lessonList.stream().map(
+          (lesson) -> new LessonLatestRespDto(lesson)).collect(Collectors.toList());
+    }
+
+    @Setter
+    @Getter
+    public static class LessonLatestRespDto {
+      private String name;
+      private Long price;
+      private String photo;
+
+      public LessonLatestRespDto(Lesson lesson) {
+        this.name = lesson.getName();
+        this.price = lesson.getPrice();
+        this.photo = lesson.getPhoto();
+      }
     }
   }
-
 }

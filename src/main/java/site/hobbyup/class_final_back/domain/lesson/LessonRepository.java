@@ -29,4 +29,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
         @Query("select l from Lesson l join fetch l.user u where l.user.id = :userId")
         List<Lesson> findByUserId(@Param("userId") Long userId);
 
+        @Query("select l from Lesson l where l.id<13 order by l.createdAt desc")
+        List<Lesson> findAllLatest();
+
 }
