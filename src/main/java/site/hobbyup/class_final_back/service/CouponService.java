@@ -22,22 +22,22 @@ import site.hobbyup.class_final_back.util.DecodeUtil;
 @Service
 public class CouponService extends DecodeUtil {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
-    private final UserRepository userRepository;
-    private final CouponRepository couponRepository;
+        private final Logger log = LoggerFactory.getLogger(getClass());
+        private final UserRepository userRepository;
+        private final CouponRepository couponRepository;
 
-    @Transactional
-    public CouponListRespDto getCouponList(Long userId) {
-        log.debug("디버그 : service - 쿠폰 리스트보기 시작");
-        User userPS = userRepository.findById(userId)
-                .orElseThrow(
-                        () -> new CustomApiException("존재하지 않는 유저입니다.", HttpStatus.FORBIDDEN));
+        @Transactional
+        public CouponListRespDto getCouponList(Long userId) {
+                log.debug("디버그 : service - 쿠폰 리스트보기 시작");
+                User userPS = userRepository.findById(userId)
+                                .orElseThrow(
+                                                () -> new CustomApiException("존재하지 않는 유저입니다.", HttpStatus.FORBIDDEN));
 
-        List<Coupon> couponList = couponRepository.findAllByUserId(userPS.getId());
-        if (couponList.size() == 0) {
-            throw new CustomApiException("쿠폰이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
+                List<Coupon> couponList = couponRepository.findAllByUserId(userPS.getId());
+                if (couponList.size() == 0) {
+                        throw new CustomApiException("쿠폰이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
+                }
+                return new CouponListRespDto(couponList);
         }
-        return new CouponListRespDto(couponList);
-    }
 
 }

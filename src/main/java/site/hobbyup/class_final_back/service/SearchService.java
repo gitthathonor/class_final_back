@@ -17,13 +17,13 @@ import site.hobbyup.class_final_back.dto.search.SearchRespDto.SearchListRespDto;
 @Service
 public class SearchService {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
-    private final LessonRepository lessonRepository;
+        private final Logger log = LoggerFactory.getLogger(getClass());
+        private final LessonRepository lessonRepository;
 
-    @Transactional
-    public SearchListRespDto getSearchClass(String keyword) {
-        List<Lesson> lessonList = lessonRepository.findAllByKeyword(keyword);
-        return new SearchListRespDto(lessonList);
-    }
+        @Transactional
+        public SearchListRespDto getSearchClass(String keyword) {
+                List<Lesson> lessonList = lessonRepository.findAllByKeyword(keyword);
+                return new SearchListRespDto(lessonList);
+        }
 
 }

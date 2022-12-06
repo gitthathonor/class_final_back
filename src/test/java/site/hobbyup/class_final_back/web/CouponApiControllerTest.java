@@ -43,56 +43,56 @@ import site.hobbyup.class_final_back.dto.subscribe.SubscribeReqDto.SubscribeSave
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
 public class CouponApiControllerTest extends DummyEntity {
 
-    private static final String APPLICATION_JSON_UTF8 = "application/json; charset=utf-8";
-    private static final String APPLICATION_FORM_URLENCODED = "application/x-www-form-urlencoded; charset=utf-8";
+        private static final String APPLICATION_JSON_UTF8 = "application/json; charset=utf-8";
+        private static final String APPLICATION_FORM_URLENCODED = "application/x-www-form-urlencoded; charset=utf-8";
 
-    @Autowired
-    private MockMvc mvc;
+        @Autowired
+        private MockMvc mvc;
 
-    @Autowired
-    private ObjectMapper om;
+        @Autowired
+        private ObjectMapper om;
 
-    @Autowired
-    private SubscribeRepository subscribeRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
-    private LessonRepository lessonRepository;
-    @Autowired
-    private CouponRepository couponRepository;
+        @Autowired
+        private SubscribeRepository subscribeRepository;
+        @Autowired
+        private UserRepository userRepository;
+        @Autowired
+        private CategoryRepository categoryRepository;
+        @Autowired
+        private LessonRepository lessonRepository;
+        @Autowired
+        private CouponRepository couponRepository;
 
-    @BeforeEach
-    public void setUp() throws IOException {
-        User ssar = userRepository.save(newUser("ssar"));
-        User cos = userRepository.save(newUser("cos"));
+        @BeforeEach
+        public void setUp() throws IOException {
+                User ssar = userRepository.save(newUser("ssar"));
+                User cos = userRepository.save(newUser("cos"));
 
-        Category beauty = categoryRepository.save(newCategory("뷰티"));
+                Category beauty = categoryRepository.save(newCategory("뷰티"));
 
-        Lesson lesson1 = lessonRepository.save(newLesson("더미1", 10000L, ssar, beauty));
-        Lesson lesson2 = lessonRepository.save(newLesson("더미1", 10000L, ssar, beauty));
+                Lesson lesson1 = lessonRepository.save(newLesson("더미1", 10000L, ssar, beauty));
+                Lesson lesson2 = lessonRepository.save(newLesson("더미1", 10000L, ssar, beauty));
 
-        Coupon coupon1 = couponRepository.save(newCoupon("회원가입 쿠폰", 10000L, "2022-12-22", cos));
-        Coupon coupon2 = couponRepository.save(newCoupon("회원가입 쿠폰", 10000L, "2022-12-22", cos));
-    }
+                Coupon coupon1 = couponRepository.save(newCoupon("회원가입 쿠폰", 10000L, "2022-12-22", cos));
+                Coupon coupon2 = couponRepository.save(newCoupon("회원가입 쿠폰", 10000L, "2022-12-22", cos));
+        }
 
-    @WithUserDetails(value = "cos", setupBefore = TestExecutionEvent.TEST_EXECUTION)
-    @Test
-    public void getCouponList_test() throws Exception {
-        // given
-        Long userId = 2L;
+        @WithUserDetails(value = "cos", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+        @Test
+        public void getCouponList_test() throws Exception {
+                // given
+                Long userId = 2L;
 
-        // when
-        ResultActions resultActions = mvc
-                .perform(get("/api/user/" + userId + "/coupon"));
+                // when
+                ResultActions resultActions = mvc
+                                .perform(get("/api/user/" + userId + "/coupon"));
 
-        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-        System.out.println("테스트 : " + responseBody);
+                String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+                System.out.println("테스트 : " + responseBody);
 
-        // then
-        resultActions.andExpect(status().isCreated());
-        resultActions.andExpect(jsonPath("$.data.couponList.length()").value(2));
-    }
+                // then
+                resultActions.andExpect(status().isCreated());
+                resultActions.andExpect(jsonPath("$.data.couponList.length()").value(2));
+        }
 
 }
