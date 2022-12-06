@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.hobbyup.class_final_back.domain.AuditingTime;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.paymentType.PaymentType;
 import site.hobbyup.class_final_back.domain.user.User;
@@ -20,7 +21,7 @@ import site.hobbyup.class_final_back.domain.user.User;
 @Getter
 @Table(name = "payment")
 @Entity
-public class Payment {
+public class Payment extends AuditingTime {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id; // pk
