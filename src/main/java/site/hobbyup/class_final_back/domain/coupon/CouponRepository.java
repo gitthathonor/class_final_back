@@ -9,6 +9,6 @@ import org.springframework.data.repository.query.Param;
 public interface CouponRepository extends JpaRepository<Coupon, Long> {
 
     @Query("select c from Coupon c join fetch c.user u where c.user.id = :userId")
-    List<Coupon> findByUserId(@Param("userId") Long userId);
+    List<Coupon> findAllByUserId(@Param("userId") Long userId);
 
 }

@@ -27,6 +27,8 @@ import site.hobbyup.class_final_back.config.dummy.DummyEntity;
 import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
+import site.hobbyup.class_final_back.domain.coupon.Coupon;
+import site.hobbyup.class_final_back.domain.coupon.CouponRepository;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.user.User;
@@ -53,6 +55,8 @@ public class UserApiControllerTest extends DummyEntity {
     private UserRepository userRepository;
     @Autowired
     private ProfileRepository profileRepository;
+    @Autowired
+    private CouponRepository couponRepository;
 
     @BeforeEach
     public void setUp() {
@@ -67,7 +71,6 @@ public class UserApiControllerTest extends DummyEntity {
         Category crafts = categoryRepository.save(newCategory("공예"));
         Category game = categoryRepository.save(newCategory("게임"));
         Category others = categoryRepository.save(newCategory("기타"));
-
     }
 
     @Test
@@ -113,7 +116,7 @@ public class UserApiControllerTest extends DummyEntity {
         System.out.println("테스트 : " + responseBody);
 
         // then
-        resultActions.andExpect(status().isCreated());
+        resultActions.andExpect(status().isOk());
         resultActions.andExpect(jsonPath("$.data.id").value(1L));
         resultActions.andExpect(jsonPath("$.data.username").value("cos"));
     }
