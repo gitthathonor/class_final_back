@@ -1,6 +1,7 @@
 package site.hobbyup.class_final_back.config.dummy;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -82,12 +83,11 @@ public class DummyEntity {
         return subscribe;
     }
 
-    protected Coupon newCoupon(String title, Long price, Timestamp expiredDate, Timestamp createdAt, User user) {
+    protected Coupon newCoupon(String title, Long price, String expiredDate, User user) {
         Coupon coupon = Coupon.builder()
                 .title(title)
                 .price(price)
                 .expiredDate(expiredDate)
-                .createdAt(createdAt)
                 .user(user)
                 .build();
         return coupon;
