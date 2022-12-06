@@ -96,8 +96,12 @@ public class UserService {
     public void deleteUser(Long id) {
         User userPS = userRepository.findById(id)
                 .orElseThrow(() -> new CustomApiException("가입되지 않은 유저입니다.", HttpStatus.FORBIDDEN));
+        // 쿠폰 삭제
+        List<Coupon> couponList = couponRepository.findAllByUserId(id);
+        couponRepository.deleteAll(couponList);
 
         userRepository.deleteById(userPS.getId());
+
     }
 
     @Transactional
