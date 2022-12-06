@@ -87,9 +87,14 @@ public class LessonService {
   }
 
   // 클래스 최신순 정렬
+  @Transactional
   public LessonLatestListRepDto getLatestLessonList() {
-    List<Lesson> lesson = lessonRepository.findAllLatest();
-    return new LessonLatestListRepDto(lesson);
+    List<Lesson> lessonList = lessonRepository.findAllLatest();
+    if (lessonList.size() == 0) {
+      throw new CustomApiException("게시글이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
+    }
+
+    return new LessonLatestListRepDto(lessonList);
   }
 
   // 클래스 수정하기

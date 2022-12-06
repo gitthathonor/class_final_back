@@ -57,6 +57,7 @@ public class LessonApiController {
         return new ResponseEntity<>(new ResponseDto<>("클래스 상세보기 성공", lessonDetailRespDto), HttpStatus.OK);
     }
 
+    // 최신순 정렬
     @GetMapping("/api/lesson/latest")
     public ResponseEntity<?> getLatestLessonList() {
         LessonLatestListRepDto LessonLatestRespDto = lessonService.getLatestLessonList();
