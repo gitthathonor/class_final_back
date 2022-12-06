@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.config.exception.CustomApiException;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
@@ -17,6 +18,8 @@ import site.hobbyup.class_final_back.domain.coupon.Coupon;
 import site.hobbyup.class_final_back.domain.coupon.CouponRepository;
 import site.hobbyup.class_final_back.domain.interest.Interest;
 import site.hobbyup.class_final_back.domain.interest.InterestRepository;
+import site.hobbyup.class_final_back.domain.lesson.Lesson;
+import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.user.User;
@@ -24,6 +27,7 @@ import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.user.UserReqDto.JoinReqDto;
 import site.hobbyup.class_final_back.dto.user.UserReqDto.UserUpdateReqDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.JoinRespDto;
+import site.hobbyup.class_final_back.dto.user.UserRespDto.MyLessonListRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.MyPageRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.UserUpdateRespDto;
 
@@ -38,6 +42,7 @@ public class UserService {
     private final CategoryRepository categoryRepository;
     private final ProfileRepository profileRepository;
     private final CouponRepository couponRepository;
+    private final LessonRepository lessonRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     // 회원가입
@@ -116,4 +121,30 @@ public class UserService {
         return new MyPageRespDto(userPS, profilePS);
     }
 
+    @Transactional
+    public MyLessonListRespDto getMyLesson(Long userId) {
+        // 유저 검증
+        User userPS = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomApiException("가입되지 않은 유저입니다.", HttpStatus.FORBIDDEN));
+
+        // 일반 유저일 때
+        if (userPS.getRole().getValue() == UserEnum.USER.getValue()) {
+            // 구매 테이블에서 구매한 내역이 있는지 id로 조회 - 없으면 exception
+
+            // 있으면 list로 출력
+            return new MyLessonListRespDto(null);
+
+            // 전문가일 때
+        } else if (userPS.getRole().getValue() == UserEnum.MASTER.getValue()) {
+            // 레슨 테이블에서 생성한 레슨이 있는지 id로 조회 - 없으면 exception
+            List<Lesson> lessonList = lessonRepository.findByUserId(userPS.getId());
+            if (lessonList.size() == 0) {
+                throw new CustomApiException("등록한 클래스가 없습니다.", HttpStatus.FORBIDDEN);
+            }
+            // 있으면 list로 출력
+            return new MyLessonListRespDto(lessonList);
+        } else {
+            throw new CustomApiException("관리자 페이지에서 조회하세요.", HttpStatus.FORBIDDEN);
+        }
+    }
 }

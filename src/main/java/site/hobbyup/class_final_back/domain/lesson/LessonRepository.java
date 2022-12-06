@@ -1,7 +1,6 @@
 package site.hobbyup.class_final_back.domain.lesson;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -26,5 +25,8 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
         @Query("select l from Lesson l where l.name LIKE %:keyword%")
         List<Lesson> findAllByKeyword(@Param("keyword") String keyword);
+
+        @Query("select l from Lesson l join fetch l.user u where l.user.id = :userId")
+        List<Lesson> findByUserId(@Param("userId") Long userId);
 
 }

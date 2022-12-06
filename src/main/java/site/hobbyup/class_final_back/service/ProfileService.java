@@ -39,7 +39,12 @@ public class ProfileService extends DecodeUtil {
                 log.debug("디버그 : service - 프로필 등록 시작");
 
                 User userPS = userRepository.findById(userId)
-                                .orElseThrow(() -> new CustomApiException("유저가 존재하지 않습니다.", HttpStatus.FORBIDDEN));
+                                .orElseThrow(
+                                                () -> new CustomApiException("유저가 존재하지 않습니다.", HttpStatus.FORBIDDEN));
+                Profile profile = profileRepository.findByUserId(userId);
+                if (profile != null) {
+                        throw new CustomApiException("이미 프로필을 등록했습니다.", HttpStatus.FORBIDDEN);
+                }
 
                 // 디코딩해서 이미지 저장하고 경로 리턴
                 String filePath = saveDecodingImage(profileSaveReqDto.getFilePath());
