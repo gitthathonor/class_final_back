@@ -22,6 +22,7 @@ import site.hobbyup.class_final_back.domain.subscribe.SubscribeRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.payment.PaymentReqDto.PaymentSaveReqDto;
+import site.hobbyup.class_final_back.dto.payment.PaymentRespDto.PaymentListRespDto;
 import site.hobbyup.class_final_back.dto.payment.PaymentRespDto.PaymentSaveRespDto;
 
 @RequiredArgsConstructor
@@ -60,6 +61,15 @@ public class PaymentService {
     Payment paymentPS = paymentRepository.save(payment);
     return new PaymentSaveRespDto(paymentPS);
   }
+
+  // 결제 내역 보기
+  public PaymentListRespDto getUserPaymentList(Long userId) {
+    // 결제 내역 정보들 들고오기
+    List<Payment> paymentListPS = paymentRepository.findByUserId(userId);
+    return new PaymentListRespDto(paymentListPS);
+
+  }
+  // 판매 내역 보기
 
   // 결제 취소하기
 
