@@ -1,6 +1,7 @@
 package site.hobbyup.class_final_back.web;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import site.hobbyup.class_final_back.config.auth.LoginUser;
+import site.hobbyup.class_final_back.domain.lesson.LessonRepository.LessonLatestListRespDto;
 import site.hobbyup.class_final_back.dto.ResponseDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
@@ -59,8 +61,8 @@ public class LessonApiController {
     // 최신순 정렬
     @GetMapping("/api/lesson/latest")
     public ResponseEntity<?> getLatestLessonList() {
-        lessonService.getLatestLessonList();
-        return new ResponseEntity<>(new ResponseDto<>("클래스 최신순으로 정렬", null), HttpStatus.OK);
+        List<LessonLatestListRespDto> lessonLatestListRespDto = lessonService.getLatestLessonList();
+        return new ResponseEntity<>(new ResponseDto<>("클래스 최신순으로 정렬", lessonLatestListRespDto), HttpStatus.OK);
     }
 
 }

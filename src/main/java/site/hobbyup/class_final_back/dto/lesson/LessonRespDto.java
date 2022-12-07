@@ -137,28 +137,29 @@ public class LessonRespDto {
 
   }
 
-  @Setter
-  @Getter
-  public static class LessonLatestListRepDto {
-    List<LessonLatestRespDto> lessonList = new ArrayList<>();
+  // @Setter
+  // @Getter
+  // public static class LessonLatestListRespDto {
+  // List<LessonLatestRespDto> lessonList = new ArrayList<>();
 
-    public LessonLatestListRepDto(List<Lesson> lessonList) {
-      this.lessonList = lessonList.stream().map(
-          (lesson) -> new LessonLatestRespDto(lesson)).collect(Collectors.toList());
-    }
+  // public LessonLatestListRespDto(List<Lesson> lessonList) {
+  // this.lessonList = lessonList.stream().map(
+  // (lesson) -> new LessonLatestRespDto(lesson))
+  // .collect(Collectors.toList());
+  // }
+  // }
 
-    @Setter
-    @Getter
-    public static class LessonLatestRespDto {
-      private String name;
-      private Long price;
-      private String photo;
+  // @Setter
+  // @Getter
+  // public static class LessonLatestRespDto {
+  // private String name;
+  // private Long price;
+  // private String photo;
 
-      public LessonLatestRespDto(Lesson lesson) {
-        this.name = lesson.getName();
-        this.price = lesson.getPrice();
-        this.photo = lesson.getPhoto();
-      }
-    }
-  }
+  // public LessonLatestRespDto(Lesson lesson) {
+  // this.name = lesson.getName();
+  // this.price = lesson.getPrice();
+  // this.photo = lesson.getPhoto();
+  // }
+  // }
 }
