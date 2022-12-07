@@ -10,6 +10,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hobbyup.class_final_back.domain.AuditingTime;
@@ -39,5 +40,18 @@ public class Payment extends AuditingTime {
 
   @OneToOne(fetch = FetchType.LAZY)
   private PaymentType paymentType;
+
+  @Builder
+  public Payment(Long id, Long totalPrice, Integer totalCount, Long discountPrice, Long finalPrice, User user,
+      Lesson lesson, PaymentType paymentType) {
+    this.id = id;
+    this.totalPrice = totalPrice;
+    this.totalCount = totalCount;
+    this.discountPrice = discountPrice;
+    this.finalPrice = finalPrice;
+    this.user = user;
+    this.lesson = lesson;
+    this.paymentType = paymentType;
+  }
 
 }

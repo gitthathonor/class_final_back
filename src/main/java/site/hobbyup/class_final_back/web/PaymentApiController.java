@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import site.hobbyup.class_final_back.config.auth.LoginUser;
 import site.hobbyup.class_final_back.dto.ResponseDto;
 import site.hobbyup.class_final_back.dto.payment.PaymentReqDto.PaymentSaveReqDto;
+import site.hobbyup.class_final_back.dto.payment.PaymentRespDto.PaymentSaveRespDto;
 import site.hobbyup.class_final_back.service.PaymentService;
 
 @RequiredArgsConstructor
@@ -23,8 +24,9 @@ public class PaymentApiController {
   @PostMapping("/api/lesson/{lessonId}/payment")
   public ResponseEntity<?> savePayment(@RequestBody PaymentSaveReqDto paymentSaveReqDto,
       @AuthenticationPrincipal LoginUser loginUser, @PathVariable Long lessonId) {
-    paymentService.savePayment(paymentSaveReqDto, loginUser.getUser().getId(), lessonId);
-    return new ResponseEntity<>(new ResponseDto<>("결제 완료", null), HttpStatus.CREATED);
+    PaymentSaveRespDto paymentSaveRespDto = paymentService.savePayment(paymentSaveReqDto, loginUser.getUser().getId(),
+        lessonId);
+    return new ResponseEntity<>(new ResponseDto<>("결제 완료", paymentSaveRespDto), HttpStatus.CREATED);
   }
 
 }

@@ -109,6 +109,7 @@ public class UserService {
 
     }
 
+    // 마이페이지 메인
     @Transactional
     public MyPageRespDto getMyPage(Long userId) {
         User userPS = userRepository.findById(userId)
@@ -121,6 +122,7 @@ public class UserService {
         return new MyPageRespDto(userPS, profilePS);
     }
 
+    // 마이페이지에서 본인이 수강중인 레슨내역보기
     @Transactional
     public MyLessonListRespDto getMyLesson(Long userId) {
         // 유저 검증

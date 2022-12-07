@@ -5,4 +5,6 @@ truncate table category;
 truncate table lesson;
 truncate table review;
 truncate table subscribe;
+truncate table payment;
+truncate table payment_type;
 SET REFERENTIAL_INTEGRITY TRUE;
