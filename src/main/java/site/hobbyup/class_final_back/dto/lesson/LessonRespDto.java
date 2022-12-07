@@ -82,6 +82,7 @@ public class LessonRespDto {
     private Long lessonPrice;
     private Long lessonTime;
     private Long lessonCount;
+    private String lessonCurriculum;
     private String lessonPlace;
     private String possibleDays;
     private String lessonPolicy;
@@ -96,6 +97,7 @@ public class LessonRespDto {
       this.lessonPrice = lesson.getPrice();
       this.lessonTime = lesson.getLessonTime();
       this.lessonCount = lesson.getLessonCount();
+      this.lessonCurriculum = lesson.getCurriculum();
       this.lessonPlace = lesson.getPlace();
       this.possibleDays = lesson.getPossibleDays().getValue();
       this.lessonPolicy = lesson.getPolicy();
@@ -106,6 +108,8 @@ public class LessonRespDto {
           .collect(Collectors.toList());
     }
 
+    @Setter
+    @Getter
     public class ProfileDto {
       private String masterImg;
       private String masterIntroduction;
