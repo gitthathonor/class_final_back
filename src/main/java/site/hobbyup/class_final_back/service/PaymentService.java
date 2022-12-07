@@ -3,6 +3,8 @@ package site.hobbyup.class_final_back.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,8 +28,11 @@ import site.hobbyup.class_final_back.dto.payment.PaymentRespDto.PaymentListRespD
 import site.hobbyup.class_final_back.dto.payment.PaymentRespDto.PaymentSaveRespDto;
 
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Service
 public class PaymentService {
+
+  private final Logger log = LoggerFactory.getLogger(getClass());
 
   private final UserRepository userRepository;
   private final PaymentRepository paymentRepository;
@@ -64,8 +69,11 @@ public class PaymentService {
 
   // 결제 내역 보기
   public PaymentListRespDto getUserPaymentList(Long userId) {
+    log.debug("디버그 : PaymentService-getUserPaymentList 실행");
     // 결제 내역 정보들 들고오기
-    List<Payment> paymentListPS = paymentRepository.findByUserId(userId);
+    List<Payment> paymentListPS = paymentRepository.findAllByUserId(userId);
+    log.debug("디버그 : paymentListPS의 사이즈 : " + paymentListPS.size());
+
     return new PaymentListRespDto(paymentListPS);
 
   }

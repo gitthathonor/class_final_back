@@ -1,5 +1,6 @@
 package site.hobbyup.class_final_back.web;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -28,6 +29,7 @@ import site.hobbyup.class_final_back.domain.coupon.Coupon;
 import site.hobbyup.class_final_back.domain.coupon.CouponRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
+import site.hobbyup.class_final_back.domain.payment.Payment;
 import site.hobbyup.class_final_back.domain.payment.PaymentRepository;
 import site.hobbyup.class_final_back.domain.paymentType.PaymentType;
 import site.hobbyup.class_final_back.domain.paymentType.PaymentTypeRepository;
@@ -120,6 +122,9 @@ public class PaymentApiControllerTest extends DummyEntity {
 
     Coupon coupon1 = couponRepository.save(newCoupon("회원가입 쿠폰", 1000L, "2022-12-22", ssar));
 
+    Payment ssarPayment1 = paymentRepository.save(newPayment(ssar, lesson1, card, coupon1, 2));
+    Payment ssarPayment2 = paymentRepository.save(newPayment(ssar, lesson2, kakaoPay, coupon1, 3));
+
   }
 
   @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -143,5 +148,27 @@ public class PaymentApiControllerTest extends DummyEntity {
     resultActions.andExpect(status().isCreated());
     resultActions.andExpect(jsonPath("$.data.finalPrice").value(18000L));
     resultActions.andExpect(jsonPath("$.data.paymentTypeName").value("신용카드"));
+  }
+
+  @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @Test
+  public void getUserPaymentList_test() throws Exception {
+    // given
+    Long userId = 1L;
+
+    // when
+    ResultActions resultActions = mvc
+        .perform(get("/api/user/" + userId + "/mypage/payment"));
+    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+    System.out.println("테스트 : " + responseBody);
+
+    // then
+    resultActions.andExpect(status().isOk());
+    resultActions.andExpect(jsonPath("$.data.paymentDtoList[0].lessonName").value("더미1"));
+    resultActions.andExpect(jsonPath("$.data.paymentDtoList[0].paymentType").value("신용카드"));
+    resultActions.andExpect(jsonPath("$.data.paymentDtoList[0].finalPrice").value(18000L));
+    resultActions.andExpect(jsonPath("$.data.paymentDtoList[1].lessonName").value("더미2"));
+    resultActions.andExpect(jsonPath("$.data.paymentDtoList[1].paymentType").value("카카오페이"));
+    resultActions.andExpect(jsonPath("$.data.paymentDtoList[1].finalPrice").value(57000L));
   }
 }
