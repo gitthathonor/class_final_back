@@ -167,7 +167,7 @@ public class LessonApiControllerTest extends DummyEntity {
 
     // when
     ResultActions resultActions = mvc
-        .perform(get("/api/lesson/" + lessonId));
+        .perform(get("/api/category/lesson/" + lessonId));
     String responseBody = resultActions.andReturn().getResponse().getContentAsString();
     System.out.println("테스트 : " + responseBody);
 
