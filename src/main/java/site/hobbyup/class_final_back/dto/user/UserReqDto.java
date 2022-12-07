@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import site.hobbyup.class_final_back.config.enums.UserEnum;
-import site.hobbyup.class_final_back.domain.category.Category;
-import site.hobbyup.class_final_back.domain.interest.Interest;
 import site.hobbyup.class_final_back.domain.user.User;
 
 public class UserReqDto {
