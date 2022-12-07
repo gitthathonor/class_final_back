@@ -1,6 +1,10 @@
 package site.hobbyup.class_final_back.dto.payment;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -30,6 +34,34 @@ public class PaymentRespDto {
       this.lessonName = payment.getLesson().getName();
       this.username = payment.getUser().getUsername();
       this.paymentDate = payment.getCreatedAt();
+    }
+
+  }
+
+  @Setter
+  @Getter
+  public static class PaymentListRespDto {
+    private List<PaymentDto> paymentDtoList = new ArrayList<>();
+
+    public PaymentListRespDto(List<Payment> paymentList) {
+      this.paymentDtoList = paymentList.stream().map((payment) -> new PaymentDto(payment)).collect(Collectors.toList());
+    }
+
+    @Setter
+    @Getter
+    public class PaymentDto {
+      private String lessonName;
+      private Long finalPrice;
+      private String paymentType;
+      private LocalDateTime paymentDate;
+
+      public PaymentDto(Payment payment) {
+        this.lessonName = payment.getLesson().getName();
+        this.finalPrice = payment.getFinalPrice();
+        this.paymentType = payment.getPaymentType().getName();
+        this.paymentDate = payment.getCreatedAt();
+      }
+
     }
 
   }
