@@ -137,12 +137,10 @@ public class LessonRespDto {
   @Getter
   public static class LessonLatestListRepDto {
     List<LessonLatestRespDto> lessonList = new ArrayList<>();
-    private Long totalReview;
 
-    public LessonLatestListRepDto(List<Lesson> lessonList, Long totalReview) {
+    public LessonLatestListRepDto(List<Lesson> lessonList) {
       this.lessonList = lessonList.stream().map(
           (lesson) -> new LessonLatestRespDto(lesson)).collect(Collectors.toList());
-      this.totalReview = totalReview;
     }
 
     @Setter

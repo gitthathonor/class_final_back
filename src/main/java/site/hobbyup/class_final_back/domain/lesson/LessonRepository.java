@@ -32,4 +32,11 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
         @Query(value = "SELECT * from lesson l ORDER BY created_at desc LIMIT 12", nativeQuery = true)
         List<Lesson> findAllLatest();
 
+        // @Query(value = "SELECT * from lesson l " +
+        // "left outer join (select count(*) totalReview, AVG(grade) totalGrade,
+        // r.lesson_id " +
+        // "from review r) s2 ON l.id = 1 " +
+        // "ORDER BY created_at desc LIMIT 12", nativeQuery = true)
+        // List<Lesson> findAllLatest();
+
 }

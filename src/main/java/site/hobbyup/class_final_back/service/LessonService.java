@@ -93,9 +93,8 @@ public class LessonService {
     if (lessonList.size() == 0) {
       throw new CustomApiException("게시글이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
     }
-    Long totalReview = reviewRepository.findAllCount();
 
-    return new LessonLatestListRepDto(lessonList, totalReview);
+    return new LessonLatestListRepDto(lessonList);
   }
 
   // 클래스 수정하기

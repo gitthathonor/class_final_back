@@ -20,7 +20,6 @@ import site.hobbyup.class_final_back.dto.ResponseDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDto;
-import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonLatestListRepDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
 import site.hobbyup.class_final_back.service.LessonService;
 
@@ -60,8 +59,8 @@ public class LessonApiController {
     // 최신순 정렬
     @GetMapping("/api/lesson/latest")
     public ResponseEntity<?> getLatestLessonList() {
-        LessonLatestListRepDto LessonLatestRespDto = lessonService.getLatestLessonList();
-        return new ResponseEntity<>(new ResponseDto<>("클래스 최신순으로 정렬", LessonLatestRespDto), HttpStatus.OK);
+        lessonService.getLatestLessonList();
+        return new ResponseEntity<>(new ResponseDto<>("클래스 최신순으로 정렬", null), HttpStatus.OK);
     }
 
 }
