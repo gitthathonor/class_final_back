@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
+
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
         @Query("select l from Lesson l join fetch l.category c where l.category.id = :categoryId and (l.price > :minPrice and l.price < :maxPrice)")
@@ -29,4 +31,6 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
         @Query("select l from Lesson l join fetch l.user u where l.user.id = :userId")
         List<Lesson> findByUserId(@Param("userId") Long userId);
 
+        @Query("select ")
+        List<LessonCommonListDto> findAllForMain();
 }
