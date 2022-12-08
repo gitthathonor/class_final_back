@@ -1,7 +1,6 @@
 package site.hobbyup.class_final_back.service;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -17,8 +16,6 @@ import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
-import site.hobbyup.class_final_back.domain.lesson.LessonRepository.LessonLatestListRespDto;
-import site.hobbyup.class_final_back.domain.lesson.LessonRepository.LessonLatestListRespDto.LessonLatestRespDto;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.review.Review;
@@ -28,6 +25,7 @@ import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonLatestListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
 import site.hobbyup.class_final_back.util.DecodeUtil;
 
@@ -91,23 +89,13 @@ public class LessonService {
 
   // 클래스 최신순 정렬
   @Transactional
-  public List<LessonLatestListRespDto> getLatestLessonList() {
-    List<LessonLatestRespDto> lessonList = lessonRepository.findAllLatest();
+  public LessonLatestListRespDto getLatestLessonList() {
+    List<Lesson> lessonList = lessonRepository.findAllLatest();
     if (lessonList.size() == 0) {
       throw new CustomApiException("게시글이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
     }
 
-    List<LessonLatestListRespDto> lessonLatestListRespDto = new ArrayList<>();
-
-    for (LessonLatestRespDto lessonLatestRespDto : lessonList) {
-      LessonLatestListRespDto dto = LessonLatestListRespDto
-          .builder().name(lessonLatestRespDto.getName()).photo(lessonLatestRespDto.getPhoto())
-          .price(lessonLatestRespDto.getPrice())
-          .avgGrade(lessonLatestRespDto.getAvgGrade()).totalReview(lessonLatestRespDto.getTotalReview()).build();
-
-      lessonLatestListRespDto.add(dto);
-    }
-    return lessonLatestListRespDto;
+    return new LessonLatestListRespDto(lessonList);
   }
 
   // 클래스 수정하기
