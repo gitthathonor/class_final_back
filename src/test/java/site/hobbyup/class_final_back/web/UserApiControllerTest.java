@@ -2,6 +2,7 @@ package site.hobbyup.class_final_back.web;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -105,6 +106,24 @@ public class UserApiControllerTest extends DummyEntity {
 
     @WithUserDetails(value = "cos", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
+    public void deleteUser_test() throws Exception {
+        // given
+        Long userId = 1L;
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(put("/api/user/" + userId + "/delete"));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(jsonPath("$.data.inactive").value(true));
+        resultActions.andExpect(jsonPath("$.data.username").value("cos"));
+    }
+
+    @WithUserDetails(value = "cos", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
     public void getMyPage_test() throws Exception {
         // given
         Long userId = 1L;
@@ -120,22 +139,5 @@ public class UserApiControllerTest extends DummyEntity {
         resultActions.andExpect(jsonPath("$.data.id").value(1L));
         resultActions.andExpect(jsonPath("$.data.username").value("cos"));
     }
-
-    // @Test
-    // public void deleteById_test() throws Exception {
-    // // given
-    // Long id = 1L;
-
-    // // when
-    // ResultActions resultActions = mvc
-    // .perform(delete("/api/user/" + id)
-    // .contentType(APPLICATION_JSON_UTF8));
-    // String responseBody =
-    // resultActions.andReturn().getResponse().getContentAsString();
-    // System.out.println("디버그 : " + responseBody);
-
-    // // then
-    // resultActions.andExpect(status().isOk());
-    // }
 
 }

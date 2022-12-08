@@ -64,4 +64,8 @@ public class User extends AuditingTime {
         this.phoneNum = userUpdateReqDto.getPhoneNum();
     }
 
+    public void delete() {
+        this.isInactive = true;
+    }
+
 }

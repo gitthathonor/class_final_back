@@ -130,4 +130,17 @@ public class UserRespDto {
             }
         }
     }
+
+    @Setter
+    @Getter
+    public static class UserDeleteRespDto {
+        private String username;
+        private boolean isInactive;
+
+        public UserDeleteRespDto(User user) {
+            this.username = user.getUsername();
+            this.isInactive = user.isInactive();
+        }
+
+    }
 }
