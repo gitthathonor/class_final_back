@@ -13,7 +13,6 @@ import site.hobbyup.class_final_back.domain.interest.Interest;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.user.User;
-import site.hobbyup.class_final_back.dto.user.UserRespDto.MyLessonListRespDto.MyLessonRespDto;
 
 public class UserRespDto {
 
@@ -22,11 +21,13 @@ public class UserRespDto {
     public static class JoinRespDto {
         private Long id;
         private String username;
+        private boolean isInactive;
         private List<InterestDto> interestList;
 
         public JoinRespDto(User user, List<Interest> interestList) {
             this.id = user.getId();
             this.username = user.getUsername();
+            this.isInactive = user.isInactive();
             this.interestList = interestList.stream().map((interest) -> new InterestDto(interest))
                     .collect(Collectors.toList());
         }
