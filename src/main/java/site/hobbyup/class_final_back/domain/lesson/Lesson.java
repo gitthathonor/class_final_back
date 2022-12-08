@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.ColumnDefault;
@@ -24,6 +25,7 @@ import lombok.NoArgsConstructor;
 import site.hobbyup.class_final_back.config.enums.DayEnum;
 import site.hobbyup.class_final_back.domain.AuditingTime;
 import site.hobbyup.class_final_back.domain.category.Category;
+import site.hobbyup.class_final_back.domain.review.Review;
 import site.hobbyup.class_final_back.domain.user.User;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

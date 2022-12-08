@@ -6,6 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
         @Query("select l from Lesson l join fetch l.category c where l.category.id = :categoryId and (l.price > :minPrice and l.price < :maxPrice)")
@@ -28,5 +32,8 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
         @Query("select l from Lesson l join fetch l.user u where l.user.id = :userId")
         List<Lesson> findByUserId(@Param("userId") Long userId);
+
+        @Query(value = "SELECT * from lesson l ORDER BY created_at desc LIMIT 12", nativeQuery = true)
+        List<Lesson> findAllLatest();
 
 }
