@@ -31,7 +31,7 @@ public class CouponApiController {
         }
 
         CouponListRespDto couponListRespDto = couponService.getCouponList(userId);
-        return new ResponseEntity<>(new ResponseDto<>("쿠폰 리스트보기", couponListRespDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ResponseDto<>("쿠폰 리스트보기", couponListRespDto), HttpStatus.OK);
     }
 
 }

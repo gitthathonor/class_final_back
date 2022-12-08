@@ -25,5 +25,4 @@ public class SearchApiController {
         SearchListRespDto searchListRespDto = searchService.getSearchClass(keyword);
         return new ResponseEntity<>(new ResponseDto<>("검색하기", searchListRespDto), HttpStatus.CREATED);
     }
-
 }
