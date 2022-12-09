@@ -35,8 +35,10 @@ public class ReviewService {
         .orElseThrow(() -> new CustomApiException("해당 강의가 없습니다.", HttpStatus.BAD_REQUEST));
 
     // 현재 강의를 구입했는지 안 했는지 여부
-    Payment paymentPS = paymentRepository.findByUserIdAndLessonId(userId, lessonId)
-        .orElseThrow(() -> new CustomApiException("강의를 구입하지 않았습니다.", HttpStatus.BAD_REQUEST));
+    // Payment paymentPS = paymentRepository.findByUserIdAndLessonId(userId,
+    // lessonId)
+    // .orElseThrow(() -> new CustomApiException("강의를 구입하지 않았습니다.",
+    // HttpStatus.BAD_REQUEST));
 
     Review review = reviewSaveReqDto.toEntity(userPS, lessonPS);
     Review reviewPS = reviewRepository.save(review);

@@ -34,6 +34,8 @@ import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.review.Review;
 import site.hobbyup.class_final_back.domain.review.ReviewRepository;
+import site.hobbyup.class_final_back.domain.subscribe.Subscribe;
+import site.hobbyup.class_final_back.domain.subscribe.SubscribeRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
@@ -69,6 +71,9 @@ public class LessonApiControllerTest extends DummyEntity {
   private ProfileRepository profileRepository;
 
   @Autowired
+  private SubscribeRepository subscribeRepository;
+
+  @Autowired
   private EntityManager em;
 
   @BeforeEach
@@ -102,7 +107,16 @@ public class LessonApiControllerTest extends DummyEntity {
     Review review1 = reviewRepository.save(newReivew("너무 좋은 강의입니다.", 4.5, ssar, lesson1));
     Review review2 = reviewRepository.save(newReivew("생각했던 것보다 더 좋네요!", 4.0, cos, lesson1));
     Review review3 = reviewRepository.save(newReivew("별로네요", 3.0, ssar, lesson2));
-    Review review4 = reviewRepository.save(newReivew("도대체 이 강의 하시는 이유가 뭐죠?", 2.5, ssar, lesson2));
+    Review review4 = reviewRepository.save(newReivew("도대체 이 강의 하시는 이유가 뭐죠?", 2.5, ssar, lesson3));
+    Review review5 = reviewRepository.save(newReivew("피곤하다", 2.0, cos, lesson2));
+    Review review6 = reviewRepository.save(newReivew("에반데", 3.5, cos, lesson8));
+    Review review7 = reviewRepository.save(newReivew("토큰 없음", 1.5, cos, lesson7));
+
+    Subscribe subscribe1 = subscribeRepository.save(newSubscribe(ssar, lesson1));
+    Subscribe subscribe2 = subscribeRepository.save(newSubscribe(ssar, lesson2));
+    Subscribe subscribe3 = subscribeRepository.save(newSubscribe(cos, lesson3));
+    Subscribe subscribe4 = subscribeRepository.save(newSubscribe(cos, lesson8));
+    Subscribe subscribe5 = subscribeRepository.save(newSubscribe(cos, lesson9));
 
   }
 
@@ -175,6 +189,20 @@ public class LessonApiControllerTest extends DummyEntity {
     resultActions.andExpect(status().isOk());
     resultActions.andExpect(jsonPath("$.data.lessonName").value("더미1"));
     resultActions.andExpect(jsonPath("$.data.lessonReviewList[0].reviewContent").value("너무 좋은 강의입니다."));
+  }
+
+  @WithUserDetails(value = "cos", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @Test
+  public void getLessonCommonList_test() throws Exception {
+    // when
+    ResultActions resultActions = mvc
+        .perform(get("/api/main"));
+    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+    System.out.println("테스트 : " + responseBody);
+
+    // then
+    resultActions.andExpect(status().isOk());
+
   }
 
 }

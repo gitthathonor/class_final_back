@@ -109,7 +109,7 @@ public class LessonService {
   // 클래스 삭제하기
 
   // 클래스 리스트 뽑기 테스트
-  public List<LessonCommonListDto> getLessonCommonList(Long userId, Long lessonId) {
-    return lessonRepository.findAllByIdAndUserId(userId, lessonId);
+  public List<LessonCommonListDto> getLessonCommonList(Long userId) {
+    return lessonRepository.findAllWithReview(userId);
   }
 }

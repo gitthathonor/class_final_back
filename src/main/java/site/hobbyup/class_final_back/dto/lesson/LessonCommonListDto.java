@@ -9,5 +9,6 @@ public interface LessonCommonListDto {
 
   Double getAvgGrade();
 
-  Boolean isSubscribed();
+  boolean isSubscribed();
+
 }
