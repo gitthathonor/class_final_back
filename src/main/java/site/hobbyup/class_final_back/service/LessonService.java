@@ -23,6 +23,7 @@ import site.hobbyup.class_final_back.domain.review.Review;
 import site.hobbyup.class_final_back.domain.review.ReviewRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
+import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDto;
@@ -106,4 +107,9 @@ public class LessonService {
   // 클래스 수정하기
 
   // 클래스 삭제하기
+
+  // 클래스 리스트 뽑기 테스트
+  public List<LessonCommonListDto> getLessonCommonList(Long userId, Long lessonId) {
+    return lessonRepository.findAllByIdAndUserId(userId, lessonId);
+  }
 }

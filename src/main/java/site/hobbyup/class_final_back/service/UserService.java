@@ -30,6 +30,7 @@ import site.hobbyup.class_final_back.dto.user.UserReqDto.UserUpdateReqDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.JoinRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.MyLessonListRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.MyPageRespDto;
+import site.hobbyup.class_final_back.dto.user.UserRespDto.UserDeleteRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.UserUpdateRespDto;
 
 @Transactional(readOnly = true)
@@ -99,15 +100,16 @@ public class UserService {
 
     // 회원탈퇴
     @Transactional(rollbackFor = RuntimeException.class)
-    public void deleteUser(Long id) {
+    public UserDeleteRespDto deleteUser(Long id) {
         User userPS = userRepository.findById(id)
                 .orElseThrow(() -> new CustomApiException("가입되지 않은 유저입니다.", HttpStatus.FORBIDDEN));
         // 쿠폰 삭제
         List<Coupon> couponList = couponRepository.findAllByUserId(id);
         couponRepository.deleteAll(couponList);
 
-        userRepository.deleteById(userPS.getId());
-
+        // 회원 탈퇴
+        userPS.delete();
+        return new UserDeleteRespDto(userRepository.save(userPS));
     }
 
     // 마이페이지 메인

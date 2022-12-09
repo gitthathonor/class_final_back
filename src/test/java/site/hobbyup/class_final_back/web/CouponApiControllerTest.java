@@ -91,7 +91,7 @@ public class CouponApiControllerTest extends DummyEntity {
                 System.out.println("테스트 : " + responseBody);
 
                 // then
-                resultActions.andExpect(status().isCreated());
+                resultActions.andExpect(status().isOk());
                 resultActions.andExpect(jsonPath("$.data.couponList.length()").value(2));
         }
 

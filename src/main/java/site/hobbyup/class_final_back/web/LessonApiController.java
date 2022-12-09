@@ -51,7 +51,7 @@ public class LessonApiController {
     }
 
     // lesson 상세보기
-    @GetMapping("/api/lesson/{lessonId}")
+    @GetMapping("/api/category/lesson/{lessonId}")
     public ResponseEntity<?> getLessonDetail(@PathVariable Long lessonId) {
         LessonDetailRespDto lessonDetailRespDto = lessonService.getLessonDetail(lessonId);
         return new ResponseEntity<>(new ResponseDto<>("클래스 상세보기 성공", lessonDetailRespDto), HttpStatus.OK);
