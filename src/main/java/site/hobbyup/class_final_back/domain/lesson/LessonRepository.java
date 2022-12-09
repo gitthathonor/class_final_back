@@ -6,10 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-
 import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
 
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
@@ -43,6 +39,6 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
                         + " ON l.id = r.lesson_id"
                         + " LEFT OUTER JOIN (SELECT lesson_id FROM subscribe WHERE user_id = :userId) s"
                         + " ON l.id = s.lesson_id"
-                        + " ORDER BY l.created_at DESC", nativeQuery = true)
+                        + " ORDER BY l.created_at DESC DESC LIMIT 12", nativeQuery = true)
         List<LessonCommonListDto> findAllWithReview(@Param("userId") Long userId);
 }
