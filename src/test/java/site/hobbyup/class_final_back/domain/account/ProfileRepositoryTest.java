@@ -2,6 +2,8 @@ package site.hobbyup.class_final_back.domain.account;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Optional;
+
 import javax.persistence.EntityManager;
 
 import org.junit.jupiter.api.AfterEach;
@@ -51,10 +53,10 @@ public class ProfileRepositoryTest extends DummyEntity {
         Long userId = 1L;
 
         // when
-        Profile profilePS = profileRepository.findByUserId(userId);
+        Optional<Profile> profileOP = profileRepository.findByUserId(userId);
 
         // then (실재값, 기대값)
-        assertThat(profilePS.getUser().getId()).isEqualTo(1L);
-        assertThat(profilePS.getCareerYear()).isEqualTo("신입");
+        assertThat(profileOP.get().getUser().getId()).isEqualTo(1L);
+        assertThat(profileOP.get().getCareerYear()).isEqualTo("신입");
     }
 }
