@@ -39,7 +39,7 @@ public class Review {
     this.id = id;
     this.content = content;
     this.grade = grade;
-    // this.lesson = lesson;
+    this.lesson = lesson;
     this.user = user;
   }
 

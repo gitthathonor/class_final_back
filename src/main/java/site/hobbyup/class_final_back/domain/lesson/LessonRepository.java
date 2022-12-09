@@ -6,13 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
-
 
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
@@ -40,14 +38,10 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
         @Query(value = "SELECT * from lesson l ORDER BY created_at desc LIMIT 12", nativeQuery = true)
         List<Lesson> findAllLatest();
 
-        @Query(value = "SELECT l1.lessonName AS lessonName, l1.lessonPrice AS lessonPrice, l1.isSubscribed AS subscribed, COUNT(*) AS totalReview, decode_oracle(AVG(r.grade), NULL,0.0,AVG(r.grade)) AS avgGrade"
-                        +
-                        "FROM (SELECT l.title AS lessonName, l.price AS lessonPrice, decode_oracle((SELECT COUNT(*) FROM subscribe WHERE user_id = :userId AND lesson_id = :lessonId), 1, 1, 0) AS isSubscribed, l.id AS id"
-                        +
-                        "FROM lesson l LEFT OUTER JOIN subscribe s" +
-                        "ON l.id = s.lesson_id" +
-                        "WHERE l.id = :lessonId" +
-                        "GROUP BY l.id) l1 LEFT OUTER JOIN review r" +
-                        "ON l1.id = r.lesson_id", nativeQuery = true)
-        List<LessonCommonListDto> findAllByIdAndUserId(@Param("userId") Long userId, @Param("lessonId") Long lessonId);
+        @Query(value = "SELECT l.name AS lessonName, l.price AS lessonPrice, (case when r.count IS NULL then 0 ELSE r.count END) AS totalReview, (case when r.grade IS NULL then 0 ELSE r.grade END) AS avgGrade, (case when s.lesson_id IS NOT NULL then true ELSE false END) AS subscribed"
+                        + " FROM lesson l LEFT OUTER JOIN (SELECT AVG(grade) AS grade, COUNT(*) AS count, lesson_id FROM review GROUP BY lesson_id) r"
+                        + " ON l.id = r.lesson_id"
+                        + " LEFT OUTER JOIN (SELECT lesson_id FROM subscribe WHERE user_id = :userId) s"
+                        + " ON l.id = s.lesson_id", nativeQuery = true)
+        List<LessonCommonListDto> findAllWithReview(@Param("userId") Long userId);
 }

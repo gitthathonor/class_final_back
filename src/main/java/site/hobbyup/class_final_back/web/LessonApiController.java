@@ -1,6 +1,7 @@
 package site.hobbyup.class_final_back.web;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import site.hobbyup.class_final_back.config.auth.LoginUser;
 import site.hobbyup.class_final_back.dto.ResponseDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDto;
@@ -62,6 +64,13 @@ public class LessonApiController {
     public ResponseEntity<?> getLatestLessonList() {
         LessonLatestListRespDto lessonLatestListRespDto = lessonService.getLatestLessonList();
         return new ResponseEntity<>(new ResponseDto<>("클래스 최신순으로 정렬", lessonLatestListRespDto), HttpStatus.OK);
+    }
+
+    // dto 리스트 테스트 컨트롤러
+    @GetMapping("/api/main")
+    public ResponseEntity<?> getLessonCommonList(@AuthenticationPrincipal LoginUser loginUser) {
+        List<LessonCommonListDto> lessonCommonListDtos = lessonService.getLessonCommonList(loginUser.getUser().getId());
+        return new ResponseEntity<>(new ResponseDto<>("테스트", lessonCommonListDtos), HttpStatus.OK);
     }
 
 }
