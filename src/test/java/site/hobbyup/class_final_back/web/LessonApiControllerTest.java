@@ -188,7 +188,7 @@ public class LessonApiControllerTest extends DummyEntity {
     // then
     resultActions.andExpect(status().isOk());
     resultActions.andExpect(jsonPath("$.data.lessonName").value("더미1"));
-    resultActions.andExpect(jsonPath("$.data.lessonReviewList[0].reviewContent").value("너무 좋은 강의입니다."));
+    resultActions.andExpect(jsonPath("$.data.lessonReviewList[0].reviewContent").value("생각했던 것보다 더 좋네요!"));
   }
 
   @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)

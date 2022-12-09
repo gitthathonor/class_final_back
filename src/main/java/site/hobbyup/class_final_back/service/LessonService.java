@@ -89,7 +89,13 @@ public class LessonService {
     }
     log.debug("디버그 : " + profileOP.get());
     List<Review> reviewListPS = reviewRepository.findAllByLessonId(lessonPS.getId());
-    LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, profileOP.get(), reviewListPS);
+    Double sum = 0.0;
+    for (int i = 0; i < reviewListPS.size(); i++) {
+      sum += reviewListPS.get(i).getGrade();
+    }
+    Double avgGrade = sum / reviewListPS.size();
+    LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, profileOP.get(), avgGrade,
+        reviewListPS);
     return lessonDetailRespDto;
   }
 
