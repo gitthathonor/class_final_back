@@ -6,7 +6,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
 import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
+
 
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
@@ -44,5 +50,4 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
                         "GROUP BY l.id) l1 LEFT OUTER JOIN review r" +
                         "ON l1.id = r.lesson_id", nativeQuery = true)
         List<LessonCommonListDto> findAllByIdAndUserId(@Param("userId") Long userId, @Param("lessonId") Long lessonId);
-
 }

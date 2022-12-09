@@ -1,6 +1,7 @@
 package site.hobbyup.class_final_back.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -117,11 +118,11 @@ public class UserService {
         User userPS = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomApiException("가입되지 않은 유저입니다.", HttpStatus.FORBIDDEN));
 
-        Profile profilePS = profileRepository.findByUserId(userPS.getId());
-        if (profilePS == null) {
+        Optional<Profile> profileOP = profileRepository.findByUserId(userPS.getId());
+        if (profileOP.isEmpty()) {
             throw new CustomApiException("프로필 사진이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
         }
-        return new MyPageRespDto(userPS, profilePS);
+        return new MyPageRespDto(userPS, profileOP.get());
     }
 
     // 마이페이지에서 본인이 수강중인 레슨내역보기

@@ -2,6 +2,7 @@ package site.hobbyup.class_final_back.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,9 +83,13 @@ public class LessonService {
     log.debug("디버그 : LessonService-getLessonDetail 실행");
     Lesson lessonPS = lessonRepository.findById(id)
         .orElseThrow(() -> new CustomApiException("해당 수업 없음", HttpStatus.BAD_REQUEST));
-    Profile profilePS = profileRepository.findByUserId(lessonPS.getId());
+    Optional<Profile> profileOP = profileRepository.findByUserId(lessonPS.getUser().getId());
+    if (profileOP.isEmpty()) {
+      throw new CustomApiException("프로필을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST);
+    }
+    log.debug("디버그 : " + profileOP.get());
     List<Review> reviewListPS = reviewRepository.findAllByLessonId(lessonPS.getId());
-    LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, profilePS, reviewListPS);
+    LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, profileOP.get(), reviewListPS);
     return lessonDetailRespDto;
   }
 
