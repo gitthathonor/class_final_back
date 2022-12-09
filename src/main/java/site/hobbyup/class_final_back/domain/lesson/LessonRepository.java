@@ -42,6 +42,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
                         + " FROM lesson l LEFT OUTER JOIN (SELECT AVG(grade) AS grade, COUNT(*) AS count, lesson_id FROM review GROUP BY lesson_id) r"
                         + " ON l.id = r.lesson_id"
                         + " LEFT OUTER JOIN (SELECT lesson_id FROM subscribe WHERE user_id = :userId) s"
-                        + " ON l.id = s.lesson_id", nativeQuery = true)
+                        + " ON l.id = s.lesson_id"
+                        + " ORDER BY l.created_at DESC", nativeQuery = true)
         List<LessonCommonListDto> findAllWithReview(@Param("userId") Long userId);
 }

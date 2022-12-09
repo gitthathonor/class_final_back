@@ -191,7 +191,7 @@ public class LessonApiControllerTest extends DummyEntity {
     resultActions.andExpect(jsonPath("$.data.lessonReviewList[0].reviewContent").value("너무 좋은 강의입니다."));
   }
 
-  @WithUserDetails(value = "cos", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
   @Test
   public void getLessonCommonList_test() throws Exception {
     // when
