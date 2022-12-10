@@ -35,11 +35,9 @@ public class UserRespDto {
         @Setter
         @Getter
         public class InterestDto {
-            private Long userId;
             private String categoryName;
 
             public InterestDto(Interest interest) {
-                this.userId = interest.getUser().getId();
                 this.categoryName = interest.getCategory().getName();
             }
         }

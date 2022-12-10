@@ -90,6 +90,7 @@ public class UserApiControllerTest extends DummyEntity {
         joinReqDto.setRole(UserEnum.USER);
         joinReqDto.setCategoryIds(categoryIds);
         String requestBody = om.writeValueAsString(joinReqDto);
+        System.out.println("테스트 : " + requestBody);
 
         // when
         ResultActions resultActions = mvc
