@@ -12,13 +12,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import site.hobbyup.class_final_back.config.enums.UserEnum;
+import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.config.exception.CustomApiException;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
 import site.hobbyup.class_final_back.domain.coupon.Coupon;
 import site.hobbyup.class_final_back.domain.coupon.CouponRepository;
+import site.hobbyup.class_final_back.domain.coupon.Coupon;
+import site.hobbyup.class_final_back.domain.coupon.CouponRepository;
 import site.hobbyup.class_final_back.domain.interest.Interest;
 import site.hobbyup.class_final_back.domain.interest.InterestRepository;
+import site.hobbyup.class_final_back.domain.lesson.Lesson;
+import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
+import site.hobbyup.class_final_back.domain.profile.Profile;
+import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
 import site.hobbyup.class_final_back.domain.profile.Profile;
@@ -42,6 +49,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final InterestRepository interestRepository;
     private final CategoryRepository categoryRepository;
+    private final ProfileRepository profileRepository;
+    private final CouponRepository couponRepository;
+    private final LessonRepository lessonRepository;
     private final ProfileRepository profileRepository;
     private final CouponRepository couponRepository;
     private final LessonRepository lessonRepository;
@@ -71,6 +81,10 @@ public class UserService {
 
         // 4. 카테고리를 다시 select함
         List<Interest> interestListPS = interestRepository.findAllByUserId(userPS.getId());
+
+        // 5. 쿠폰 증정
+        Coupon coupon = Coupon.builder().title("회원가입 쿠폰").price(10000L).expiredDate("2022-12-22").user(userPS).build();
+        couponRepository.save(coupon);
 
         // 5. 쿠폰 증정
         Coupon coupon = Coupon.builder().title("회원가입 쿠폰").price(10000L).expiredDate("2022-12-22").user(userPS).build();

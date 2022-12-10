@@ -43,19 +43,19 @@ public class User extends AuditingTime {
     @Column(nullable = false)
     private UserEnum role;
 
-    @Column(name = "is_inactive")
-    private boolean isInactive; // default가 false, 탈퇴하면 true
+    @Column(name = "is_disabled")
+    private boolean isDisabled; // default가 false, 탈퇴하면 true
 
     @Builder
     public User(Long id, String username, String password, String email, String phoneNum, UserEnum role,
-            boolean isInactive) {
+            boolean isDisabled) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
         this.phoneNum = phoneNum;
         this.role = role;
-        this.isInactive = isInactive;
+        this.isDisabled = isDisabled;
     }
 
     public void update(UserUpdateReqDto userUpdateReqDto) {
@@ -65,7 +65,7 @@ public class User extends AuditingTime {
     }
 
     public void delete() {
-        this.isInactive = true;
+        this.isDisabled = true;
     }
 
 }

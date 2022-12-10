@@ -1,6 +1,7 @@
 package site.hobbyup.class_final_back.config.dummy;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 

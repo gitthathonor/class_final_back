@@ -79,4 +79,5 @@ public class UserApiController {
         MyLessonListRespDto myLessonRespDto = userService.getMyLesson(userId);
         return new ResponseEntity<>(new ResponseDto<>("마이페이지 클래스 보기", myLessonRespDto), HttpStatus.OK);
     }
+
 }
