@@ -1,6 +1,5 @@
 package site.hobbyup.class_final_back.dto.coupon;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
