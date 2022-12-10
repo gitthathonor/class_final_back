@@ -1,6 +1,7 @@
 package site.hobbyup.class_final_back.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,13 +12,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import site.hobbyup.class_final_back.config.enums.UserEnum;
+import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.config.exception.CustomApiException;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
 import site.hobbyup.class_final_back.domain.coupon.Coupon;
 import site.hobbyup.class_final_back.domain.coupon.CouponRepository;
+import site.hobbyup.class_final_back.domain.coupon.Coupon;
+import site.hobbyup.class_final_back.domain.coupon.CouponRepository;
 import site.hobbyup.class_final_back.domain.interest.Interest;
 import site.hobbyup.class_final_back.domain.interest.InterestRepository;
+import site.hobbyup.class_final_back.domain.lesson.Lesson;
+import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
+import site.hobbyup.class_final_back.domain.profile.Profile;
+import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
 import site.hobbyup.class_final_back.domain.profile.Profile;
@@ -29,6 +37,7 @@ import site.hobbyup.class_final_back.dto.user.UserReqDto.UserUpdateReqDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.JoinRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.MyLessonListRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.MyPageRespDto;
+import site.hobbyup.class_final_back.dto.user.UserRespDto.UserDeleteRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.UserUpdateRespDto;
 
 @Transactional(readOnly = true)
@@ -40,6 +49,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final InterestRepository interestRepository;
     private final CategoryRepository categoryRepository;
+    private final ProfileRepository profileRepository;
+    private final CouponRepository couponRepository;
+    private final LessonRepository lessonRepository;
     private final ProfileRepository profileRepository;
     private final CouponRepository couponRepository;
     private final LessonRepository lessonRepository;
@@ -74,6 +86,10 @@ public class UserService {
         Coupon coupon = Coupon.builder().title("회원가입 쿠폰").price(10000L).expiredDate("2022-12-22").user(userPS).build();
         couponRepository.save(coupon);
 
+        // 5. 쿠폰 증정
+        Coupon coupon = Coupon.builder().title("회원가입 쿠폰").price(10000L).expiredDate("2022-12-22").user(userPS).build();
+        couponRepository.save(coupon);
+
         // 4. DTO 응답
         return new JoinRespDto(userPS, interestListPS);
     }
@@ -98,29 +114,32 @@ public class UserService {
 
     // 회원탈퇴
     @Transactional(rollbackFor = RuntimeException.class)
-    public void deleteUser(Long id) {
+    public UserDeleteRespDto deleteUser(Long id) {
         User userPS = userRepository.findById(id)
                 .orElseThrow(() -> new CustomApiException("가입되지 않은 유저입니다.", HttpStatus.FORBIDDEN));
         // 쿠폰 삭제
         List<Coupon> couponList = couponRepository.findAllByUserId(id);
         couponRepository.deleteAll(couponList);
 
-        userRepository.deleteById(userPS.getId());
-
+        // 회원 탈퇴
+        userPS.delete();
+        return new UserDeleteRespDto(userRepository.save(userPS));
     }
 
+    // 마이페이지 메인
     @Transactional
     public MyPageRespDto getMyPage(Long userId) {
         User userPS = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomApiException("가입되지 않은 유저입니다.", HttpStatus.FORBIDDEN));
 
-        Profile profilePS = profileRepository.findByUserId(userPS.getId());
-        if (profilePS == null) {
+        Optional<Profile> profileOP = profileRepository.findByUserId(userPS.getId());
+        if (profileOP.isEmpty()) {
             throw new CustomApiException("프로필 사진이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
         }
-        return new MyPageRespDto(userPS, profilePS);
+        return new MyPageRespDto(userPS, profileOP.get());
     }
 
+    // 마이페이지에서 본인이 수강중인 레슨내역보기
     @Transactional
     public MyLessonListRespDto getMyLesson(Long userId) {
         // 유저 검증

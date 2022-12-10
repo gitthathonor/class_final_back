@@ -2,11 +2,11 @@ package site.hobbyup.class_final_back.dto.lesson;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import lombok.Getter;
 import lombok.Setter;
-import site.hobbyup.class_final_back.config.enums.DayEnum;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
@@ -82,6 +82,7 @@ public class LessonRespDto {
     private Long lessonPrice;
     private Long lessonTime;
     private Long lessonCount;
+    private String lessonCurriculum;
     private String lessonPlace;
     private String possibleDays;
     private String lessonPolicy;
@@ -96,6 +97,7 @@ public class LessonRespDto {
       this.lessonPrice = lesson.getPrice();
       this.lessonTime = lesson.getLessonTime();
       this.lessonCount = lesson.getLessonCount();
+      this.lessonCurriculum = lesson.getCurriculum();
       this.lessonPlace = lesson.getPlace();
       this.possibleDays = lesson.getPossibleDays().getValue();
       this.lessonPolicy = lesson.getPolicy();
@@ -106,6 +108,8 @@ public class LessonRespDto {
           .collect(Collectors.toList());
     }
 
+    @Setter
+    @Getter
     public class ProfileDto {
       private String masterImg;
       private String masterIntroduction;
@@ -133,4 +137,29 @@ public class LessonRespDto {
 
   }
 
+  @Setter
+  @Getter
+  public static class LessonLatestListRespDto {
+    List<LessonLatestRespDto> lessonList = new ArrayList<>();
+
+    public LessonLatestListRespDto(List<Lesson> lessonList) {
+      this.lessonList = lessonList.stream().map(
+          (lesson) -> new LessonLatestRespDto(lesson))
+          .collect(Collectors.toList());
+    }
+  }
+
+  @Setter
+  @Getter
+  public static class LessonLatestRespDto {
+    private String name;
+    private Long price;
+    private String photo;
+
+    public LessonLatestRespDto(Lesson lesson) {
+      this.name = lesson.getName();
+      this.price = lesson.getPrice();
+      this.photo = lesson.getPhoto();
+    }
+  }
 }

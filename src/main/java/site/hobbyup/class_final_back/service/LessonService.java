@@ -2,6 +2,7 @@ package site.hobbyup.class_final_back.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +23,11 @@ import site.hobbyup.class_final_back.domain.review.Review;
 import site.hobbyup.class_final_back.domain.review.ReviewRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
+import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonLatestListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
 import site.hobbyup.class_final_back.util.DecodeUtil;
 
@@ -75,17 +78,38 @@ public class LessonService {
   }
 
   // 클래스 상세보기
+  @Transactional
   public LessonDetailRespDto getLessonDetail(Long id) {
     log.debug("디버그 : LessonService-getLessonDetail 실행");
     Lesson lessonPS = lessonRepository.findById(id)
-        .orElseThrow(() -> new CustomApiException("해당 수업 없읍", HttpStatus.BAD_REQUEST));
-    Profile profilePS = profileRepository.findByUserId(lessonPS.getId());
+        .orElseThrow(() -> new CustomApiException("해당 수업 없음", HttpStatus.BAD_REQUEST));
+    Optional<Profile> profileOP = profileRepository.findByUserId(lessonPS.getUser().getId());
+    if (profileOP.isEmpty()) {
+      throw new CustomApiException("프로필을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST);
+    }
+    log.debug("디버그 : " + profileOP.get());
     List<Review> reviewListPS = reviewRepository.findAllByLessonId(lessonPS.getId());
-    LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, profilePS, reviewListPS);
+    LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, profileOP.get(), reviewListPS);
     return lessonDetailRespDto;
+  }
+
+  // 클래스 최신순 정렬
+  @Transactional
+  public LessonLatestListRespDto getLatestLessonList() {
+    List<Lesson> lessonList = lessonRepository.findAllLatest();
+    if (lessonList.size() == 0) {
+      throw new CustomApiException("게시글이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
+    }
+
+    return new LessonLatestListRespDto(lessonList);
   }
 
   // 클래스 수정하기
 
   // 클래스 삭제하기
+
+  // 클래스 리스트 뽑기 테스트
+  public List<LessonCommonListDto> getLessonCommonList(Long userId) {
+    return lessonRepository.findAllWithReview(userId);
+  }
 }

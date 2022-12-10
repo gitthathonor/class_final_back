@@ -5,8 +5,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.sql.Timestamp;
-
 import javax.persistence.EntityManager;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -25,27 +23,30 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import site.hobbyup.class_final_back.config.dummy.DummyEntity;
-import site.hobbyup.class_final_back.config.enums.DayEnum;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
+import site.hobbyup.class_final_back.domain.coupon.Coupon;
+import site.hobbyup.class_final_back.domain.coupon.CouponRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
+import site.hobbyup.class_final_back.domain.payment.Payment;
+import site.hobbyup.class_final_back.domain.payment.PaymentRepository;
+import site.hobbyup.class_final_back.domain.paymentType.PaymentType;
+import site.hobbyup.class_final_back.domain.paymentType.PaymentTypeRepository;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
-import site.hobbyup.class_final_back.domain.review.Review;
 import site.hobbyup.class_final_back.domain.review.ReviewRepository;
 import site.hobbyup.class_final_back.domain.subscribe.Subscribe;
 import site.hobbyup.class_final_back.domain.subscribe.SubscribeRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
-import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
-import site.hobbyup.class_final_back.util.DecodeUtil;
+import site.hobbyup.class_final_back.dto.payment.PaymentReqDto.PaymentSaveReqDto;
 
 @Sql("classpath:db/truncate.sql") // 롤백 대신 사용 (auto_increment 초기화 + 데이터 비우기)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
-public class LessonApiControllerTest extends DummyEntity {
+public class PaymentApiControllerTest extends DummyEntity {
 
   private static final String APPLICATION_JSON_UTF8 = "application/json; charset=utf-8";
 
@@ -69,6 +70,15 @@ public class LessonApiControllerTest extends DummyEntity {
 
   @Autowired
   private ProfileRepository profileRepository;
+
+  @Autowired
+  private PaymentRepository paymentRepository;
+
+  @Autowired
+  private PaymentTypeRepository paymentTypeRepository;
+
+  @Autowired
+  private CouponRepository couponRepository;
 
   @Autowired
   private SubscribeRepository subscribeRepository;
@@ -104,105 +114,61 @@ public class LessonApiControllerTest extends DummyEntity {
     Lesson lesson9 = lessonRepository.save(newLesson("더미9", 50000L, ssar, sports));
     Lesson lesson10 = lessonRepository.save(newLesson("더미10", 70000L, ssar, sports));
 
-    Review review1 = reviewRepository.save(newReivew("너무 좋은 강의입니다.", 4.5, ssar, lesson1));
-    Review review2 = reviewRepository.save(newReivew("생각했던 것보다 더 좋네요!", 4.0, cos, lesson1));
-    Review review3 = reviewRepository.save(newReivew("별로네요", 3.0, ssar, lesson2));
-    Review review4 = reviewRepository.save(newReivew("도대체 이 강의 하시는 이유가 뭐죠?", 2.5, ssar, lesson3));
-    Review review5 = reviewRepository.save(newReivew("피곤하다", 2.0, cos, lesson2));
-    Review review6 = reviewRepository.save(newReivew("에반데", 3.5, cos, lesson8));
-    Review review7 = reviewRepository.save(newReivew("토큰 없음", 1.5, cos, lesson7));
+    PaymentType card = paymentTypeRepository.save(newPaymentType("신용카드"));
+    PaymentType kakaoPay = paymentTypeRepository.save(newPaymentType("카카오페이"));
+    PaymentType vbank = paymentTypeRepository.save(newPaymentType("무통장입금"));
 
     Subscribe subscribe1 = subscribeRepository.save(newSubscribe(ssar, lesson1));
-    Subscribe subscribe2 = subscribeRepository.save(newSubscribe(ssar, lesson2));
-    Subscribe subscribe3 = subscribeRepository.save(newSubscribe(cos, lesson3));
-    Subscribe subscribe4 = subscribeRepository.save(newSubscribe(cos, lesson8));
-    Subscribe subscribe5 = subscribeRepository.save(newSubscribe(cos, lesson9));
+
+    Coupon coupon1 = couponRepository.save(newCoupon("회원가입 쿠폰", 1000L, "2022-12-22", ssar));
+
+    Payment ssarPayment1 = paymentRepository.save(newPayment(ssar, lesson1, card, coupon1, 2));
+    Payment ssarPayment2 = paymentRepository.save(newPayment(ssar, lesson2, kakaoPay, coupon1, 3));
 
   }
 
   @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
   @Test
-  public void saveLesson_test() throws Exception {
+  public void savePayment_test() throws Exception {
     // given
-    LessonSaveReqDto lessonSaveReqDto = new LessonSaveReqDto();
-    String realPhoto = "";
-    String photo = DecodeUtil.saveDecodingImage(realPhoto);
-
-    lessonSaveReqDto.setName("프로작곡가가 알려주는 하루만에 미디 작곡하는 법");
-    lessonSaveReqDto.setCategoryId(4L);
-    lessonSaveReqDto.setCurriculum("1차 : 작곡가 소개, 2차 : 미디 사용법 숙지, 3차 : 실제 곡 만들기");
-    lessonSaveReqDto.setPhoto(photo);
-    lessonSaveReqDto.setPlace("부산진구");
-    lessonSaveReqDto.setExpiredAt(new Timestamp(700000000L));
-    lessonSaveReqDto.setPolicy("취소 및 환불정책");
-    lessonSaveReqDto.setPossibleDays(DayEnum.MONDAY);
-    lessonSaveReqDto.setPrice(500000L);
-
-    String requestBody = om.writeValueAsString(lessonSaveReqDto);
+    Long lessonId = 1L;
+    PaymentSaveReqDto paymentSaveReqDto = new PaymentSaveReqDto();
+    paymentSaveReqDto.setTotalCount(2);
+    paymentSaveReqDto.setPaymentTypeId(1L);
+    String requestBody = om.writeValueAsString(paymentSaveReqDto);
 
     // when
     ResultActions resultActions = mvc
-        .perform(post("/api/lesson").content(requestBody)
+        .perform(post("/api/lesson/" + lessonId + "/payment").content(requestBody)
             .contentType(APPLICATION_JSON_UTF8));
     String responseBody = resultActions.andReturn().getResponse().getContentAsString();
     System.out.println("테스트 : " + responseBody);
 
     // then
     resultActions.andExpect(status().isCreated());
-    resultActions.andExpect(jsonPath("$.data.name").value("프로작곡가가 알려주는 하루만에 미디 작곡하는 법"));
-    resultActions.andExpect(jsonPath("$.data.category.name").value("음악"));
-    resultActions.andExpect(jsonPath("$.data.user.id").value(1L));
-    resultActions.andExpect(jsonPath("$.data.id").value(11L));
+    resultActions.andExpect(jsonPath("$.data.finalPrice").value(18000L));
+    resultActions.andExpect(jsonPath("$.data.paymentTypeName").value("신용카드"));
   }
 
+  @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
   @Test
-  public void getLessonCategoryList_test() throws Exception {
+  public void getUserPaymentList_test() throws Exception {
     // given
-    Long categoryId = 2L;
-    Long minPrice = 5000L;
-    Long maxPrice = 50000L;
+    Long userId = 1L;
 
     // when
     ResultActions resultActions = mvc
-        .perform(get("/api/category/" + categoryId + "?min_price=" + minPrice + "&max_price=" + maxPrice));
+        .perform(get("/api/user/" + userId + "/mypage/payment"));
     String responseBody = resultActions.andReturn().getResponse().getContentAsString();
     System.out.println("테스트 : " + responseBody);
 
     // then
     resultActions.andExpect(status().isOk());
-    resultActions.andExpect(jsonPath("$.data.categoryDto.categoryName").value("스포츠"));
-    resultActions.andExpect(jsonPath("$.data.lessonDtoList[0].lessonPrice").value("20000원"));
+    resultActions.andExpect(jsonPath("$.data.paymentDtoList[0].lessonName").value("더미1"));
+    resultActions.andExpect(jsonPath("$.data.paymentDtoList[0].paymentType").value("신용카드"));
+    resultActions.andExpect(jsonPath("$.data.paymentDtoList[0].finalPrice").value(18000L));
+    resultActions.andExpect(jsonPath("$.data.paymentDtoList[1].lessonName").value("더미2"));
+    resultActions.andExpect(jsonPath("$.data.paymentDtoList[1].paymentType").value("카카오페이"));
+    resultActions.andExpect(jsonPath("$.data.paymentDtoList[1].finalPrice").value(57000L));
   }
-
-  @Test
-  public void getLessonDetail_test() throws Exception {
-    // given
-    Long lessonId = 1L;
-
-    // when
-    ResultActions resultActions = mvc
-        .perform(get("/api/category/lesson/" + lessonId));
-    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-    System.out.println("테스트 : " + responseBody);
-
-    // then
-    resultActions.andExpect(status().isOk());
-    resultActions.andExpect(jsonPath("$.data.lessonName").value("더미1"));
-    resultActions.andExpect(jsonPath("$.data.lessonReviewList[0].reviewContent").value("너무 좋은 강의입니다."));
-  }
-
-  @WithUserDetails(value = "cos", setupBefore = TestExecutionEvent.TEST_EXECUTION)
-  @Test
-  public void getLessonCommonList_test() throws Exception {
-    // when
-    ResultActions resultActions = mvc
-        .perform(get("/api/main"));
-    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-    System.out.println("테스트 : " + responseBody);
-
-    // then
-    resultActions.andExpect(status().isOk());
-
-  }
-
 }

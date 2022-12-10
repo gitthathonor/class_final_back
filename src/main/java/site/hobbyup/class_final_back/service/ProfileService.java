@@ -3,6 +3,7 @@ package site.hobbyup.class_final_back.service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Optional;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
@@ -41,8 +42,8 @@ public class ProfileService extends DecodeUtil {
                 User userPS = userRepository.findById(userId)
                                 .orElseThrow(
                                                 () -> new CustomApiException("유저가 존재하지 않습니다.", HttpStatus.FORBIDDEN));
-                Profile profile = profileRepository.findByUserId(userId);
-                if (profile != null) {
+                Optional<Profile> profileOP = profileRepository.findByUserId(userId);
+                if (profileOP.isPresent()) {
                         throw new CustomApiException("이미 프로필을 등록했습니다.", HttpStatus.FORBIDDEN);
                 }
 
@@ -50,6 +51,7 @@ public class ProfileService extends DecodeUtil {
                 String filePath = saveDecodingImage(profileSaveReqDto.getFilePath());
 
                 profileSaveReqDto.setFilePath(filePath);
+                Profile profilePS = profileRepository.save(profileSaveReqDto.toEntity(userPS));
                 Profile profilePS = profileRepository.save(profileSaveReqDto.toEntity(userPS));
                 return new ProfileSaveRespDto(profilePS);
         }
@@ -59,12 +61,13 @@ public class ProfileService extends DecodeUtil {
                 log.debug("디버그 : service - 프로필 상세보기 시작");
                 User userPS = userRepository.findById(userId)
                                 .orElseThrow(() -> new CustomApiException("탈퇴한 유저입니다.", HttpStatus.FORBIDDEN));
+                                .orElseThrow(() -> new CustomApiException("탈퇴한 유저입니다.", HttpStatus.FORBIDDEN));
 
-                Profile profilePS = profileRepository.findByUserId(userPS.getId());
-                if (profilePS == null) {
+                Optional<Profile> profileOP = profileRepository.findByUserId(userPS.getId());
+                if (profileOP.isEmpty()) {
                         throw new CustomApiException("프로필이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
                 }
-                return new ProfileDetailRespDto(profilePS);
+                return new ProfileDetailRespDto(profileOP.get());
         }
 
         @Transactional
@@ -73,10 +76,11 @@ public class ProfileService extends DecodeUtil {
                 log.debug("디버그 : service - 프로필 수정 시작");
                 User userPS = userRepository.findById(userId)
                                 .orElseThrow(() -> new CustomApiException("유저가 존재하지 않습니다.", HttpStatus.FORBIDDEN));
+                                .orElseThrow(() -> new CustomApiException("유저가 존재하지 않습니다.", HttpStatus.FORBIDDEN));
 
                 // db에 있는 userId 이용해서 프로필 찾기
-                Profile profilePS = profileRepository.findByUserId(userPS.getId());
-                if (profilePS == null) {
+                Optional<Profile> profileOP = profileRepository.findByUserId(userPS.getId());
+                if (profileOP.isEmpty()) {
                         throw new CustomApiException("프로필이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
                 }
 
@@ -84,8 +88,8 @@ public class ProfileService extends DecodeUtil {
                 byte[] decodeByte = Base64.decodeBase64(profileUpdateReqDto.getFilePath());
                 String filePath = "C:\\Temp\\upload\\" + decodeByte + ".jpg";
                 // 파일 수정했는지 확인하고 수정됐다면 이미지 새로 저장
-                if (profilePS.getFilePath() != filePath) {
-                        File file = new File(profilePS.getFilePath());
+                if (profileOP.get().getFilePath() != filePath) {
+                        File file = new File(profileOP.get().getFilePath());
                         file.delete();
                         fos = new FileOutputStream(filePath);
                         fos.write(decodeByte);
@@ -93,7 +97,7 @@ public class ProfileService extends DecodeUtil {
                         profileUpdateReqDto.setFilePath(filePath);
                 }
 
-                profilePS.update(profileUpdateReqDto);
-                return new ProfileUpdateRespDto(profileRepository.save(profilePS));
+                profileOP.get().update(profileUpdateReqDto);
+                return new ProfileUpdateRespDto(profileRepository.save(profileOP.get()));
         }
 }

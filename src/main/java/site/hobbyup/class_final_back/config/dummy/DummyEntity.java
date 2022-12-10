@@ -10,6 +10,8 @@ import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.coupon.Coupon;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
+import site.hobbyup.class_final_back.domain.payment.Payment;
+import site.hobbyup.class_final_back.domain.paymentType.PaymentType;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.review.Review;
 import site.hobbyup.class_final_back.domain.subscribe.Subscribe;
@@ -91,6 +93,24 @@ public class DummyEntity {
                 .user(user)
                 .build();
         return coupon;
+    }
+
+    protected PaymentType newPaymentType(String name) {
+        return PaymentType.builder()
+                .name(name)
+                .build();
+    }
+
+    protected Payment newPayment(User user, Lesson lesson, PaymentType paymentType, Coupon coupon, Integer count) {
+        return Payment.builder()
+                .totalPrice(lesson.getPrice())
+                .discountPrice(coupon.getPrice())
+                .totalCount(count)
+                .finalPrice((lesson.getPrice() - coupon.getPrice()) * count)
+                .lesson(lesson)
+                .user(user)
+                .paymentType(paymentType)
+                .build();
     }
 
 }
