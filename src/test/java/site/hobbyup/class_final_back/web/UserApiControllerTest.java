@@ -118,7 +118,7 @@ public class UserApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(status().isOk());
-        resultActions.andExpect(jsonPath("$.data.inactive").value(true));
+        resultActions.andExpect(jsonPath("$.data.disabled").value(true));
         resultActions.andExpect(jsonPath("$.data.username").value("cos"));
     }
 

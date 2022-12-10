@@ -21,13 +21,13 @@ public class UserRespDto {
     public static class JoinRespDto {
         private Long id;
         private String username;
-        private boolean isInactive;
+        private boolean isDisabled;
         private List<InterestDto> interestList;
 
         public JoinRespDto(User user, List<Interest> interestList) {
             this.id = user.getId();
             this.username = user.getUsername();
-            this.isInactive = user.isInactive();
+            this.isDisabled = user.isDisabled();
             this.interestList = interestList.stream().map((interest) -> new InterestDto(interest))
                     .collect(Collectors.toList());
         }
@@ -135,11 +135,11 @@ public class UserRespDto {
     @Getter
     public static class UserDeleteRespDto {
         private String username;
-        private boolean isInactive;
+        private boolean isDisabled;
 
         public UserDeleteRespDto(User user) {
             this.username = user.getUsername();
-            this.isInactive = user.isInactive();
+            this.isDisabled = user.isDisabled();
         }
 
     }
