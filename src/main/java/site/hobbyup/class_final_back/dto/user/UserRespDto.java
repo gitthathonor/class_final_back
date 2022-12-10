@@ -21,13 +21,13 @@ public class UserRespDto {
     public static class JoinRespDto {
         private Long id;
         private String username;
-        private boolean isInactive;
+        private boolean isDisabled;
         private List<InterestDto> interestList;
 
         public JoinRespDto(User user, List<Interest> interestList) {
             this.id = user.getId();
             this.username = user.getUsername();
-            this.isInactive = user.isInactive();
+            this.isDisabled = user.isDisabled();
             this.interestList = interestList.stream().map((interest) -> new InterestDto(interest))
                     .collect(Collectors.toList());
         }
@@ -35,11 +35,9 @@ public class UserRespDto {
         @Setter
         @Getter
         public class InterestDto {
-            private Long userId;
             private String categoryName;
 
             public InterestDto(Interest interest) {
-                this.userId = interest.getUser().getId();
                 this.categoryName = interest.getCategory().getName();
             }
         }
@@ -50,11 +48,13 @@ public class UserRespDto {
     public static class LoginRespDto {
         private Long id;
         private String username;
+        private String role;
         private String createdAt;
 
         public LoginRespDto(User user) {
             this.id = user.getId();
             this.username = user.getUsername();
+            this.role = user.getRole().getValue();
             this.createdAt = user.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         }
     }
@@ -135,11 +135,11 @@ public class UserRespDto {
     @Getter
     public static class UserDeleteRespDto {
         private String username;
-        private boolean isInactive;
+        private boolean isDisabled;
 
         public UserDeleteRespDto(User user) {
             this.username = user.getUsername();
-            this.isInactive = user.isInactive();
+            this.isDisabled = user.isDisabled();
         }
 
     }

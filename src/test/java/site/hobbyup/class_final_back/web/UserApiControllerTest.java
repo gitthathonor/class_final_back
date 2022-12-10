@@ -90,6 +90,7 @@ public class UserApiControllerTest extends DummyEntity {
         joinReqDto.setRole(UserEnum.USER);
         joinReqDto.setCategoryIds(categoryIds);
         String requestBody = om.writeValueAsString(joinReqDto);
+        System.out.println("테스트 : " + requestBody);
 
         // when
         ResultActions resultActions = mvc
@@ -118,7 +119,7 @@ public class UserApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(status().isOk());
-        resultActions.andExpect(jsonPath("$.data.inactive").value(true));
+        resultActions.andExpect(jsonPath("$.data.disabled").value(true));
         resultActions.andExpect(jsonPath("$.data.username").value("cos"));
     }
 
