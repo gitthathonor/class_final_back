@@ -89,9 +89,11 @@ public class LessonRespDto {
     private String masterName;
     private String masterImg;
     private String masterIntroduction;
+    private Double lessonAvgGrade;
+    private boolean isSubscribed;
     private List<ReviewDto> lessonReviewList = new ArrayList<>();
 
-    public LessonDetailRespDto(Lesson lesson, Profile profile,
+    public LessonDetailRespDto(Lesson lesson, Profile profile, Double avgGrade, boolean isSubscribed,
         List<Review> reviewList) {
       this.lessonName = lesson.getName();
       this.lessonPrice = lesson.getPrice();
@@ -104,6 +106,8 @@ public class LessonRespDto {
       this.masterName = lesson.getUser().getUsername();
       this.masterImg = profile.getFilePath();
       this.masterIntroduction = profile.getIntroduction();
+      this.lessonAvgGrade = avgGrade;
+      this.isSubscribed = isSubscribed;
       this.lessonReviewList = reviewList.stream().map((review) -> new ReviewDto(review))
           .collect(Collectors.toList());
     }

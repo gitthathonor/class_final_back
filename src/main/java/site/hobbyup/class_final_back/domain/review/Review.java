@@ -13,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.hobbyup.class_final_back.domain.AuditingTime;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.user.User;
 
@@ -20,7 +21,7 @@ import site.hobbyup.class_final_back.domain.user.User;
 @Getter
 @Table(name = "review")
 @Entity
-public class Review {
+public class Review extends AuditingTime {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;

@@ -109,7 +109,7 @@ public class LessonApiControllerTest extends DummyEntity {
     Review review3 = reviewRepository.save(newReivew("별로네요", 3.0, ssar, lesson2));
     Review review4 = reviewRepository.save(newReivew("도대체 이 강의 하시는 이유가 뭐죠?", 2.5, ssar, lesson3));
     Review review5 = reviewRepository.save(newReivew("피곤하다", 2.0, cos, lesson2));
-    Review review6 = reviewRepository.save(newReivew("에반데", 3.5, cos, lesson8));
+    Review review6 = reviewRepository.save(newReivew("이정도 퀄리티면 좋은 거 같아요, 다만 목소리가...", 3.5, cos, lesson8));
     Review review7 = reviewRepository.save(newReivew("토큰 없음", 1.5, cos, lesson7));
 
     Subscribe subscribe1 = subscribeRepository.save(newSubscribe(ssar, lesson1));
@@ -174,6 +174,7 @@ public class LessonApiControllerTest extends DummyEntity {
     resultActions.andExpect(jsonPath("$.data.lessonDtoList[0].lessonPrice").value("20000원"));
   }
 
+  @WithUserDetails(value = "cos", setupBefore = TestExecutionEvent.TEST_EXECUTION)
   @Test
   public void getLessonDetail_test() throws Exception {
     // given
@@ -188,10 +189,11 @@ public class LessonApiControllerTest extends DummyEntity {
     // then
     resultActions.andExpect(status().isOk());
     resultActions.andExpect(jsonPath("$.data.lessonName").value("더미1"));
-    resultActions.andExpect(jsonPath("$.data.lessonReviewList[0].reviewContent").value("너무 좋은 강의입니다."));
+    resultActions.andExpect(jsonPath("$.data.lessonReviewList[0].reviewContent").value("생각했던 것보다 더 좋네요!"));
+    resultActions.andExpect(jsonPath("$.data.subscribed").value(false));
   }
 
-  @WithUserDetails(value = "cos", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
   @Test
   public void getLessonCommonList_test() throws Exception {
     // when
@@ -202,6 +204,10 @@ public class LessonApiControllerTest extends DummyEntity {
 
     // then
     resultActions.andExpect(status().isOk());
+    resultActions.andExpect(jsonPath("$.data[0].lessonPrice").value(70000L));
+    resultActions.andExpect(jsonPath("$.data[9].avgGrade").value(4.25));
+    resultActions.andExpect(jsonPath("$.data[8].subscribed").value(true));
+    resultActions.andExpect(jsonPath("$.data[8].totalReview").value(2L));
 
   }
 

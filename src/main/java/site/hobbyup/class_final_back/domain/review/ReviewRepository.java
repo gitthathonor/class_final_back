@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-    @Query("select r from Review r where r.lesson.id = :lessonId")
+    @Query("select r from Review r where r.lesson.id = :lessonId order by r.createdAt desc")
     List<Review> findAllByLessonId(@Param("lessonId") Long lessonId);
 
     // @Query(value = "select count(*) from Review r fetch join r.lesson l where

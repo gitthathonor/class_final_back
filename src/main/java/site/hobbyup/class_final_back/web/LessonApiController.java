@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -54,8 +55,13 @@ public class LessonApiController {
 
     // lesson 상세보기
     @GetMapping("/api/category/lesson/{lessonId}")
-    public ResponseEntity<?> getLessonDetail(@PathVariable Long lessonId) {
-        LessonDetailRespDto lessonDetailRespDto = lessonService.getLessonDetail(lessonId);
+    public ResponseEntity<?> getLessonDetail(@PathVariable Long lessonId,
+            @AuthenticationPrincipal LoginUser loginUser) {
+        if (loginUser == null) {
+            LessonDetailRespDto lessonDetailRespDto = lessonService.getLessonDetailNotLogin(lessonId);
+            return new ResponseEntity<>(new ResponseDto<>("클래스 상세보기 성공", lessonDetailRespDto), HttpStatus.OK);
+        }
+        LessonDetailRespDto lessonDetailRespDto = lessonService.getLessonDetail(lessonId, loginUser.getUser().getId());
         return new ResponseEntity<>(new ResponseDto<>("클래스 상세보기 성공", lessonDetailRespDto), HttpStatus.OK);
     }
 
