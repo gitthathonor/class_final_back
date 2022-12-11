@@ -7,4 +7,5 @@ truncate table review;
 truncate table subscribe;
 truncate table payment;
 truncate table payment_type;
+truncate table expert;
 SET REFERENTIAL_INTEGRITY TRUE;
