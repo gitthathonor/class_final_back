@@ -34,6 +34,12 @@ public class UserRespDto {
                     .collect(Collectors.toList());
         }
 
+        public JoinRespDto(User user) {
+            this.id = user.getId();
+            this.username = user.getUsername();
+            this.isDisabled = user.isDisabled();
+        }
+
         @Setter
         @Getter
         public class InterestDto {
