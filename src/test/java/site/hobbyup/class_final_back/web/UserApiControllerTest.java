@@ -2,6 +2,7 @@ package site.hobbyup.class_final_back.web;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -27,6 +28,7 @@ import site.hobbyup.class_final_back.config.dummy.DummyEntity;
 import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
+import site.hobbyup.class_final_back.domain.coupon.CouponRepository;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.user.User;
@@ -53,6 +55,8 @@ public class UserApiControllerTest extends DummyEntity {
     private UserRepository userRepository;
     @Autowired
     private ProfileRepository profileRepository;
+    @Autowired
+    private CouponRepository couponRepository;
 
     @BeforeEach
     public void setUp() {
@@ -67,7 +71,6 @@ public class UserApiControllerTest extends DummyEntity {
         Category crafts = categoryRepository.save(newCategory("공예"));
         Category game = categoryRepository.save(newCategory("게임"));
         Category others = categoryRepository.save(newCategory("기타"));
-
     }
 
     @Test
@@ -86,6 +89,7 @@ public class UserApiControllerTest extends DummyEntity {
         joinReqDto.setRole(UserEnum.USER);
         joinReqDto.setCategoryIds(categoryIds);
         String requestBody = om.writeValueAsString(joinReqDto);
+        System.out.println("테스트 : " + requestBody);
 
         // when
         ResultActions resultActions = mvc
@@ -102,37 +106,38 @@ public class UserApiControllerTest extends DummyEntity {
 
     @WithUserDetails(value = "cos", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
+    public void deleteUser_test() throws Exception {
+        // given
+        Long userId = 1L;
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(put("/api/user/" + userId + "/delete"));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(jsonPath("$.data.disabled").value(true));
+        resultActions.andExpect(jsonPath("$.data.username").value("cos"));
+    }
+
+    @WithUserDetails(value = "cos", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
     public void getMyPage_test() throws Exception {
         // given
         Long userId = 1L;
 
         // when
         ResultActions resultActions = mvc
-                .perform(get("/api/user/" + userId + "/myPage"));
+                .perform(get("/api/user/" + userId + "/mypage"));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
         // then
-        resultActions.andExpect(status().isCreated());
+        resultActions.andExpect(status().isOk());
         resultActions.andExpect(jsonPath("$.data.id").value(1L));
         resultActions.andExpect(jsonPath("$.data.username").value("cos"));
     }
-
-    // @Test
-    // public void deleteById_test() throws Exception {
-    // // given
-    // Long id = 1L;
-
-    // // when
-    // ResultActions resultActions = mvc
-    // .perform(delete("/api/user/" + id)
-    // .contentType(APPLICATION_JSON_UTF8));
-    // String responseBody =
-    // resultActions.andReturn().getResponse().getContentAsString();
-    // System.out.println("디버그 : " + responseBody);
-
-    // // then
-    // resultActions.andExpect(status().isOk());
-    // }
 
 }

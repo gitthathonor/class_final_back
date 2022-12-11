@@ -6,7 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum UserEnum {
-    USER("수강생"), MASTER("전문가"), ADMIN("관리자");
+    USER("일반회원"), MASTER("전문가"), ADMIN("관리자");
 
     private String value;
 }

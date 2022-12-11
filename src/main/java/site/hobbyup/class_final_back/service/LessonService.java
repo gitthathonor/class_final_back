@@ -2,6 +2,7 @@ package site.hobbyup.class_final_back.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,12 +21,18 @@ import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.review.Review;
 import site.hobbyup.class_final_back.domain.review.ReviewRepository;
+import site.hobbyup.class_final_back.domain.subscribe.Subscribe;
+import site.hobbyup.class_final_back.domain.subscribe.SubscribeRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
+import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonUpdateReqDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonLatestListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonUpdateRespDto;
 import site.hobbyup.class_final_back.util.DecodeUtil;
 
 @RequiredArgsConstructor
@@ -38,6 +45,7 @@ public class LessonService {
   private final UserRepository userRepository;
   private final ReviewRepository reviewRepository;
   private final ProfileRepository profileRepository;
+  private final SubscribeRepository subscribeRepository;
 
   // 클래스 생성하기
   @Transactional
@@ -75,17 +83,91 @@ public class LessonService {
   }
 
   // 클래스 상세보기
-  public LessonDetailRespDto getLessonDetail(Long id) {
+  @Transactional
+  public LessonDetailRespDto getLessonDetail(Long lessonId, Long userId) {
     log.debug("디버그 : LessonService-getLessonDetail 실행");
-    Lesson lessonPS = lessonRepository.findById(id)
-        .orElseThrow(() -> new CustomApiException("해당 수업 없읍", HttpStatus.BAD_REQUEST));
-    Profile profilePS = profileRepository.findByUserId(lessonPS.getId());
+    Lesson lessonPS = lessonRepository.findById(lessonId)
+        .orElseThrow(() -> new CustomApiException("해당 수업 없음", HttpStatus.BAD_REQUEST));
+    Optional<Profile> profileOP = profileRepository.findByUserId(lessonPS.getUser().getId());
+    if (profileOP.isEmpty()) {
+      throw new CustomApiException("프로필을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST);
+    }
+    log.debug("디버그 : " + profileOP.get());
+
+    // 평균 리뷰 구하기 + 리뷰 리스트 뽑기
     List<Review> reviewListPS = reviewRepository.findAllByLessonId(lessonPS.getId());
-    LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, profilePS, reviewListPS);
+    Double sum = 0.0;
+    for (int i = 0; i < reviewListPS.size(); i++) {
+      sum += reviewListPS.get(i).getGrade();
+    }
+    Double avgGrade = sum / reviewListPS.size();
+
+    // 찜 여부 확인하기
+    boolean isSubscribed = false;
+    Subscribe subscribePS = subscribeRepository.findByUserIdAndLessonId(userId, lessonId).orElse(null);
+    if (subscribePS != null) {
+      isSubscribed = true;
+    }
+
+    LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, profileOP.get(), avgGrade, isSubscribed,
+        reviewListPS);
     return lessonDetailRespDto;
+  }
+
+  @Transactional
+  public LessonDetailRespDto getLessonDetailNotLogin(Long lessonId) {
+    log.debug("디버그 : LessonService-getLessonDetail 실행");
+    Lesson lessonPS = lessonRepository.findById(lessonId)
+        .orElseThrow(() -> new CustomApiException("해당 수업 없음", HttpStatus.BAD_REQUEST));
+    Optional<Profile> profileOP = profileRepository.findByUserId(lessonPS.getUser().getId());
+    if (profileOP.isEmpty()) {
+      throw new CustomApiException("프로필을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST);
+    }
+    log.debug("디버그 : " + profileOP.get());
+
+    // 평균 리뷰 구하기 + 리뷰 리스트 뽑기
+    List<Review> reviewListPS = reviewRepository.findAllByLessonId(lessonPS.getId());
+    Double sum = 0.0;
+    for (int i = 0; i < reviewListPS.size(); i++) {
+      sum += reviewListPS.get(i).getGrade();
+    }
+    Double avgGrade = sum / reviewListPS.size();
+
+    // 찜 여부 확인하기
+    boolean isSubscribed = false;
+
+    LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, profileOP.get(), avgGrade, isSubscribed,
+        reviewListPS);
+    return lessonDetailRespDto;
+  }
+
+  // 클래스 최신순 정렬
+  @Transactional
+  public LessonLatestListRespDto getLatestLessonList() {
+    List<Lesson> lessonList = lessonRepository.findAllLatest();
+    if (lessonList.size() == 0) {
+      throw new CustomApiException("게시글이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
+    }
+
+    return new LessonLatestListRespDto(lessonList);
   }
 
   // 클래스 수정하기
 
   // 클래스 삭제하기
+
+  // 클래스 리스트 뽑기 테스트
+  public List<LessonCommonListDto> getLessonCommonList(Long userId) {
+    return lessonRepository.findAllWithReview(userId);
+  }
+
+  public LessonUpdateRespDto updateLesson(LessonUpdateReqDto lessonUpdateReqDto, Long id) {
+    // 1. 이 레슨을 지울 수 있는 권한이 있는지 확인
+
+    // 2. 레슨이 존재하는지 확인 후 영속화
+
+    // 3. 더티체킹 후 수정
+
+    return null;
+  }
 }

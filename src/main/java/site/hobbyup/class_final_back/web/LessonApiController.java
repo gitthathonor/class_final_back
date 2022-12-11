@@ -1,6 +1,7 @@
 package site.hobbyup.class_final_back.web;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,10 +19,15 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import site.hobbyup.class_final_back.config.auth.LoginUser;
 import site.hobbyup.class_final_back.dto.ResponseDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonUpdateReqDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonLatestListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonUpdateRespDto;
+import site.hobbyup.class_final_back.dto.user.UserRespDto.UserUpdateRespDto;
 import site.hobbyup.class_final_back.service.LessonService;
 
 @RequiredArgsConstructor
@@ -50,9 +57,38 @@ public class LessonApiController {
     }
 
     // lesson 상세보기
-    @GetMapping("/api/lesson/{lessonId}")
-    public ResponseEntity<?> getLessonDetail(@PathVariable Long lessonId) {
-        LessonDetailRespDto lessonDetailRespDto = lessonService.getLessonDetail(lessonId);
+    @GetMapping("/api/category/lesson/{lessonId}")
+    public ResponseEntity<?> getLessonDetail(@PathVariable Long lessonId,
+            @AuthenticationPrincipal LoginUser loginUser) {
+        if (loginUser == null) {
+            LessonDetailRespDto lessonDetailRespDto = lessonService.getLessonDetailNotLogin(lessonId);
+            return new ResponseEntity<>(new ResponseDto<>("클래스 상세보기 성공", lessonDetailRespDto), HttpStatus.OK);
+        }
+        LessonDetailRespDto lessonDetailRespDto = lessonService.getLessonDetail(lessonId, loginUser.getUser().getId());
         return new ResponseEntity<>(new ResponseDto<>("클래스 상세보기 성공", lessonDetailRespDto), HttpStatus.OK);
     }
+
+    // 최신순 정렬
+    @GetMapping("/api/lesson/latest")
+    public ResponseEntity<?> getLatestLessonList() {
+        LessonLatestListRespDto lessonLatestListRespDto = lessonService.getLatestLessonList();
+        return new ResponseEntity<>(new ResponseDto<>("클래스 최신순으로 정렬", lessonLatestListRespDto), HttpStatus.OK);
+    }
+
+    // 메인 페이지
+    @GetMapping("/api/main")
+    public ResponseEntity<?> getLessonCommonList(@AuthenticationPrincipal LoginUser loginUser) {
+        List<LessonCommonListDto> lessonCommonListDtos = lessonService.getLessonCommonList(loginUser.getUser().getId());
+        return new ResponseEntity<>(new ResponseDto<>("테스트", lessonCommonListDtos), HttpStatus.OK);
+    }
+
+    // 레슨 수정하기
+    @PutMapping("/api/lesson/{id}")
+    public ResponseEntity<?> updateLesson(@RequestBody LessonUpdateReqDto lessonUpdateReqDto, @PathVariable Long id,
+            @AuthenticationPrincipal LoginUser loginUser) {
+        log.debug("디버그 : LessonApiController-updateLesson 실행됨");
+        LessonUpdateRespDto lessonUpdateRespDto = lessonService.updateLesson(lessonUpdateReqDto, id);
+        return new ResponseEntity<>(new ResponseDto<>(" 레슨 수정완료", lessonUpdateRespDto), HttpStatus.OK);
+    }
+
 }

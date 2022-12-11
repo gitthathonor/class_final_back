@@ -1,6 +1,5 @@
 package site.hobbyup.class_final_back.dto.coupon;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,7 +25,7 @@ public class CouponRespDto {
             private Long id;
             private String title;
             private Long price;
-            private Timestamp expiredDate;
+            private String expiredDate;
 
             public CouponDto(Coupon coupon) {
                 this.id = coupon.getId();
