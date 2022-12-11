@@ -27,7 +27,6 @@ import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDt
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonLatestListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonUpdateRespDto;
-import site.hobbyup.class_final_back.dto.user.UserRespDto.UserUpdateRespDto;
 import site.hobbyup.class_final_back.service.LessonService;
 
 @RequiredArgsConstructor
@@ -91,7 +90,8 @@ public class LessonApiController {
     public ResponseEntity<?> updateLesson(@RequestBody LessonUpdateReqDto lessonUpdateReqDto, @PathVariable Long id,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : LessonApiController-updateLesson 실행됨");
-        LessonUpdateRespDto lessonUpdateRespDto = lessonService.updateLesson(lessonUpdateReqDto, id);
+        LessonUpdateRespDto lessonUpdateRespDto = lessonService.updateLesson(lessonUpdateReqDto, id,
+                loginUser.getUser().getId());
         return new ResponseEntity<>(new ResponseDto<>(" 레슨 수정완료", lessonUpdateRespDto), HttpStatus.OK);
     }
 

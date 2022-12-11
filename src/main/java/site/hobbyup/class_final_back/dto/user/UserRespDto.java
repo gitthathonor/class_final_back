@@ -116,14 +116,14 @@ public class UserRespDto {
             private String name;
             private UserDto user;
             private Long price;
-            private Timestamp expiredAt;
+            private Timestamp deadline;
             private String photo;
 
             public MyLessonRespDto(Lesson lesson) {
                 this.name = lesson.getName();
                 this.user = new UserDto(lesson.getUser());
                 this.price = lesson.getPrice();
-                this.expiredAt = lesson.getExpiredAt();
+                this.deadline = lesson.getDeadline();
                 this.photo = lesson.getPhoto();
             }
 

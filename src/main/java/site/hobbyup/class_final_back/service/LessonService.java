@@ -114,6 +114,7 @@ public class LessonService {
     return lessonDetailRespDto;
   }
 
+  // 레슨 상세보기
   @Transactional
   public LessonDetailRespDto getLessonDetailNotLogin(Long lessonId) {
     log.debug("디버그 : LessonService-getLessonDetail 실행");
@@ -152,23 +153,30 @@ public class LessonService {
     return new LessonLatestListRespDto(lessonList);
   }
 
-  // 클래스 수정하기
-
   // 클래스 삭제하기
 
-  // 클래스 리스트 뽑기 테스트
+  // 메인 페이지 보기
   public List<LessonCommonListDto> getLessonCommonList(Long userId) {
     return lessonRepository.findAllWithReview(userId);
   }
 
-  public LessonUpdateRespDto updateLesson(LessonUpdateReqDto lessonUpdateReqDto, Long id) {
+  public LessonUpdateRespDto updateLesson(LessonUpdateReqDto lessonUpdateReqDto, Long id, Long userId) {
     // 1. 이 레슨을 지울 수 있는 권한이 있는지 확인
-
+    User userPS = userRepository.findById(userId)
+        .orElseThrow(() -> new CustomApiException("권한이 없습니다.", HttpStatus.FORBIDDEN));
     // 2. 레슨이 존재하는지 확인 후 영속화
+    Lesson lessonPS = lessonRepository.findById(id)
+        .orElseThrow(() -> new CustomApiException("해당 레슨이 없습니다.", HttpStatus.BAD_REQUEST));
 
-    // 3. 더티체킹 후 수정
+    // 3. 카테고리 체크 후 영속화
+    Category categoryPS = categoryRepository.findById(lessonUpdateReqDto.getCategoryId())
+        .orElseThrow(() -> new CustomApiException("해당 카테고리가 없습니다.", HttpStatus.BAD_REQUEST));
 
-    return null;
+    // 4. 더티체킹 후 수정
+    lessonPS.update(lessonUpdateReqDto);
+    lessonRepository.save(lessonPS);
+
+    return new LessonUpdateRespDto(lessonPS);
   }
 
   // 비로그인 시 메인 페이지

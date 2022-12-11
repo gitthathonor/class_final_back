@@ -62,7 +62,7 @@ public class DummyEntity {
                 .possibleDays(DayEnum.MONDAY)
                 .user(user)
                 .curriculum("커리큘럼" + dummy)
-                .expiredAt(new Timestamp(50000))
+                .deadline(new Timestamp(50000))
                 .policy("취소 환불 정책" + dummy)
                 .category(category)
                 .build();

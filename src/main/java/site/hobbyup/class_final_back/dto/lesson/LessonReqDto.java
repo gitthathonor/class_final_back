@@ -22,7 +22,7 @@ public class LessonReqDto {
     private DayEnum possibleDays;
     private String curriculum;
     private String policy;
-    private Timestamp expiredAt;
+    private Timestamp deadline;
     private Long categoryId;
 
     public Lesson toEntity(Category category, User user) {
@@ -37,7 +37,7 @@ public class LessonReqDto {
           .possibleDays(possibleDays)
           .curriculum(curriculum)
           .policy(policy)
-          .expiredAt(expiredAt)
+          .deadline(deadline)
           .category(category)
           .build();
     }
@@ -55,7 +55,7 @@ public class LessonReqDto {
     private DayEnum possibleDays;
     private String curriculum;
     private String policy;
-    private Timestamp expiredAt;
+    private Timestamp deadline;
     private Long categoryId;
 
     public Lesson toEntity(Category category, User user) {
@@ -70,7 +70,7 @@ public class LessonReqDto {
           .possibleDays(possibleDays)
           .curriculum(curriculum)
           .policy(policy)
-          .expiredAt(expiredAt)
+          .deadline(deadline)
           .category(category)
           .build();
     }

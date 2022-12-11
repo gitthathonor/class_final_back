@@ -2,6 +2,7 @@ package site.hobbyup.class_final_back.web;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -39,6 +40,7 @@ import site.hobbyup.class_final_back.domain.subscribe.SubscribeRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonUpdateReqDto;
 import site.hobbyup.class_final_back.util.DecodeUtil;
 
 @Sql("classpath:db/truncate.sql") // 롤백 대신 사용 (auto_increment 초기화 + 데이터 비우기)
@@ -133,7 +135,7 @@ public class LessonApiControllerTest extends DummyEntity {
     lessonSaveReqDto.setCurriculum("1차 : 작곡가 소개, 2차 : 미디 사용법 숙지, 3차 : 실제 곡 만들기");
     lessonSaveReqDto.setPhoto(photo);
     lessonSaveReqDto.setPlace("부산진구");
-    lessonSaveReqDto.setExpiredAt(new Timestamp(700000000L));
+    lessonSaveReqDto.setDeadline(new Timestamp(700000000L));
     lessonSaveReqDto.setPolicy("취소 및 환불정책");
     lessonSaveReqDto.setPossibleDays(DayEnum.MONDAY);
     lessonSaveReqDto.setPrice(500000L);
@@ -150,8 +152,8 @@ public class LessonApiControllerTest extends DummyEntity {
     // then
     resultActions.andExpect(status().isCreated());
     resultActions.andExpect(jsonPath("$.data.name").value("프로작곡가가 알려주는 하루만에 미디 작곡하는 법"));
-    resultActions.andExpect(jsonPath("$.data.category.name").value("음악"));
-    resultActions.andExpect(jsonPath("$.data.user.id").value(1L));
+    resultActions.andExpect(jsonPath("$.data.categoryName").value("음악"));
+    resultActions.andExpect(jsonPath("$.data.userId").value(1L));
     resultActions.andExpect(jsonPath("$.data.id").value(11L));
   }
 
@@ -209,6 +211,44 @@ public class LessonApiControllerTest extends DummyEntity {
     resultActions.andExpect(jsonPath("$.data[9].avgGrade").value(4.25));
     resultActions.andExpect(jsonPath("$.data[8].subscribed").value(false));
     resultActions.andExpect(jsonPath("$.data[8].totalReview").value(2L));
+
+  }
+
+  @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @Test
+  public void updateLesson_test() throws Exception {
+    // given
+
+    Long id = 1L;
+    LessonUpdateReqDto lessonUpdateReqDto = new LessonUpdateReqDto();
+    String realPhoto = "";
+    String photo = DecodeUtil.saveDecodingImage(realPhoto);
+
+    lessonUpdateReqDto.setName("200만 뷰티 유튜버가 알려드리는 화장법");
+    lessonUpdateReqDto.setCategoryId(1L);
+    lessonUpdateReqDto.setCurriculum("주 2회, 1시간 동안 고객님에게 딱 맞는 화장법을 캐치해드립니다.");
+    lessonUpdateReqDto.setPhoto(photo);
+    lessonUpdateReqDto.setPlace("강남구");
+    lessonUpdateReqDto.setDeadline(new Timestamp(8225L));
+    lessonUpdateReqDto.setPolicy("취소 및 환불정책");
+    lessonUpdateReqDto.setPossibleDays(DayEnum.WEDNESDAY);
+    lessonUpdateReqDto.setPrice(250000L);
+
+    String requestBody = om.writeValueAsString(lessonUpdateReqDto);
+
+    // when
+    ResultActions resultActions = mvc
+        .perform(put("/api/lesson/" + id).content(requestBody)
+            .contentType(APPLICATION_JSON_UTF8));
+    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+    System.out.println("테스트 : " + responseBody);
+
+    // then
+    resultActions.andExpect(status().isOk());
+    resultActions.andExpect(jsonPath("$.data.name").value("200만 뷰티 유튜버가 알려드리는 화장법"));
+    resultActions.andExpect(jsonPath("$.data.categoryName").value("뷰티"));
+    resultActions.andExpect(jsonPath("$.data.userId").value(1L));
+    resultActions.andExpect(jsonPath("$.data.id").value(1L));
 
   }
 

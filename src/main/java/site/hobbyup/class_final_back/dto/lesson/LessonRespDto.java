@@ -18,14 +18,16 @@ public class LessonRespDto {
   public static class LessonSaveRespDto {
     private Long id;
     private String name;
-    private Category category;
-    private User user;
+    private String categoryName;
+    private Long userId;
+    private String username;
 
     public LessonSaveRespDto(Lesson lesson) {
       this.id = lesson.getId();
       this.name = lesson.getName();
-      this.category = lesson.getCategory();
-      this.user = lesson.getUser();
+      this.categoryName = lesson.getCategory().getName();
+      this.userId = lesson.getUser().getId();
+      this.username = lesson.getUser().getUsername();
     }
   }
 
@@ -171,14 +173,16 @@ public class LessonRespDto {
   public static class LessonUpdateRespDto {
     private Long id;
     private String name;
-    private Category category;
-    private User user;
+    private String categoryName;
+    private Long userId;
+    private String username;
 
     public LessonUpdateRespDto(Lesson lesson) {
       this.id = lesson.getId();
       this.name = lesson.getName();
-      this.category = lesson.getCategory();
-      this.user = lesson.getUser();
+      this.categoryName = lesson.getCategory().getName();
+      this.userId = lesson.getUser().getId();
+      this.username = lesson.getUser().getUsername();
     }
   }
 }
