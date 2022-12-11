@@ -174,7 +174,17 @@ public class LessonService {
         return null;
     }
 
+    // 비로그인 시 메인 페이지
+    public List<LessonCommonListDto> getLessonCommonListNotLogin() {
+        return lessonRepository.findAllWithReviewNotLogin();
+    }
+
     public List<LessonSubscribeListDto> getLessonSubscribeList(Long userId) {
         return lessonRepository.findAllBySubscribe(userId);
+    }
+
+    // 비로그인 구독순 리스트
+    public List<LessonSubscribeListDto> getLessonSubscribeListNotLogin() {
+        return lessonRepository.findAllBySubscribeNotLogin();
     }
 }

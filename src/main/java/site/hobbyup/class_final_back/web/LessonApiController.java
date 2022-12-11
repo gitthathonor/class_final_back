@@ -79,6 +79,10 @@ public class LessonApiController {
     // 메인 페이지
     @GetMapping("/api/main")
     public ResponseEntity<?> getLessonCommonList(@AuthenticationPrincipal LoginUser loginUser) {
+        if (loginUser == null) {
+            List<LessonCommonListDto> lessonCommonListDtos = lessonService.getLessonCommonListNotLogin();
+            return new ResponseEntity<>(new ResponseDto<>("클래스 상세보기 성공", lessonCommonListDtos), HttpStatus.OK);
+        }
         List<LessonCommonListDto> lessonCommonListDtos = lessonService.getLessonCommonList(loginUser.getUser().getId());
         return new ResponseEntity<>(new ResponseDto<>("테스트", lessonCommonListDtos), HttpStatus.OK);
     }
@@ -95,6 +99,10 @@ public class LessonApiController {
     // 구독순 정렬
     @GetMapping("/api/lesson/subscribe")
     public ResponseEntity<?> getLessonSubscribeList(@AuthenticationPrincipal LoginUser loginUser) {
+        if (loginUser == null) {
+            List<LessonSubscribeListDto> lessonSubscribeListDtos = lessonService.getLessonSubscribeListNotLogin();
+            return new ResponseEntity<>(new ResponseDto<>("클래스 상세보기 성공", lessonSubscribeListDtos), HttpStatus.OK);
+        }
         List<LessonSubscribeListDto> lessonSubscribeListDtos = lessonService
                 .getLessonSubscribeList(loginUser.getUser().getId());
         return new ResponseEntity<>(new ResponseDto<>("클래스 구독순으로 정렬", lessonSubscribeListDtos), HttpStatus.OK);

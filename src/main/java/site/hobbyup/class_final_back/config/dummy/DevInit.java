@@ -51,12 +51,12 @@ public class DevInit extends DummyEntity {
             Lesson lesson9 = lessonRepository.save(newLesson("더미9", 50000L, ssar, sports));
             Lesson lesson10 = lessonRepository.save(newLesson("더미10", 70000L, ssar, sports));
 
-            Subscribe subscribe1 = subscribeRepository.save(newSubscribe(ssar, lesson4));
-            Subscribe subscribe2 = subscribeRepository.save(newSubscribe(cos, lesson4));
-            Subscribe subscribe3 = subscribeRepository.save(newSubscribe(aa, lesson4));
-            Subscribe subscribe4 = subscribeRepository.save(newSubscribe(ssar, lesson7));
-            Subscribe subscribe5 = subscribeRepository.save(newSubscribe(cos, lesson7));
-            Subscribe subscribe6 = subscribeRepository.save(newSubscribe(ssar, lesson2));
+            Subscribe subscribe1 = subscribeRepository.save(newSubscribe(ssar, lesson10));
+            Subscribe subscribe2 = subscribeRepository.save(newSubscribe(cos, lesson10));
+            Subscribe subscribe3 = subscribeRepository.save(newSubscribe(aa, lesson10));
+            Subscribe subscribe4 = subscribeRepository.save(newSubscribe(aa, lesson9));
+            Subscribe subscribe5 = subscribeRepository.save(newSubscribe(cos, lesson9));
+            Subscribe subscribe6 = subscribeRepository.save(newSubscribe(ssar, lesson8));
         };
 
     }
