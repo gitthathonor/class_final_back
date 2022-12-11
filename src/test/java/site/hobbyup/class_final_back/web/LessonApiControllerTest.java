@@ -193,7 +193,8 @@ public class LessonApiControllerTest extends DummyEntity {
     resultActions.andExpect(jsonPath("$.data.subscribed").value(false));
   }
 
-  @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  // @WithUserDetails(value = "ssar", setupBefore =
+  // TestExecutionEvent.TEST_EXECUTION)
   @Test
   public void getLessonCommonList_test() throws Exception {
     // when
@@ -206,7 +207,7 @@ public class LessonApiControllerTest extends DummyEntity {
     resultActions.andExpect(status().isOk());
     resultActions.andExpect(jsonPath("$.data[0].lessonPrice").value(70000L));
     resultActions.andExpect(jsonPath("$.data[9].avgGrade").value(4.25));
-    resultActions.andExpect(jsonPath("$.data[8].subscribed").value(true));
+    resultActions.andExpect(jsonPath("$.data[8].subscribed").value(false));
     resultActions.andExpect(jsonPath("$.data[8].totalReview").value(2L));
 
   }
