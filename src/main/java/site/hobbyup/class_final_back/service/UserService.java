@@ -68,6 +68,10 @@ public class UserService {
 
         // 3. 관심사 저장
         log.debug("디버그 : JoinReqDto가 선택한 카테고리들 : " + joinReqDto.getCategoryIds());
+
+        if (joinReqDto.getCategoryIds() == null) {
+            return new JoinRespDto(userPS);
+        }
         List<Category> categoryListPS = categoryRepository.findAllById(joinReqDto.getCategoryIds());
 
         for (Category category : categoryListPS) {
@@ -83,7 +87,7 @@ public class UserService {
         Coupon coupon = Coupon.builder().title("회원가입 쿠폰").price(10000L).expiredDate("2022-12-22").user(userPS).build();
         couponRepository.save(coupon);
 
-        // 4. DTO 응답
+        // 6. DTO 응답
         return new JoinRespDto(userPS, interestListPS);
     }
 
