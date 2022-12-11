@@ -11,6 +11,8 @@ import site.hobbyup.class_final_back.domain.category.CategoryRepository;
 import site.hobbyup.class_final_back.domain.interest.InterestRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
+import site.hobbyup.class_final_back.domain.subscribe.Subscribe;
+import site.hobbyup.class_final_back.domain.subscribe.SubscribeRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
 
@@ -21,11 +23,13 @@ public class DevInit extends DummyEntity {
     @Profile("dev")
     @Bean
     public CommandLineRunner dataSetting(UserRepository userRepository, CategoryRepository categoryRepository,
-            InterestRepository interestRepository, LessonRepository lessonRepository) {
+            InterestRepository interestRepository, LessonRepository lessonRepository,
+            SubscribeRepository subscribeRepository) {
 
         return (args) -> {
             User ssar = userRepository.save(newUser("ssar"));
             User cos = userRepository.save(newUser("cos"));
+            User aa = userRepository.save(newUser("aa"));
 
             Category beauty = categoryRepository.save(newCategory("뷰티"));
             Category sports = categoryRepository.save(newCategory("스포츠"));
@@ -47,6 +51,12 @@ public class DevInit extends DummyEntity {
             Lesson lesson9 = lessonRepository.save(newLesson("더미9", 50000L, ssar, sports));
             Lesson lesson10 = lessonRepository.save(newLesson("더미10", 70000L, ssar, sports));
 
+            Subscribe subscribe1 = subscribeRepository.save(newSubscribe(ssar, lesson4));
+            Subscribe subscribe2 = subscribeRepository.save(newSubscribe(cos, lesson4));
+            Subscribe subscribe3 = subscribeRepository.save(newSubscribe(aa, lesson4));
+            Subscribe subscribe4 = subscribeRepository.save(newSubscribe(ssar, lesson7));
+            Subscribe subscribe5 = subscribeRepository.save(newSubscribe(cos, lesson7));
+            Subscribe subscribe6 = subscribeRepository.save(newSubscribe(ssar, lesson2));
         };
 
     }
