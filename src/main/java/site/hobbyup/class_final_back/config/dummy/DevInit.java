@@ -25,6 +25,7 @@ public class DevInit extends DummyEntity {
 
         return (args) -> {
             User ssar = userRepository.save(newUser("ssar"));
+            User cos = userRepository.save(newUser("cos"));
 
             Category beauty = categoryRepository.save(newCategory("뷰티"));
             Category sports = categoryRepository.save(newCategory("스포츠"));
@@ -36,6 +37,15 @@ public class DevInit extends DummyEntity {
             Category others = categoryRepository.save(newCategory("기타"));
 
             Lesson lesson = lessonRepository.save(newLesson("더미1", 10000L, ssar, beauty));
+            Lesson lesson2 = lessonRepository.save(newLesson("더미2", 20000L, ssar, sports));
+            Lesson lesson3 = lessonRepository.save(newLesson("더미3", 50000L, ssar, music));
+            Lesson lesson4 = lessonRepository.save(newLesson("더미4", 34500L, cos, music));
+            Lesson lesson5 = lessonRepository.save(newLesson("더미5", 2400L, cos, music));
+            Lesson lesson6 = lessonRepository.save(newLesson("더미6", 98000000L, cos, beauty));
+            Lesson lesson7 = lessonRepository.save(newLesson("더미7", 30000L, ssar, sports));
+            Lesson lesson8 = lessonRepository.save(newLesson("더미8", 40000L, ssar, sports));
+            Lesson lesson9 = lessonRepository.save(newLesson("더미9", 50000L, ssar, sports));
+            Lesson lesson10 = lessonRepository.save(newLesson("더미10", 70000L, ssar, sports));
 
         };
 

@@ -42,4 +42,38 @@ public class LessonReqDto {
           .build();
     }
   }
+
+  @Setter
+  @Getter
+  public static class LessonUpdateReqDto {
+    private String name;
+    private String photo;
+    private Long price;
+    private String place;
+    private Long lessonTime;
+    private Long lessonCount;
+    private DayEnum possibleDays;
+    private String curriculum;
+    private String policy;
+    private Timestamp expiredAt;
+    private Long categoryId;
+
+    public Lesson toEntity(Category category, User user) {
+      return Lesson.builder()
+          .user(user)
+          .name(name)
+          .photo(photo)
+          .price(price)
+          .place(place)
+          .lessonTime(lessonTime)
+          .lessonCount(lessonCount)
+          .possibleDays(possibleDays)
+          .curriculum(curriculum)
+          .policy(policy)
+          .expiredAt(expiredAt)
+          .category(category)
+          .build();
+    }
+  }
+
 }
