@@ -170,4 +170,9 @@ public class LessonService {
 
     return null;
   }
+
+  // 비로그인 시 메인 페이지
+  public List<LessonCommonListDto> getLessonCommonListNotLogin() {
+    return lessonRepository.findAllWithReviewNotLogin();
+  }
 }
