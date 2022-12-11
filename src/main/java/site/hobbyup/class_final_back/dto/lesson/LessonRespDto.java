@@ -2,7 +2,6 @@ package site.hobbyup.class_final_back.dto.lesson;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import lombok.Getter;
@@ -164,6 +163,22 @@ public class LessonRespDto {
       this.name = lesson.getName();
       this.price = lesson.getPrice();
       this.photo = lesson.getPhoto();
+    }
+  }
+
+  @Setter
+  @Getter
+  public static class LessonUpdateRespDto {
+    private Long id;
+    private String name;
+    private Category category;
+    private User user;
+
+    public LessonUpdateRespDto(Lesson lesson) {
+      this.id = lesson.getId();
+      this.name = lesson.getName();
+      this.category = lesson.getCategory();
+      this.user = lesson.getUser();
     }
   }
 }

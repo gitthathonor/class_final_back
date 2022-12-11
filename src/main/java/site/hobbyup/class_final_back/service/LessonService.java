@@ -27,10 +27,12 @@ import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonUpdateReqDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonLatestListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonUpdateRespDto;
 import site.hobbyup.class_final_back.util.DecodeUtil;
 
 @RequiredArgsConstructor
@@ -157,5 +159,15 @@ public class LessonService {
   // 클래스 리스트 뽑기 테스트
   public List<LessonCommonListDto> getLessonCommonList(Long userId) {
     return lessonRepository.findAllWithReview(userId);
+  }
+
+  public LessonUpdateRespDto updateLesson(LessonUpdateReqDto lessonUpdateReqDto, Long id) {
+    // 1. 이 레슨을 지울 수 있는 권한이 있는지 확인
+
+    // 2. 레슨이 존재하는지 확인 후 영속화
+
+    // 3. 더티체킹 후 수정
+
+    return null;
   }
 }
