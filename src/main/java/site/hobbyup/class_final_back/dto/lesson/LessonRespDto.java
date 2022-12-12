@@ -10,7 +10,6 @@ import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.review.Review;
-import site.hobbyup.class_final_back.domain.user.User;
 
 public class LessonRespDto {
   @Setter
@@ -20,13 +19,15 @@ public class LessonRespDto {
     private String name;
     private String categoryName;
     private Long userId;
+    private List<String> possibleDays = new ArrayList<>();
     private String username;
 
-    public LessonSaveRespDto(Lesson lesson) {
+    public LessonSaveRespDto(Lesson lesson, List<String> dayList) {
       this.id = lesson.getId();
       this.name = lesson.getName();
       this.categoryName = lesson.getCategory().getName();
       this.userId = lesson.getUser().getId();
+      this.possibleDays = dayList;
       this.username = lesson.getUser().getUsername();
     }
   }
@@ -85,7 +86,7 @@ public class LessonRespDto {
     private Long lessonCount;
     private String lessonCurriculum;
     private String lessonPlace;
-    private String possibleDays;
+    private List<String> possibleDays = new ArrayList<>();
     private String lessonPolicy;
     private String masterName;
     private String masterImg;
@@ -94,7 +95,8 @@ public class LessonRespDto {
     private boolean isSubscribed;
     private List<ReviewDto> lessonReviewList = new ArrayList<>();
 
-    public LessonDetailRespDto(Lesson lesson, Profile profile, Double avgGrade, boolean isSubscribed,
+    public LessonDetailRespDto(Lesson lesson, List<String> dayList, Profile profile, Double avgGrade,
+        boolean isSubscribed,
         List<Review> reviewList) {
       this.lessonName = lesson.getName();
       this.lessonPrice = lesson.getPrice();
@@ -102,7 +104,7 @@ public class LessonRespDto {
       this.lessonCount = lesson.getLessonCount();
       this.lessonCurriculum = lesson.getCurriculum();
       this.lessonPlace = lesson.getPlace();
-      this.possibleDays = lesson.getPossibleDays().getValue();
+      this.possibleDays = dayList;
       this.lessonPolicy = lesson.getPolicy();
       this.masterName = lesson.getUser().getUsername();
       this.masterImg = profile.getFilePath();

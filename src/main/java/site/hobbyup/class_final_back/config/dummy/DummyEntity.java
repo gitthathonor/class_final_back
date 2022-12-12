@@ -2,6 +2,7 @@ package site.hobbyup.class_final_back.config.dummy;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -59,7 +60,7 @@ public class DummyEntity {
                 .photo(dummy)
                 .price(dummyNum)
                 .place(dummy)
-                .possibleDays(DayEnum.MONDAY)
+                .possibleDays("월요일,화요일")
                 .user(user)
                 .curriculum("커리큘럼" + dummy)
                 .deadline(new Timestamp(50000))

@@ -137,7 +137,7 @@ public class LessonApiControllerTest extends DummyEntity {
     lessonSaveReqDto.setPlace("부산진구");
     lessonSaveReqDto.setDeadline(new Timestamp(700000000L));
     lessonSaveReqDto.setPolicy("취소 및 환불정책");
-    lessonSaveReqDto.setPossibleDays(DayEnum.MONDAY);
+    lessonSaveReqDto.setPossibleDays("월요일,수요일,금요일");
     lessonSaveReqDto.setPrice(500000L);
 
     String requestBody = om.writeValueAsString(lessonSaveReqDto);
@@ -231,7 +231,7 @@ public class LessonApiControllerTest extends DummyEntity {
     lessonUpdateReqDto.setPlace("강남구");
     lessonUpdateReqDto.setDeadline(new Timestamp(8225L));
     lessonUpdateReqDto.setPolicy("취소 및 환불정책");
-    lessonUpdateReqDto.setPossibleDays(DayEnum.WEDNESDAY);
+    lessonUpdateReqDto.setPossibleDays("월요일,화요일,수요일,목요일");
     lessonUpdateReqDto.setPrice(250000L);
 
     String requestBody = om.writeValueAsString(lessonUpdateReqDto);

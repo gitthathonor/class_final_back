@@ -5,8 +5,6 @@ import java.sql.Timestamp;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,7 +19,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import site.hobbyup.class_final_back.config.enums.DayEnum;
 import site.hobbyup.class_final_back.domain.AuditingTime;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.user.User;
@@ -55,9 +52,8 @@ public class Lesson extends AuditingTime {
   @ColumnDefault(value = "0")
   private Long lessonCount; // 레슨 횟수
 
-  @Enumerated(EnumType.STRING)
-  @Column(nullable = false)
-  private DayEnum possibleDays;
+  @Column(nullable = true)
+  private String possibleDays;
 
   @Column(columnDefinition = "LONGTEXT")
   private String curriculum;
@@ -75,7 +71,7 @@ public class Lesson extends AuditingTime {
 
   @Builder
   public Lesson(Long id, String name, String photo, Long price, String place, Long lessonTime, Long lessonCount,
-      DayEnum possibleDays, String curriculum, String policy, Timestamp deadline, User user, Category category) {
+      String possibleDays, String curriculum, String policy, Timestamp deadline, User user, Category category) {
     this.id = id;
     this.name = name;
     this.photo = photo;

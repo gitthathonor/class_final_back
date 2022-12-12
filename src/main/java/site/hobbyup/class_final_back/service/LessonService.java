@@ -1,6 +1,7 @@
 package site.hobbyup.class_final_back.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import site.hobbyup.class_final_back.config.auth.LoginUser;
+import site.hobbyup.class_final_back.config.enums.DayEnum;
 import site.hobbyup.class_final_back.config.exception.CustomApiException;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
@@ -65,7 +67,19 @@ public class LessonService {
 
     // toEntity로 엔티티화 시킨 후에 저장하고 json(ResponseDto) 반환
     Lesson lessonPS = lessonRepository.save(lessonSaveReqDto.toEntity(categoryPS, userPS));
-    return new LessonSaveRespDto(lessonPS);
+
+    // possibleDays 파싱
+    List<String> dayList = new ArrayList<>();
+    if (lessonPS.getPossibleDays() == null) {
+      dayList.add("");
+    } else {
+      String[] days = lessonPS.getPossibleDays().split(",");
+      for (String day : days) {
+        dayList.add(day);
+      }
+    }
+
+    return new LessonSaveRespDto(lessonPS, dayList);
   }
 
   // 클래스 리스트 보기(카테고리별 + 예산별 필터링 적용)
@@ -82,12 +96,24 @@ public class LessonService {
     return new LessonCategoryListRespDto(categoryPS, lessonListPS);
   }
 
-  // 클래스 상세보기
+  // 레슨 상세보기(로그인 시)
   @Transactional
   public LessonDetailRespDto getLessonDetail(Long lessonId, Long userId) {
     log.debug("디버그 : LessonService-getLessonDetail 실행");
     Lesson lessonPS = lessonRepository.findById(lessonId)
         .orElseThrow(() -> new CustomApiException("해당 수업 없음", HttpStatus.BAD_REQUEST));
+
+    // possibleDays 파싱
+    List<String> dayList = new ArrayList<>();
+    if (lessonPS.getPossibleDays() == null) {
+      dayList.add("");
+    } else {
+      String[] days = lessonPS.getPossibleDays().split(",");
+      for (String day : days) {
+        dayList.add(day);
+      }
+    }
+
     Optional<Profile> profileOP = profileRepository.findByUserId(lessonPS.getUser().getId());
     if (profileOP.isEmpty()) {
       throw new CustomApiException("프로필을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST);
@@ -109,17 +135,30 @@ public class LessonService {
       isSubscribed = true;
     }
 
-    LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, profileOP.get(), avgGrade, isSubscribed,
+    LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, dayList, profileOP.get(), avgGrade,
+        isSubscribed,
         reviewListPS);
     return lessonDetailRespDto;
   }
 
-  // 레슨 상세보기
+  // 레슨 상세보기(비로그인 시)
   @Transactional
   public LessonDetailRespDto getLessonDetailNotLogin(Long lessonId) {
     log.debug("디버그 : LessonService-getLessonDetail 실행");
     Lesson lessonPS = lessonRepository.findById(lessonId)
         .orElseThrow(() -> new CustomApiException("해당 수업 없음", HttpStatus.BAD_REQUEST));
+
+    // possibleDays 파싱
+    List<String> dayList = new ArrayList<>();
+    if (lessonPS.getPossibleDays() == null) {
+      dayList.add("");
+    } else {
+      String[] days = lessonPS.getPossibleDays().split(",");
+      for (String day : days) {
+        dayList.add(day);
+      }
+    }
+
     Optional<Profile> profileOP = profileRepository.findByUserId(lessonPS.getUser().getId());
     if (profileOP.isEmpty()) {
       throw new CustomApiException("프로필을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST);
@@ -137,7 +176,8 @@ public class LessonService {
     // 찜 여부 확인하기
     boolean isSubscribed = false;
 
-    LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, profileOP.get(), avgGrade, isSubscribed,
+    LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, dayList, profileOP.get(), avgGrade,
+        isSubscribed,
         reviewListPS);
     return lessonDetailRespDto;
   }
