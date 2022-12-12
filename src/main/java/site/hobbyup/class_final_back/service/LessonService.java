@@ -127,11 +127,8 @@ public class LessonService {
     }
 
     // 프로필 정보 영속화
-    Optional<Profile> profileOP = profileRepository.findByUserId(lessonPS.getExpert().getUser().getId());
-    if (profileOP.isEmpty()) {
-      throw new CustomApiException("프로필을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST);
-    }
-    log.debug("디버그 : " + profileOP.get());
+    Profile profilePS = profileRepository.findByUserId(lessonPS.getExpert().getUser().getId())
+        .orElseThrow(() -> new CustomApiException("프로필을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST));
 
     // 평균 리뷰 구하기 + 리뷰 리스트 뽑기
     List<Review> reviewListPS = reviewRepository.findAllByLessonId(lessonPS.getId());
@@ -148,7 +145,7 @@ public class LessonService {
       isSubscribed = true;
     }
 
-    LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, dayList, profileOP.get(), avgGrade,
+    LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, dayList, profilePS, avgGrade,
         isSubscribed,
         reviewListPS);
     return lessonDetailRespDto;
