@@ -21,7 +21,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hobbyup.class_final_back.domain.AuditingTime;
 import site.hobbyup.class_final_back.domain.category.Category;
-import site.hobbyup.class_final_back.domain.user.User;
+import site.hobbyup.class_final_back.domain.expert.Expert;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonUpdateReqDto;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -64,14 +64,14 @@ public class Lesson extends AuditingTime {
   private Timestamp deadline;
 
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
-  private User user;
+  private Expert expert;
 
   @ManyToOne(fetch = FetchType.LAZY)
   private Category category;
 
   @Builder
   public Lesson(Long id, String name, String photo, Long price, String place, Long lessonTime, Long lessonCount,
-      String possibleDays, String curriculum, String policy, Timestamp deadline, User user, Category category) {
+      String possibleDays, String curriculum, String policy, Timestamp deadline, Expert expert, Category category) {
     this.id = id;
     this.name = name;
     this.photo = photo;
@@ -83,7 +83,7 @@ public class Lesson extends AuditingTime {
     this.curriculum = curriculum;
     this.policy = policy;
     this.deadline = deadline;
-    this.user = user;
+    this.expert = expert;
     this.category = category;
   }
 

@@ -133,7 +133,7 @@ public class UserRespDto {
 
             public MyLessonRespDto(Lesson lesson) {
                 this.name = lesson.getName();
-                this.user = new UserDto(lesson.getUser());
+                this.user = new UserDto(lesson.getExpert().getUser());
                 this.price = lesson.getPrice();
                 this.deadline = lesson.getDeadline();
                 this.photo = lesson.getPhoto();

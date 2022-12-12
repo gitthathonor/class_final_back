@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import lombok.Getter;
 import lombok.Setter;
 import site.hobbyup.class_final_back.domain.category.Category;
+import site.hobbyup.class_final_back.domain.expert.Expert;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.user.User;
 
@@ -24,9 +25,9 @@ public class LessonReqDto {
     private Timestamp deadline;
     private Long categoryId;
 
-    public Lesson toEntity(Category category, User user) {
+    public Lesson toEntity(Category category, Expert expert) {
       return Lesson.builder()
-          .user(user)
+          .expert(expert)
           .name(name)
           .photo(photo)
           .price(price)
@@ -57,9 +58,9 @@ public class LessonReqDto {
     private Timestamp deadline;
     private Long categoryId;
 
-    public Lesson toEntity(Category category, User user) {
+    public Lesson toEntity(Category category, Expert expert) {
       return Lesson.builder()
-          .user(user)
+          .expert(expert)
           .name(name)
           .photo(photo)
           .price(price)

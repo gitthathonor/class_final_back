@@ -18,7 +18,7 @@ public class LessonRespDto {
     private Long id;
     private String name;
     private String categoryName;
-    private Long userId;
+    private Long expertId;
     private List<String> possibleDays = new ArrayList<>();
     private String username;
 
@@ -26,9 +26,9 @@ public class LessonRespDto {
       this.id = lesson.getId();
       this.name = lesson.getName();
       this.categoryName = lesson.getCategory().getName();
-      this.userId = lesson.getUser().getId();
+      this.expertId = lesson.getExpert().getId();
       this.possibleDays = dayList;
-      this.username = lesson.getUser().getUsername();
+      this.username = lesson.getExpert().getUser().getUsername();
     }
   }
 
@@ -88,9 +88,9 @@ public class LessonRespDto {
     private String lessonPlace;
     private List<String> possibleDays = new ArrayList<>();
     private String lessonPolicy;
-    private String masterName;
-    private String masterImg;
-    private String masterIntroduction;
+    private String expertName;
+    private String expertPhoto;
+    private String expertIntroduction;
     private Double lessonAvgGrade;
     private boolean isSubscribed;
     private List<ReviewDto> lessonReviewList = new ArrayList<>();
@@ -106,9 +106,9 @@ public class LessonRespDto {
       this.lessonPlace = lesson.getPlace();
       this.possibleDays = dayList;
       this.lessonPolicy = lesson.getPolicy();
-      this.masterName = lesson.getUser().getUsername();
-      this.masterImg = profile.getFilePath();
-      this.masterIntroduction = profile.getIntroduction();
+      this.expertName = lesson.getExpert().getUser().getUsername();
+      this.expertPhoto = profile.getFilePath();
+      this.expertIntroduction = profile.getIntroduction();
       this.lessonAvgGrade = avgGrade;
       this.isSubscribed = isSubscribed;
       this.lessonReviewList = reviewList.stream().map((review) -> new ReviewDto(review))
@@ -118,12 +118,12 @@ public class LessonRespDto {
     @Setter
     @Getter
     public class ProfileDto {
-      private String masterImg;
-      private String masterIntroduction;
+      private String expertPhoto;
+      private String expertIntroduction;
 
       public ProfileDto(Profile profile) {
-        this.masterImg = profile.getFilePath();
-        this.masterIntroduction = profile.getIntroduction();
+        this.expertPhoto = profile.getFilePath();
+        this.expertIntroduction = profile.getIntroduction();
       }
     }
 
@@ -176,15 +176,15 @@ public class LessonRespDto {
     private Long id;
     private String name;
     private String categoryName;
-    private Long userId;
+    private Long expertId;
     private String username;
 
     public LessonUpdateRespDto(Lesson lesson) {
       this.id = lesson.getId();
       this.name = lesson.getName();
       this.categoryName = lesson.getCategory().getName();
-      this.userId = lesson.getUser().getId();
-      this.username = lesson.getUser().getUsername();
+      this.expertId = lesson.getExpert().getId();
+      this.username = lesson.getExpert().getUser().getUsername();
     }
   }
 }

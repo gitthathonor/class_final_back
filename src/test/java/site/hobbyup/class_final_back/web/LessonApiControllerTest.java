@@ -26,9 +26,10 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import site.hobbyup.class_final_back.config.dummy.DummyEntity;
-import site.hobbyup.class_final_back.config.enums.DayEnum;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
+import site.hobbyup.class_final_back.domain.expert.Expert;
+import site.hobbyup.class_final_back.domain.expert.ExpertRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
 import site.hobbyup.class_final_back.domain.profile.Profile;
@@ -76,12 +77,18 @@ public class LessonApiControllerTest extends DummyEntity {
   private SubscribeRepository subscribeRepository;
 
   @Autowired
+  private ExpertRepository expertRepository;
+
+  @Autowired
   private EntityManager em;
 
   @BeforeEach
   public void setUp() {
     User ssar = userRepository.save(newUser("ssar"));
     User cos = userRepository.save(newUser("cos"));
+    User hong = userRepository.save(newUser("expert"));
+
+    Expert expert1 = expertRepository.save(newExpert(hong));
 
     Category beauty = categoryRepository.save(newCategory("뷰티"));
     Category sports = categoryRepository.save(newCategory("스포츠"));
@@ -95,16 +102,19 @@ public class LessonApiControllerTest extends DummyEntity {
     Profile ssarProfile = profileRepository
         .save(newProfile("", "안녕하세요 부산에서 가장 뷰티한 강사 ssar입니다.", "부산", "미용사", "5년", "박준 뷰티랩 양정점 원장 10년", ssar));
 
-    Lesson lesson1 = lessonRepository.save(newLesson("더미1", 10000L, ssar, beauty));
-    Lesson lesson2 = lessonRepository.save(newLesson("더미2", 20000L, ssar, sports));
-    Lesson lesson3 = lessonRepository.save(newLesson("더미3", 50000L, ssar, music));
-    Lesson lesson4 = lessonRepository.save(newLesson("더미4", 34500L, cos, music));
-    Lesson lesson5 = lessonRepository.save(newLesson("더미5", 2400L, cos, music));
-    Lesson lesson6 = lessonRepository.save(newLesson("더미6", 98000000L, cos, beauty));
-    Lesson lesson7 = lessonRepository.save(newLesson("더미7", 30000L, ssar, sports));
-    Lesson lesson8 = lessonRepository.save(newLesson("더미8", 40000L, ssar, sports));
-    Lesson lesson9 = lessonRepository.save(newLesson("더미9", 50000L, ssar, sports));
-    Lesson lesson10 = lessonRepository.save(newLesson("더미10", 70000L, ssar, sports));
+    Profile hongProfile = profileRepository
+        .save(newProfile("", "hong의 프로필입니다.", "울산", "네일아트 자격증", "10년", "각종 다수의 숍에서 일한 경력", hong));
+
+    Lesson lesson1 = lessonRepository.save(newLesson("더미1", 10000L, expert1, beauty));
+    Lesson lesson2 = lessonRepository.save(newLesson("더미2", 20000L, expert1, sports));
+    Lesson lesson3 = lessonRepository.save(newLesson("더미3", 50000L, expert1, music));
+    Lesson lesson4 = lessonRepository.save(newLesson("더미4", 34500L, expert1, music));
+    Lesson lesson5 = lessonRepository.save(newLesson("더미5", 2400L, expert1, music));
+    Lesson lesson6 = lessonRepository.save(newLesson("더미6", 98000000L, expert1, beauty));
+    Lesson lesson7 = lessonRepository.save(newLesson("더미7", 30000L, expert1, sports));
+    Lesson lesson8 = lessonRepository.save(newLesson("더미8", 40000L, expert1, sports));
+    Lesson lesson9 = lessonRepository.save(newLesson("더미9", 50000L, expert1, sports));
+    Lesson lesson10 = lessonRepository.save(newLesson("더미10", 70000L, expert1, sports));
 
     Review review1 = reviewRepository.save(newReivew("너무 좋은 강의입니다.", 4.5, ssar, lesson1));
     Review review2 = reviewRepository.save(newReivew("생각했던 것보다 더 좋네요!", 4.0, cos, lesson1));
@@ -122,7 +132,7 @@ public class LessonApiControllerTest extends DummyEntity {
 
   }
 
-  @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @WithUserDetails(value = "expert", setupBefore = TestExecutionEvent.TEST_EXECUTION)
   @Test
   public void saveLesson_test() throws Exception {
     // given
@@ -153,7 +163,7 @@ public class LessonApiControllerTest extends DummyEntity {
     resultActions.andExpect(status().isCreated());
     resultActions.andExpect(jsonPath("$.data.name").value("프로작곡가가 알려주는 하루만에 미디 작곡하는 법"));
     resultActions.andExpect(jsonPath("$.data.categoryName").value("음악"));
-    resultActions.andExpect(jsonPath("$.data.userId").value(1L));
+    resultActions.andExpect(jsonPath("$.data.expertId").value(1L));
     resultActions.andExpect(jsonPath("$.data.id").value(11L));
   }
 
@@ -265,7 +275,7 @@ public class LessonApiControllerTest extends DummyEntity {
     resultActions.andExpect(status().isOk());
     resultActions.andExpect(jsonPath("$.data.name").value("200만 뷰티 유튜버가 알려드리는 화장법"));
     resultActions.andExpect(jsonPath("$.data.categoryName").value("뷰티"));
-    resultActions.andExpect(jsonPath("$.data.userId").value(1L));
+    resultActions.andExpect(jsonPath("$.data.expertId").value(1L));
     resultActions.andExpect(jsonPath("$.data.id").value(1L));
 
   }

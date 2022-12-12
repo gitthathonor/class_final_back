@@ -52,14 +52,14 @@ public class DummyEntity {
         return category;
     }
 
-    protected Lesson newLesson(String dummy, Long dummyNum, User user, Category category) {
+    protected Lesson newLesson(String dummy, Long dummyNum, Expert expert, Category category) {
         return Lesson.builder()
                 .name(dummy)
                 .photo(dummy)
                 .price(dummyNum)
                 .place(dummy)
                 .possibleDays("월요일,화요일")
-                .user(user)
+                .expert(expert)
                 .curriculum("커리큘럼" + dummy)
                 .deadline(new Timestamp(50000))
                 .policy("취소 환불 정책" + dummy)
@@ -116,7 +116,7 @@ public class DummyEntity {
         return Expert.builder()
                 .satisfaction(0L)
                 .totalLesson(0L)
-                .isApproval(false)
+                .isApproval(true)
                 .user(user)
                 .build();
     }
