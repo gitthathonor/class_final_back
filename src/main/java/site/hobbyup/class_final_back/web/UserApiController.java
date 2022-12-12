@@ -39,8 +39,12 @@ public class UserApiController {
     }
 
     @PutMapping("/api/user/{id}")
-    public ResponseEntity<?> updateUser(@RequestBody UserUpdateReqDto userUpdateReqDto, @PathVariable Long id) {
+    public ResponseEntity<?> updateUser(@RequestBody UserUpdateReqDto userUpdateReqDto, @PathVariable Long id,
+            @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : UserApiController-updateUser 실행됨");
+        if (loginUser.getUser().getId() != id) {
+            throw new CustomApiException("권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
         UserUpdateRespDto userUpdateRespDto = userService.updateUser(userUpdateReqDto, id);
         return new ResponseEntity<>(new ResponseDto<>("회원정보 수정완료", userUpdateRespDto), HttpStatus.OK);
     }

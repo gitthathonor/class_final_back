@@ -103,17 +103,29 @@ public class UserService {
     public UserUpdateRespDto updateUser(UserUpdateReqDto userUpdateReqDto, Long id) {
         log.debug("디버그 : UserService-updateUser 실행됨");
 
-        // 회원이 DB에 존재하는지 확인
-        User userOP = userRepository.findById(id)
+        // 회원 영속화
+        User userPS = userRepository.findById(id)
                 .orElseThrow(() -> new CustomApiException("가입되지 않은 유저입니다.", HttpStatus.FORBIDDEN));
-        log.debug("디버그 : userOP의 id : " + userOP.getId());
+        log.debug("디버그 : userPS의 id : " + userPS.getId());
         String rawPassword = userUpdateReqDto.getPassword();
         String encPassword = passwordEncoder.encode(rawPassword);
         userUpdateReqDto.setPassword(encPassword);
 
-        userOP.update(userUpdateReqDto);
+        // ReqDto에서 받은 카테고리 id로 참조
+        List<Category> categoryListPS = categoryRepository.findAllById(userUpdateReqDto.getCategoryIds());
 
-        return new UserUpdateRespDto(userRepository.save(userOP));
+        // 관심사 테이블 영속화
+        List<Interest> interestPS = interestRepository.findAllByUserId(userPS.getId());
+
+        // 관심사 테이블의 카테고리들을 업데이트 시켜주기
+        for (int i = 0; i < interestPS.size(); i++) {
+            interestPS.get(i).update(categoryListPS.get(i));
+        }
+        interestRepository.saveAll(interestPS);
+
+        userPS.update(userUpdateReqDto);
+
+        return new UserUpdateRespDto(userRepository.save(userPS), interestPS);
     }
 
     // 회원탈퇴

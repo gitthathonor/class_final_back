@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.coupon.Coupon;
+import site.hobbyup.class_final_back.domain.expert.Expert;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.payment.Payment;
 import site.hobbyup.class_final_back.domain.paymentType.PaymentType;
@@ -108,6 +109,15 @@ public class DummyEntity {
                 .lesson(lesson)
                 .user(user)
                 .paymentType(paymentType)
+                .build();
+    }
+
+    protected Expert newExpert(User user) {
+        return Expert.builder()
+                .satisfaction(0L)
+                .totalLesson(0L)
+                .isApproval(false)
+                .user(user)
                 .build();
     }
 

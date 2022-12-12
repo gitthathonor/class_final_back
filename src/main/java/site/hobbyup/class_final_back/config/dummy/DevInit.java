@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Profile;
 import lombok.RequiredArgsConstructor;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
+import site.hobbyup.class_final_back.domain.expert.Expert;
+import site.hobbyup.class_final_back.domain.expert.ExpertRepository;
 import site.hobbyup.class_final_back.domain.interest.InterestRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
@@ -26,12 +28,14 @@ public class DevInit extends DummyEntity {
     @Bean
     public CommandLineRunner dataSetting(UserRepository userRepository, CategoryRepository categoryRepository,
             InterestRepository interestRepository, LessonRepository lessonRepository, ReviewRepository reviewRepository,
-            SubscribeRepository subscribeRepository) {
+            SubscribeRepository subscribeRepository, ExpertRepository expertRepository) {
 
         return (args) -> {
             User ssar = userRepository.save(newUser("ssar"));
             User cos = userRepository.save(newUser("cos"));
-            User expert = userRepository.save(newUser("expert"));
+            User hong = userRepository.save(newUser("expert"));
+
+            Expert expert = expertRepository.save(newExpert(hong));
 
             Category beauty = categoryRepository.save(newCategory("뷰티"));
             Category sports = categoryRepository.save(newCategory("스포츠"));
