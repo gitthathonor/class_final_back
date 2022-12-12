@@ -5,8 +5,6 @@ import java.sql.Timestamp;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,10 +19,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import site.hobbyup.class_final_back.config.enums.DayEnum;
 import site.hobbyup.class_final_back.domain.AuditingTime;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.user.User;
+import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonUpdateReqDto;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -54,9 +52,8 @@ public class Lesson extends AuditingTime {
   @ColumnDefault(value = "0")
   private Long lessonCount; // 레슨 횟수
 
-  @Enumerated(EnumType.STRING)
-  @Column(nullable = false)
-  private DayEnum possibleDays;
+  @Column(nullable = true)
+  private String possibleDays;
 
   @Column(columnDefinition = "LONGTEXT")
   private String curriculum;
@@ -64,7 +61,7 @@ public class Lesson extends AuditingTime {
   @Column(columnDefinition = "LONGTEXT")
   private String policy;
 
-  private Timestamp expiredAt;
+  private Timestamp deadline;
 
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
   private User user;
@@ -74,7 +71,7 @@ public class Lesson extends AuditingTime {
 
   @Builder
   public Lesson(Long id, String name, String photo, Long price, String place, Long lessonTime, Long lessonCount,
-      DayEnum possibleDays, String curriculum, String policy, Timestamp expiredAt, User user, Category category) {
+      String possibleDays, String curriculum, String policy, Timestamp deadline, User user, Category category) {
     this.id = id;
     this.name = name;
     this.photo = photo;
@@ -85,9 +82,22 @@ public class Lesson extends AuditingTime {
     this.possibleDays = possibleDays;
     this.curriculum = curriculum;
     this.policy = policy;
-    this.expiredAt = expiredAt;
+    this.deadline = deadline;
     this.user = user;
     this.category = category;
+  }
+
+  public void update(LessonUpdateReqDto lessonUpdateReqDto) {
+    this.name = lessonUpdateReqDto.getName();
+    this.photo = lessonUpdateReqDto.getPhoto();
+    this.price = lessonUpdateReqDto.getPrice();
+    this.place = lessonUpdateReqDto.getPlace();
+    this.lessonTime = lessonUpdateReqDto.getLessonTime();
+    this.lessonCount = lessonUpdateReqDto.getLessonCount();
+    this.possibleDays = lessonUpdateReqDto.getPossibleDays();
+    this.curriculum = lessonUpdateReqDto.getCurriculum();
+    this.policy = lessonUpdateReqDto.getPolicy();
+    this.deadline = lessonUpdateReqDto.getDeadline();
   }
 
 }

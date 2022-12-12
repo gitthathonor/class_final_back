@@ -92,7 +92,8 @@ public class LessonApiController {
     public ResponseEntity<?> updateLesson(@RequestBody LessonUpdateReqDto lessonUpdateReqDto, @PathVariable Long id,
             @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : LessonApiController-updateLesson 실행됨");
-        LessonUpdateRespDto lessonUpdateRespDto = lessonService.updateLesson(lessonUpdateReqDto, id);
+        LessonUpdateRespDto lessonUpdateRespDto = lessonService.updateLesson(lessonUpdateReqDto, id,
+                loginUser.getUser().getId());
         return new ResponseEntity<>(new ResponseDto<>(" 레슨 수정완료", lessonUpdateRespDto), HttpStatus.OK);
     }
 

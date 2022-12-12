@@ -1,7 +1,6 @@
 package site.hobbyup.class_final_back.dto.user;
 
 import java.sql.Timestamp;
-import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,7 @@ import site.hobbyup.class_final_back.domain.interest.Interest;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.user.User;
-import site.hobbyup.class_final_back.dto.user.UserRespDto.MyLessonListRespDto.MyLessonRespDto;
+import site.hobbyup.class_final_back.dto.user.UserRespDto.JoinRespDto.InterestDto;
 
 public class UserRespDto {
 
@@ -74,12 +73,25 @@ public class UserRespDto {
         private String username;
         private String email;
         private String phoneNum;
+        private List<InterestDto> interestList;
 
-        public UserUpdateRespDto(User user) {
+        public UserUpdateRespDto(User user, List<Interest> interestList) {
             this.id = user.getId();
             this.username = user.getUsername();
             this.email = user.getEmail();
             this.phoneNum = user.getPhoneNum();
+            this.interestList = interestList.stream().map((interest) -> new InterestDto(interest))
+                    .collect(Collectors.toList());
+        }
+
+        @Setter
+        @Getter
+        public class InterestDto {
+            private String categoryName;
+
+            public InterestDto(Interest interest) {
+                this.categoryName = interest.getCategory().getName();
+            }
         }
 
     }
@@ -116,14 +128,14 @@ public class UserRespDto {
             private String name;
             private UserDto user;
             private Long price;
-            private Timestamp expiredAt;
+            private Timestamp deadline;
             private String photo;
 
             public MyLessonRespDto(Lesson lesson) {
                 this.name = lesson.getName();
                 this.user = new UserDto(lesson.getUser());
                 this.price = lesson.getPrice();
-                this.expiredAt = lesson.getExpiredAt();
+                this.deadline = lesson.getDeadline();
                 this.photo = lesson.getPhoto();
             }
 
