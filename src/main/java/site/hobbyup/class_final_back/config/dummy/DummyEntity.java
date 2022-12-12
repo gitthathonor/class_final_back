@@ -1,12 +1,9 @@
 package site.hobbyup.class_final_back.config.dummy;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.List;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import site.hobbyup.class_final_back.config.enums.DayEnum;
 import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.coupon.Coupon;
@@ -28,7 +25,7 @@ public class DummyEntity {
                 .password(encPassword)
                 .email(username + "@nate.com")
                 .phoneNum("010" + (++phoneNum))
-                .role(username.equals("admin") ? UserEnum.ADMIN : UserEnum.USER)
+                .role(username.equals("expert") ? UserEnum.EXPERT : UserEnum.USER)
                 .build();
         return user;
     }

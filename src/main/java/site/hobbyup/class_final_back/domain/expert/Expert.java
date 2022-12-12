@@ -13,6 +13,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hobbyup.class_final_back.domain.user.User;
@@ -40,5 +41,14 @@ public class Expert {
 
     @OneToOne(fetch = FetchType.LAZY)
     private User user;
+
+    @Builder
+    public Expert(Long id, Long satisfaction, Long totalLesson, boolean isApproval, User user) {
+        this.id = id;
+        this.satisfaction = satisfaction;
+        this.totalLesson = totalLesson;
+        this.isApproval = isApproval;
+        this.user = user;
+    }
 
 }

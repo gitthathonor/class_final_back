@@ -31,6 +31,7 @@ public class DevInit extends DummyEntity {
         return (args) -> {
             User ssar = userRepository.save(newUser("ssar"));
             User cos = userRepository.save(newUser("cos"));
+            User expert = userRepository.save(newUser("expert"));
 
             Category beauty = categoryRepository.save(newCategory("뷰티"));
             Category sports = categoryRepository.save(newCategory("스포츠"));
