@@ -10,6 +10,7 @@ import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.review.Review;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto.LessonDto;
 
 public class LessonRespDto {
   @Setter
@@ -80,17 +81,19 @@ public class LessonRespDto {
   @Setter
   @Getter
   public static class LessonDetailRespDto {
-    private String lessonName;
-    private Long lessonPrice;
-    private Long lessonTime;
-    private Long lessonCount;
-    private String lessonCurriculum;
-    private String lessonPlace;
-    private List<String> possibleDays = new ArrayList<>();
-    private String lessonPolicy;
-    private String expertName;
-    private String expertPhoto;
-    private String expertIntroduction;
+    // private String lessonName;
+    // private Long lessonPrice;
+    // private Long lessonTime;
+    // private Long lessonCount;
+    // private String lessonCurriculum;
+    // private String lessonPlace;
+    // private List<String> possibleDays = new ArrayList<>();
+    // private String lessonPolicy;
+    // private String expertName;
+    // private String expertPhoto;
+    // private String expertIntroduction;
+    private LessonDto lessonDto;
+    private ProfileDto profileDto;
     private Double lessonAvgGrade;
     private boolean isSubscribed;
     private List<ReviewDto> lessonReviewList = new ArrayList<>();
@@ -98,21 +101,46 @@ public class LessonRespDto {
     public LessonDetailRespDto(Lesson lesson, List<String> dayList, Profile profile, Double avgGrade,
         boolean isSubscribed,
         List<Review> reviewList) {
-      this.lessonName = lesson.getName();
-      this.lessonPrice = lesson.getPrice();
-      this.lessonTime = lesson.getLessonTime();
-      this.lessonCount = lesson.getLessonCount();
-      this.lessonCurriculum = lesson.getCurriculum();
-      this.lessonPlace = lesson.getPlace();
-      this.possibleDays = dayList;
-      this.lessonPolicy = lesson.getPolicy();
-      this.expertName = lesson.getExpert().getUser().getUsername();
-      this.expertPhoto = profile.getFilePath();
-      this.expertIntroduction = profile.getIntroduction();
+      // this.lessonName = lesson.getName();
+      // this.lessonPrice = lesson.getPrice();
+      // this.lessonTime = lesson.getLessonTime();
+      // this.lessonCount = lesson.getLessonCount();
+      // this.lessonCurriculum = lesson.getCurriculum();
+      // this.lessonPlace = lesson.getPlace();
+      // this.possibleDays = dayList;
+      // this.lessonPolicy = lesson.getPolicy();
+      // this.expertName = lesson.getExpert().getUser().getUsername();
+      // this.expertPhoto = profile.getFilePath();
+      // this.expertIntroduction = profile.getIntroduction();
+      this.lessonDto = new LessonDto(lesson);
+      this.profileDto = new ProfileDto(profile);
       this.lessonAvgGrade = avgGrade;
       this.isSubscribed = isSubscribed;
       this.lessonReviewList = reviewList.stream().map((review) -> new ReviewDto(review))
           .collect(Collectors.toList());
+    }
+
+    @Setter
+    @Getter
+    public class LessonDto {
+      private String lessonName;
+      private Long lessonPrice;
+      private Long lessonTime;
+      private Long lessonCount;
+      private String curriculum;
+      private String lessonPlace;
+      private String lessonPolicy;
+
+      public LessonDto(Lesson lesson) {
+        this.lessonName = lesson.getName();
+        this.lessonPrice = lesson.getPrice();
+        this.lessonTime = lesson.getLessonTime();
+        this.lessonCount = lesson.getLessonCount();
+        this.curriculum = lesson.getCurriculum();
+        this.lessonPlace = lesson.getPlace();
+        this.lessonPolicy = lesson.getPolicy();
+      }
+
     }
 
     @Setter
