@@ -33,6 +33,7 @@ public class DevInit extends DummyEntity {
         return (args) -> {
             User ssar = userRepository.save(newUser("ssar"));
             User cos = userRepository.save(newUser("cos"));
+            User aa = userRepository.save(newUser("aa"));
             User hong = userRepository.save(newUser("expert"));
 
             Expert expert = expertRepository.save(newExpert(hong));
@@ -70,6 +71,13 @@ public class DevInit extends DummyEntity {
             Subscribe subscribe3 = subscribeRepository.save(newSubscribe(cos, lesson3));
             Subscribe subscribe4 = subscribeRepository.save(newSubscribe(cos, lesson8));
             Subscribe subscribe5 = subscribeRepository.save(newSubscribe(cos, lesson9));
+
+            Subscribe subscribe6 = subscribeRepository.save(newSubscribe(ssar, lesson10));
+            Subscribe subscribe7 = subscribeRepository.save(newSubscribe(cos, lesson10));
+            Subscribe subscribe8 = subscribeRepository.save(newSubscribe(aa, lesson10));
+            Subscribe subscribe9 = subscribeRepository.save(newSubscribe(aa, lesson9));
+            Subscribe subscribe10 = subscribeRepository.save(newSubscribe(cos, lesson9));
+            Subscribe subscribe11 = subscribeRepository.save(newSubscribe(ssar, lesson8));
 
         };
 

@@ -216,6 +216,24 @@ public class LessonApiControllerTest extends DummyEntity {
 
   @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
   @Test
+  public void getLessonSubscribeList_test() throws Exception {
+    // when
+    ResultActions resultActions = mvc
+        .perform(get("/api/lesson/subscribe"));
+    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+    System.out.println("테스트 : " + responseBody);
+
+    // then
+    resultActions.andExpect(status().isOk());
+    resultActions.andExpect(jsonPath("$.data[0].lessonPrice").value(10000L));
+    resultActions.andExpect(jsonPath("$.data[0].avgGrade").value(4.25));
+    resultActions.andExpect(jsonPath("$.data[1].subscribed").value(true));
+    resultActions.andExpect(jsonPath("$.data[2].totalReview").value(1L));
+
+  }
+
+  @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @Test
   public void updateLesson_test() throws Exception {
     // given
 
