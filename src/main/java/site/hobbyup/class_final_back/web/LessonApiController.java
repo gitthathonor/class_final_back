@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.repository.query.Param;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.web.server.ServerHttpSecurity.HttpsRedirectSpec;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import site.hobbyup.class_final_back.config.auth.LoginUser;
+import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
 import site.hobbyup.class_final_back.dto.ResponseDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonSubscribeListDto;
@@ -37,6 +40,7 @@ public class LessonApiController {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final LessonService lessonService;
 
+    // 추후 role 체크해서 expert의 is_approval이 true인 사람들만 클래스를 생성할 수 있게 해야 한다.
     // 추후 role 체크해서 expert의 is_approval이 true인 사람들만 클래스를 생성할 수 있게 해야 한다.
     // lesson 등록
     @PostMapping("/api/lesson")
@@ -109,9 +113,10 @@ public class LessonApiController {
         return new ResponseEntity<>(new ResponseDto<>("클래스 구독순으로 정렬", lessonSubscribeListDtos), HttpStatus.OK);
     }
 
-    // @GetMapping("/api/category")
-    // public ResponseEntity<?> getLessonListBySort() {
-
-    // }
+    @GetMapping("/api/category")
+    public ResponseEntity<?> getLessonListBySort() {
+        LessonRepository.getLessonListBySort();
+        return new ResponseEntity<>(new ResponseDto<>("추천순 정렬 완료", null), HttpStatus.OK);
+    }
 
 }
