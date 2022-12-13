@@ -41,6 +41,7 @@ public class LessonApiController {
     private final LessonService lessonService;
 
     // 추후 role 체크해서 expert의 is_approval이 true인 사람들만 클래스를 생성할 수 있게 해야 한다.
+    // 추후 role 체크해서 expert의 is_approval이 true인 사람들만 클래스를 생성할 수 있게 해야 한다.
     // lesson 등록
     @PostMapping("/api/lesson")
     public ResponseEntity<?> saveLesson(@RequestBody LessonSaveReqDto lessonSaveReqDto,
