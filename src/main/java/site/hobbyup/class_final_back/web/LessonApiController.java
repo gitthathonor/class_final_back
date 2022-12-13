@@ -37,7 +37,7 @@ public class LessonApiController {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final LessonService lessonService;
 
-    // 추후 role 체크해서 master인 사람들만 클래스를 생성할 수 있게 해야 한다.
+    // 추후 role 체크해서 expert의 is_approval이 true인 사람들만 클래스를 생성할 수 있게 해야 한다.
     // lesson 등록
     @PostMapping("/api/lesson")
     public ResponseEntity<?> saveLesson(@RequestBody LessonSaveReqDto lessonSaveReqDto,
@@ -102,11 +102,16 @@ public class LessonApiController {
     public ResponseEntity<?> getLessonSubscribeList(@AuthenticationPrincipal LoginUser loginUser) {
         if (loginUser == null) {
             List<LessonSubscribeListDto> lessonSubscribeListDtos = lessonService.getLessonSubscribeListNotLogin();
-            return new ResponseEntity<>(new ResponseDto<>("클래스 상세보기 성공", lessonSubscribeListDtos), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseDto<>("클래스 구독순으로 정렬", lessonSubscribeListDtos), HttpStatus.OK);
         }
         List<LessonSubscribeListDto> lessonSubscribeListDtos = lessonService
                 .getLessonSubscribeList(loginUser.getUser().getId());
         return new ResponseEntity<>(new ResponseDto<>("클래스 구독순으로 정렬", lessonSubscribeListDtos), HttpStatus.OK);
     }
+
+    // @GetMapping("/api/category")
+    // public ResponseEntity<?> getLessonListBySort() {
+
+    // }
 
 }

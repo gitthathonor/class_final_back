@@ -22,6 +22,7 @@ import site.hobbyup.class_final_back.dto.user.UserRespDto.JoinRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.MyLessonListRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.MyPageRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.UserDeleteRespDto;
+import site.hobbyup.class_final_back.dto.user.UserRespDto.UserInitRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.UserUpdateRespDto;
 import site.hobbyup.class_final_back.service.UserService;
 
@@ -49,9 +50,11 @@ public class UserApiController {
         return new ResponseEntity<>(new ResponseDto<>("회원정보 수정완료", userUpdateRespDto), HttpStatus.OK);
     }
 
+    // 앱 세션의 유저정보 초기화
     @GetMapping("/api/user/session")
-    public String getSessionUser(@AuthenticationPrincipal LoginUser loginUser) {
-        return "role : " + loginUser.getUser().getRole();
+    public ResponseEntity<?> getInitSession(@AuthenticationPrincipal LoginUser loginUser) {
+        UserInitRespDto userInitRespDto = userService.getInitSession(loginUser.getUser().getId());
+        return new ResponseEntity<>(new ResponseDto<>("세션 초기화 완료", userInitRespDto), HttpStatus.OK);
     }
 
     @PutMapping("/api/user/{id}/delete")

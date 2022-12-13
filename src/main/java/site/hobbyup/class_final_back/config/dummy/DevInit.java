@@ -47,16 +47,16 @@ public class DevInit extends DummyEntity {
             Category game = categoryRepository.save(newCategory("게임"));
             Category others = categoryRepository.save(newCategory("기타"));
 
-            Lesson lesson1 = lessonRepository.save(newLesson("더미1", 10000L, ssar, beauty));
-            Lesson lesson2 = lessonRepository.save(newLesson("더미2", 20000L, ssar, sports));
-            Lesson lesson3 = lessonRepository.save(newLesson("더미3", 50000L, ssar, music));
-            Lesson lesson4 = lessonRepository.save(newLesson("더미4", 34500L, cos, music));
-            Lesson lesson5 = lessonRepository.save(newLesson("더미5", 2400L, cos, music));
-            Lesson lesson6 = lessonRepository.save(newLesson("더미6", 98000000L, cos, beauty));
-            Lesson lesson7 = lessonRepository.save(newLesson("더미7", 30000L, ssar, sports));
-            Lesson lesson8 = lessonRepository.save(newLesson("더미8", 40000L, ssar, sports));
-            Lesson lesson9 = lessonRepository.save(newLesson("더미9", 50000L, ssar, sports));
-            Lesson lesson10 = lessonRepository.save(newLesson("더미10", 70000L, ssar, sports));
+            Lesson lesson1 = lessonRepository.save(newLesson("더미1", 10000L, expert, beauty));
+            Lesson lesson2 = lessonRepository.save(newLesson("더미2", 20000L, expert, sports));
+            Lesson lesson3 = lessonRepository.save(newLesson("더미3", 50000L, expert, music));
+            Lesson lesson4 = lessonRepository.save(newLesson("더미4", 34500L, expert, music));
+            Lesson lesson5 = lessonRepository.save(newLesson("더미5", 2400L, expert, music));
+            Lesson lesson6 = lessonRepository.save(newLesson("더미6", 98000000L, expert, beauty));
+            Lesson lesson7 = lessonRepository.save(newLesson("더미7", 30000L, expert, sports));
+            Lesson lesson8 = lessonRepository.save(newLesson("더미8", 40000L, expert, sports));
+            Lesson lesson9 = lessonRepository.save(newLesson("더미9", 50000L, expert, sports));
+            Lesson lesson10 = lessonRepository.save(newLesson("더미10", 70000L, expert, sports));
 
             Review review1 = reviewRepository.save(newReivew("너무 좋은 강의입니다.", 4.5, ssar, lesson1));
             Review review2 = reviewRepository.save(newReivew("생각했던 것보다 더 좋네요!", 4.0, cos, lesson1));
@@ -76,8 +76,6 @@ public class DevInit extends DummyEntity {
             Subscribe subscribe7 = subscribeRepository.save(newSubscribe(cos, lesson10));
             Subscribe subscribe8 = subscribeRepository.save(newSubscribe(aa, lesson10));
             Subscribe subscribe9 = subscribeRepository.save(newSubscribe(aa, lesson9));
-            Subscribe subscribe10 = subscribeRepository.save(newSubscribe(cos, lesson9));
-            Subscribe subscribe11 = subscribeRepository.save(newSubscribe(ssar, lesson8));
 
         };
 

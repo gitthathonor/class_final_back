@@ -13,10 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import site.hobbyup.class_final_back.config.auth.LoginUser;
-import site.hobbyup.class_final_back.config.enums.DayEnum;
 import site.hobbyup.class_final_back.config.exception.CustomApiException;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
+import site.hobbyup.class_final_back.domain.expert.Expert;
+import site.hobbyup.class_final_back.domain.expert.ExpertRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
 import site.hobbyup.class_final_back.domain.profile.Profile;
@@ -28,7 +29,6 @@ import site.hobbyup.class_final_back.domain.subscribe.SubscribeRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
-import site.hobbyup.class_final_back.dto.lesson.LessonSubscribeListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonUpdateReqDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
@@ -36,6 +36,7 @@ import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDt
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonLatestListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonUpdateRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonSubscribeListDto;
 import site.hobbyup.class_final_back.util.DecodeUtil;
 
 @RequiredArgsConstructor
@@ -49,6 +50,7 @@ public class LessonService {
   private final ReviewRepository reviewRepository;
   private final ProfileRepository profileRepository;
   private final SubscribeRepository subscribeRepository;
+  private final ExpertRepository expertRepository;
 
   // 클래스 생성하기
   @Transactional
@@ -66,8 +68,17 @@ public class LessonService {
     User userPS = userRepository.findById(loginUser.getUser().getId())
         .orElseThrow(() -> new CustomApiException("회원가입이 되지 않은 유저입니다.", HttpStatus.BAD_REQUEST));
 
+    // user정보를 통해서 expert 정보를 영속화
+    Expert expertPS = expertRepository.findByUserId(userPS.getId())
+        .orElseThrow(() -> new CustomApiException("전문가 등록이 필요합니다.", HttpStatus.BAD_REQUEST));
+
+    // 레슨 등록 권한이 true인지 확인
+    if (!expertPS.isApproval()) {
+      throw new CustomApiException("레슨 등록할 권한이 없습니다.", HttpStatus.FORBIDDEN);
+    }
+
     // toEntity로 엔티티화 시킨 후에 저장하고 json(ResponseDto) 반환
-    Lesson lessonPS = lessonRepository.save(lessonSaveReqDto.toEntity(categoryPS, userPS));
+    Lesson lessonPS = lessonRepository.save(lessonSaveReqDto.toEntity(categoryPS, expertPS));
 
     // possibleDays 파싱
     List<String> dayList = new ArrayList<>();
@@ -115,11 +126,9 @@ public class LessonService {
       }
     }
 
-    Optional<Profile> profileOP = profileRepository.findByUserId(lessonPS.getUser().getId());
-    if (profileOP.isEmpty()) {
-      throw new CustomApiException("프로필을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST);
-    }
-    log.debug("디버그 : " + profileOP.get());
+    // 프로필 정보 영속화
+    Profile profilePS = profileRepository.findByUserId(lessonPS.getExpert().getUser().getId())
+        .orElseThrow(() -> new CustomApiException("프로필을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST));
 
     // 평균 리뷰 구하기 + 리뷰 리스트 뽑기
     List<Review> reviewListPS = reviewRepository.findAllByLessonId(lessonPS.getId());
@@ -136,7 +145,7 @@ public class LessonService {
       isSubscribed = true;
     }
 
-    LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, dayList, profileOP.get(), avgGrade,
+    LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, dayList, profilePS, avgGrade,
         isSubscribed,
         reviewListPS);
     return lessonDetailRespDto;
@@ -160,7 +169,8 @@ public class LessonService {
       }
     }
 
-    Optional<Profile> profileOP = profileRepository.findByUserId(lessonPS.getUser().getId());
+    // 프로필 정보 영속화
+    Optional<Profile> profileOP = profileRepository.findByUserId(lessonPS.getExpert().getUser().getId());
     if (profileOP.isEmpty()) {
       throw new CustomApiException("프로필을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST);
     }

@@ -1,6 +1,7 @@
 package site.hobbyup.class_final_back.dto.user;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -133,7 +134,7 @@ public class UserRespDto {
 
             public MyLessonRespDto(Lesson lesson) {
                 this.name = lesson.getName();
-                this.user = new UserDto(lesson.getUser());
+                this.user = new UserDto(lesson.getExpert().getUser());
                 this.price = lesson.getPrice();
                 this.deadline = lesson.getDeadline();
                 this.photo = lesson.getPhoto();
@@ -160,6 +161,23 @@ public class UserRespDto {
         public UserDeleteRespDto(User user) {
             this.username = user.getUsername();
             this.isDisabled = user.isDisabled();
+        }
+
+    }
+
+    @Setter
+    @Getter
+    public static class UserInitRespDto {
+        private Long userId;
+        private String username;
+        private String role;
+        private String createdAt;
+
+        public UserInitRespDto(User user) {
+            this.userId = user.getId();
+            this.username = user.getUsername();
+            this.role = user.getRole().getValue();
+            this.createdAt = user.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         }
 
     }
