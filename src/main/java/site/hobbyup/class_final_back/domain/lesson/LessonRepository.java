@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import site.hobbyup.class_final_back.dto.lesson.LessonCategoryListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonSubscribeListDto;
 
@@ -60,7 +61,12 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
                         + " ORDER BY s2.sub_count DESC", nativeQuery = true)
         List<LessonSubscribeListDto> findAllBySubscribeNotLogin();
 
-        @Query("select l from Lesson join fetch ")
-        List<Lesson> findAllBySort();
+        @Query(value = "SELECT l.photo as lessonPhoto, l.name AS lessonName, l.price AS lessonPrice, (case when r.count IS NULL then 0 ELSE r.count END) AS totalReview, (case when r.grade IS NULL then 0 ELSE r.grade END) AS avgGrade, (case when s.lesson_id IS NOT NULL then true ELSE false END) AS subscribed"
+                        + " FROM lesson l LEFT OUTER JOIN (SELECT AVG(grade) AS grade, COUNT(*) AS count, lesson_id FROM review GROUP BY lesson_id) r"
+                        + " ON l.id = r.lesson_id"
+                        + " LEFT OUTER JOIN (SELECT lesson_id FROM subscribe WHERE user_id = :userId) s"
+                        + " ON l.id = s.lesson_id"
+                        + " ORDER BY l.created_at DESC LIMIT 12")
+        List<LessonCategoryListDto> findAllByRecommand();
 
 }

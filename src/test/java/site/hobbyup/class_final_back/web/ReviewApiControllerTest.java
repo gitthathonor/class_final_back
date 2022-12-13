@@ -1,5 +1,6 @@
 package site.hobbyup.class_final_back.web;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -28,6 +29,8 @@ import site.hobbyup.class_final_back.domain.expert.Expert;
 import site.hobbyup.class_final_back.domain.expert.ExpertRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
+import site.hobbyup.class_final_back.domain.review.Review;
+import site.hobbyup.class_final_back.domain.review.ReviewRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.review.ReviewReqDto.ReviewSaveReqDto;
@@ -59,6 +62,9 @@ public class ReviewApiControllerTest extends DummyEntity {
   private ExpertRepository expertRepository;
 
   @Autowired
+  private ReviewRepository reviewRepository;
+
+  @Autowired
   private EntityManager em;
 
   @BeforeEach
@@ -88,6 +94,13 @@ public class ReviewApiControllerTest extends DummyEntity {
     Lesson lesson8 = lessonRepository.save(newLesson("더미8", 40000L, expert1, sports));
     Lesson lesson9 = lessonRepository.save(newLesson("더미9", 50000L, expert1, sports));
     Lesson lesson10 = lessonRepository.save(newLesson("더미10", 70000L, expert1, sports));
+
+    Review review1 = reviewRepository.save(newReivew("너무 좋은 강의입니다.", 4.5, ssar, lesson1));
+    Review review2 = reviewRepository.save(newReivew("생각했던 것보다 더 좋네요!", 4.0, cos, lesson1));
+    Review review3 = reviewRepository.save(newReivew("별로네요", 3.0, ssar, lesson2));
+    Review review4 = reviewRepository.save(newReivew("도대체 이 강의 하시는 이유가 뭐죠?", 2.5, ssar, lesson3));
+    Review review5 = reviewRepository.save(newReivew("피곤하다", 2.0, cos, lesson2));
+    Review review6 = reviewRepository.save(newReivew("이정도 퀄리티면 좋은 거 같아요, 다만 목소리가...", 3.5, cos, lesson8));
   }
 
   @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -115,5 +128,18 @@ public class ReviewApiControllerTest extends DummyEntity {
     resultActions.andExpect(jsonPath("$.data.grade").value(4.5));
 
   }
+
+  // @Test
+  // public void getReviews_test() throws Exception {
+  // // when
+  // ResultActions resultActions = mvc
+  // .perform(get("/api/review/test"));
+  // String responseBody =
+  // resultActions.andReturn().getResponse().getContentAsString();
+  // System.out.println("테스트 : " + responseBody);
+
+  // // then
+  // resultActions.andExpect(status().isOk());
+  // }
 
 }

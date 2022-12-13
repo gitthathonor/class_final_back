@@ -28,6 +28,7 @@ import site.hobbyup.class_final_back.domain.subscribe.Subscribe;
 import site.hobbyup.class_final_back.domain.subscribe.SubscribeRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
+import site.hobbyup.class_final_back.dto.lesson.LessonCategoryListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonUpdateReqDto;
@@ -235,6 +236,7 @@ public class LessonService {
     return lessonRepository.findAllWithReviewNotLogin();
   }
 
+  // 로그인 구독순 리스트
   public List<LessonSubscribeListDto> getLessonSubscribeList(Long userId) {
     return lessonRepository.findAllBySubscribe(userId);
   }
@@ -244,8 +246,9 @@ public class LessonService {
     return lessonRepository.findAllBySubscribeNotLogin();
   }
 
-  // 클래스 리스트 정렬
-  public List<Lesson> getLessonListBySort() {
+  // 추천순 클래스 정렬
+  public List<LessonCategoryListDto> getLessonListByRecommand() {
     return null;
   }
+
 }

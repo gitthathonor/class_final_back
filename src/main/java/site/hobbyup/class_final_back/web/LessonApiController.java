@@ -115,8 +115,9 @@ public class LessonApiController {
 
     @GetMapping("/api/category")
     public ResponseEntity<?> getLessonListBySort() {
-        LessonRepository.getLessonListBySort();
-        return new ResponseEntity<>(new ResponseDto<>("추천순 정렬 완료", null), HttpStatus.OK);
+        lessonService.getLessonListBySort();
+        return new ResponseEntity<>(new ResponseDto<>("추천순 정렬 완료", null),
+                HttpStatus.OK);
     }
 
 }

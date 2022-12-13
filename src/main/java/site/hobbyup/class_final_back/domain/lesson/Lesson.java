@@ -1,8 +1,6 @@
 package site.hobbyup.class_final_back.domain.lesson;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.ColumnDefault;
@@ -25,7 +22,6 @@ import lombok.NoArgsConstructor;
 import site.hobbyup.class_final_back.domain.AuditingTime;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.expert.Expert;
-import site.hobbyup.class_final_back.domain.review.Review;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonUpdateReqDto;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -42,12 +38,13 @@ public class Lesson extends AuditingTime {
   @Column(nullable = false, length = 100)
   private String name;
 
-  @Column(nullable = false)
+  @Column(nullable = true)
   private String photo;
 
   @Column(nullable = false)
   private Long price;
 
+  @Column(nullable = true)
   private String place;
 
   @ColumnDefault(value = "0")
@@ -65,6 +62,7 @@ public class Lesson extends AuditingTime {
   @Column(columnDefinition = "LONGTEXT")
   private String policy;
 
+  @Column(nullable = true)
   private Timestamp deadline;
 
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
@@ -73,8 +71,8 @@ public class Lesson extends AuditingTime {
   @ManyToOne(fetch = FetchType.LAZY)
   private Category category;
 
-  @OneToMany(mappedBy = "lesson", fetch = FetchType.LAZY)
-  private List<Review> reviewList = new ArrayList<>();
+  // @OneToMany(mappedBy = "lesson", fetch = FetchType.LAZY)
+  // private List<Review> reviews = new ArrayList<>();
 
   @Builder
   public Lesson(Long id, String name, String photo, Long price, String place, Long lessonTime, Long lessonCount,

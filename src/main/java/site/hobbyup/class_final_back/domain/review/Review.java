@@ -32,7 +32,7 @@ public class Review extends AuditingTime {
   private Double grade;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JsonIgnore
+  // @JsonIgnore
   private Lesson lesson;
 
   @ManyToOne(fetch = FetchType.LAZY)
