@@ -25,7 +25,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
         @Query(value = "SELECT * from lesson l ORDER BY created_at desc LIMIT 12", nativeQuery = true)
         List<Lesson> findAllLatest();
 
-        @Query(value = "SELECT l.photo as lessonPhoto, l.name AS lessonName, l.price AS lessonPrice, (case when r.count IS NULL then 0 ELSE r.count END) AS totalReview, (case when r.grade IS NULL then 0 ELSE r.grade END) AS avgGrade, (case when s.lesson_id IS NOT NULL then true ELSE false END) AS subscribed"
+        @Query(value = "SELECT l.id as lessonId, l.photo as lessonPhoto, l.name AS lessonName, l.price AS lessonPrice, (case when r.count IS NULL then 0 ELSE r.count END) AS totalReview, (case when r.grade IS NULL then 0 ELSE r.grade END) AS avgGrade, (case when s.lesson_id IS NOT NULL then true ELSE false END) AS subscribed"
                         + " FROM lesson l LEFT OUTER JOIN (SELECT AVG(grade) AS grade, COUNT(*) AS count, lesson_id FROM review GROUP BY lesson_id) r"
                         + " ON l.id = r.lesson_id"
                         + " LEFT OUTER JOIN (SELECT lesson_id FROM subscribe WHERE user_id = :userId) s"
@@ -33,7 +33,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
                         + " ORDER BY l.created_at DESC LIMIT 12", nativeQuery = true)
         List<LessonCommonListDto> findAllWithReview(@Param("userId") Long userId);
 
-        @Query(value = "SELECT l.photo as lessonPhoto, l.name AS lessonName, l.price AS lessonPrice, (case when r.count IS NULL then 0 ELSE r.count END) AS totalReview, (case when r.grade IS NULL then 0 ELSE r.grade END) AS avgGrade, (case when s.lesson_id IS NOT NULL then true ELSE false END) AS subscribed"
+        @Query(value = "SELECT l.id as lessonId, l.photo as lessonPhoto, l.name AS lessonName, l.price AS lessonPrice, (case when r.count IS NULL then 0 ELSE r.count END) AS totalReview, (case when r.grade IS NULL then 0 ELSE r.grade END) AS avgGrade, (case when s.lesson_id IS NOT NULL then true ELSE false END) AS subscribed"
                         + " FROM lesson l LEFT OUTER JOIN (SELECT AVG(grade) AS grade, COUNT(*) AS count, lesson_id FROM review GROUP BY lesson_id) r"
                         + " ON l.id = r.lesson_id"
                         + " LEFT OUTER JOIN (SELECT lesson_id FROM subscribe WHERE user_id is null) s"
@@ -63,9 +63,9 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
         @Query(value = "select l.name as lessonName,"
                         + " l.price as lessonPrice,"
-                        + " COUNT(r.id) AS totalReview,"
+                        + " COUNT(r.id) AS totalReviews,"
                         + " (case when AVG(r.grade) IS null then 0.0 ELSE AVG(r.grade) END) AS avgGrade,"
-                        + " (case when s.lesson_id IS NOT NULL then true ELSE false END) AS isSubscribed,"
+                        + " (case when s.lesson_id IS NOT NULL then true ELSE false END) AS subscribed,"
                         + " (case when i.category_id IS NOT NULL then true ELSE false END) AS recommand,"
                         + " (case when s2.count IS null then 0 ELSE s2.count END) AS ranking,"
                         + " l.created_at AS recent"
@@ -78,8 +78,8 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
                         + " ON l.id = s2.lesson_id"
                         + " WHERE l.category_id = :categoryId"
                         + " GROUP BY l.id"
-                        + " ORDER BY :sorting DESC;", nativeQuery = true)
+                        + " ORDER BY recommand DESC;", nativeQuery = true)
         List<LessonSortListRespDto> findAllByCategoryWithSort(@Param("userId") Long userId,
-                        @Param("categoryId") Long categoryId, @Param("sorting") String sorting);
+                        @Param("categoryId") Long categoryId);
 
 }

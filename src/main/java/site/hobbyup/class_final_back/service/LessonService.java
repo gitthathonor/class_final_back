@@ -247,14 +247,14 @@ public class LessonService {
   }
 
   // 카테고리별 리스트 + 각각 정렬까지
-  public List<LessonSortListRespDto> getLessonListByCategoryWithSort(Long userId, Long categoryId, String sorting) {
+  public List<LessonSortListRespDto> getLessonListByCategoryWithSort(Long userId, Long categoryId) {
 
     // 회원 여부 체크
     User userPS = userRepository.findById(userId)
         .orElseThrow(() -> new CustomApiException("권한이 없습니다.", HttpStatus.BAD_REQUEST));
 
     List<LessonSortListRespDto> lessonSortListRespDtoList = lessonRepository.findAllByCategoryWithSort(userId,
-        categoryId, sorting);
+        categoryId);
     return lessonSortListRespDtoList;
   }
 
