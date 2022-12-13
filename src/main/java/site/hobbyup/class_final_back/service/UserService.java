@@ -189,4 +189,5 @@ public class UserService {
                 .orElseThrow(() -> new CustomApiException("유저 정보가 없습니다.", HttpStatus.BAD_REQUEST));
         return new UserInitRespDto(userPS);
     }
+
 }

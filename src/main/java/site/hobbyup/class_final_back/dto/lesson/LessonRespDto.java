@@ -10,6 +10,7 @@ import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.review.Review;
+import site.hobbyup.class_final_back.domain.subscribe.Subscribe;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto.LessonDto;
 
 public class LessonRespDto {
@@ -195,4 +196,5 @@ public class LessonRespDto {
       this.username = lesson.getExpert().getUser().getUsername();
     }
   }
+
 }

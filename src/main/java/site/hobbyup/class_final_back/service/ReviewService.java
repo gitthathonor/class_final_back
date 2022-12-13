@@ -1,5 +1,7 @@
 package site.hobbyup.class_final_back.service;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import site.hobbyup.class_final_back.config.exception.CustomApiException;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
-import site.hobbyup.class_final_back.domain.payment.Payment;
 import site.hobbyup.class_final_back.domain.payment.PaymentRepository;
 import site.hobbyup.class_final_back.domain.review.Review;
 import site.hobbyup.class_final_back.domain.review.ReviewRepository;
@@ -43,6 +44,11 @@ public class ReviewService {
     Review review = reviewSaveReqDto.toEntity(userPS, lessonPS);
     Review reviewPS = reviewRepository.save(review);
     return new ReviewSaveRespDto(reviewPS);
+  }
+
+  public List<Review> getReviews() {
+    List<Review> reviewListPS = reviewRepository.findAvgAndTotalByLesson();
+    return reviewListPS;
   }
 
 }

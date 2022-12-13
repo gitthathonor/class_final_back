@@ -38,12 +38,13 @@ public class Lesson extends AuditingTime {
   @Column(nullable = false, length = 100)
   private String name;
 
-  @Column(nullable = false)
+  @Column(nullable = true)
   private String photo;
 
   @Column(nullable = false)
   private Long price;
 
+  @Column(nullable = true)
   private String place;
 
   @ColumnDefault(value = "0")
@@ -61,6 +62,7 @@ public class Lesson extends AuditingTime {
   @Column(columnDefinition = "LONGTEXT")
   private String policy;
 
+  @Column(nullable = true)
   private Timestamp deadline;
 
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
@@ -68,6 +70,9 @@ public class Lesson extends AuditingTime {
 
   @ManyToOne(fetch = FetchType.LAZY)
   private Category category;
+
+  // @OneToMany(mappedBy = "lesson", fetch = FetchType.LAZY)
+  // private List<Review> reviews = new ArrayList<>();
 
   @Builder
   public Lesson(Long id, String name, String photo, Long price, String place, Long lessonTime, Long lessonCount,

@@ -36,6 +36,7 @@ import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDt
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonLatestListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonUpdateRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonSortListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonSubscribeListDto;
 import site.hobbyup.class_final_back.util.DecodeUtil;
 
@@ -235,6 +236,7 @@ public class LessonService {
     return lessonRepository.findAllWithReviewNotLogin();
   }
 
+  // 로그인 구독순 리스트
   public List<LessonSubscribeListDto> getLessonSubscribeList(Long userId) {
     return lessonRepository.findAllBySubscribe(userId);
   }
@@ -243,4 +245,17 @@ public class LessonService {
   public List<LessonSubscribeListDto> getLessonSubscribeListNotLogin() {
     return lessonRepository.findAllBySubscribeNotLogin();
   }
+
+  // 카테고리별 리스트 + 각각 정렬까지
+  public List<LessonSortListRespDto> getLessonListByCategoryWithSort(Long userId, Long categoryId, String sorting) {
+
+    // 회원 여부 체크
+    User userPS = userRepository.findById(userId)
+        .orElseThrow(() -> new CustomApiException("권한이 없습니다.", HttpStatus.BAD_REQUEST));
+
+    List<LessonSortListRespDto> lessonSortListRespDtoList = lessonRepository.findAllByCategoryWithSort(userId,
+        categoryId, sorting);
+    return lessonSortListRespDtoList;
+  }
+
 }
