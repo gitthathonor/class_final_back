@@ -60,4 +60,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
                         + " ORDER BY s2.sub_count DESC", nativeQuery = true)
         List<LessonSubscribeListDto> findAllBySubscribeNotLogin();
 
+        @Query("select l from Lesson join fetch ")
+        List<Lesson> findAllBySort();
+
 }

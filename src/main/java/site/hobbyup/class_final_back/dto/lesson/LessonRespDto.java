@@ -10,6 +10,7 @@ import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.review.Review;
+import site.hobbyup.class_final_back.domain.subscribe.Subscribe;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto.LessonDto;
 
 public class LessonRespDto {
@@ -194,5 +195,66 @@ public class LessonRespDto {
       this.expertId = lesson.getExpert().getId();
       this.username = lesson.getExpert().getUser().getUsername();
     }
+  }
+
+  @Setter
+  @Getter
+  public static class LessonSortListRespDto {
+    private List<LessonDto> lessonDtoList;
+    private List<ReviewDto> reviewDtoList;
+    private List<SubscribeDto> subscribeDtoList;
+
+    public LessonSortListRespDto(
+        List<Lesson> lessonList,
+        List<Review> reviewList, List<Subscribe> subscribeList) {
+      this.lessonDtoList = lessonList.stream().map(
+          (lesson) -> new LessonDto(lesson))
+          .collect(Collectors.toList());
+      this.reviewDtoList = reviewList.stream().map(
+          (review) -> new ReviewDto(review))
+          .collect(Collectors.toList());
+      ;
+      this.subscribeDtoList = subscribeList.stream().map(
+          (subscribe) -> new SubscribeDto(subscribe))
+          .collect(Collectors.toList());
+      ;
+    }
+
+    @Setter
+    @Getter
+    public class LessonDto {
+      private String lessonPhoto;
+      private String lessonName;
+      private Long lessonPrice;
+
+      public LessonDto(Lesson lesson) {
+        this.lessonPhoto = lesson.getPhoto();
+        this.lessonName = lesson.getName();
+        this.lessonPrice = lesson.getPrice();
+      }
+    }
+
+    @Setter
+    @Getter
+    public class ReviewDto {
+      private Double avgGrade;
+      private Long reviewCount;
+
+      public ReviewDto(Review review) {
+        this.avgGrade = review.getGrade();
+        this.reviewCount = review.getId();
+      }
+    }
+
+    @Setter
+    @Getter
+    public class SubscribeDto {
+      private Long userId;
+
+      public SubscribeDto(Subscribe subscribe) {
+        this.userId = subscribe.getUser().getId();
+      }
+    }
+
   }
 }

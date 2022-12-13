@@ -243,4 +243,9 @@ public class LessonService {
   public List<LessonSubscribeListDto> getLessonSubscribeListNotLogin() {
     return lessonRepository.findAllBySubscribeNotLogin();
   }
+
+  // 클래스 리스트 정렬
+  public List<Lesson> getLessonListBySort() {
+    return null;
+  }
 }
