@@ -8,6 +8,7 @@ import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.coupon.Coupon;
 import site.hobbyup.class_final_back.domain.expert.Expert;
+import site.hobbyup.class_final_back.domain.interest.Interest;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.payment.Payment;
 import site.hobbyup.class_final_back.domain.paymentType.PaymentType;
@@ -118,6 +119,13 @@ public class DummyEntity {
                 .totalLesson(0L)
                 .isApproval(true)
                 .user(user)
+                .build();
+    }
+
+    protected Interest newInterest(User user, Category category) {
+        return Interest.builder()
+                .user(user)
+                .category(category)
                 .build();
     }
 

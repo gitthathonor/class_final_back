@@ -28,7 +28,6 @@ import site.hobbyup.class_final_back.domain.subscribe.Subscribe;
 import site.hobbyup.class_final_back.domain.subscribe.SubscribeRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
-import site.hobbyup.class_final_back.dto.lesson.LessonCategoryListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonUpdateReqDto;
@@ -37,6 +36,7 @@ import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDt
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonLatestListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonUpdateRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonSortListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonSubscribeListDto;
 import site.hobbyup.class_final_back.util.DecodeUtil;
 
@@ -246,9 +246,16 @@ public class LessonService {
     return lessonRepository.findAllBySubscribeNotLogin();
   }
 
-  // 추천순 클래스 정렬
-  public List<LessonCategoryListDto> getLessonListByRecommand() {
-    return null;
+  // 카테고리별 리스트 + 각각 정렬까지
+  public List<LessonSortListRespDto> getLessonListByCategoryWithSort(Long userId, Long categoryId, String sorting) {
+
+    // 회원 여부 체크
+    User userPS = userRepository.findById(userId)
+        .orElseThrow(() -> new CustomApiException("권한이 없습니다.", HttpStatus.BAD_REQUEST));
+
+    List<LessonSortListRespDto> lessonSortListRespDtoList = lessonRepository.findAllByCategoryWithSort(userId,
+        categoryId, sorting);
+    return lessonSortListRespDtoList;
   }
 
 }

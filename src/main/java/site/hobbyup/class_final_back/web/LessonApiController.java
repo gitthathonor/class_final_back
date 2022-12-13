@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.web.server.ServerHttpSecurity.HttpsRedirectSpec;
@@ -24,6 +25,7 @@ import site.hobbyup.class_final_back.config.auth.LoginUser;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
 import site.hobbyup.class_final_back.dto.ResponseDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonSortListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonSubscribeListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonUpdateReqDto;
@@ -52,7 +54,7 @@ public class LessonApiController {
     }
 
     // lesson 리스트 보기(쿼리스트링으로 예산별 필터까지 적용)
-    @GetMapping("/api/category/{categoryId}")
+    @GetMapping("/api/category/{categoryId}/test")
     public ResponseEntity<?> getLessonCategoryList(@PathVariable Long categoryId,
             @RequestParam(name = "min_price") Long minPrice, @RequestParam(name = "max_price") Long maxPrice) {
         LessonCategoryListRespDto lessonCategoryListRespDto = lessonService.getLessonCategoryList(categoryId, minPrice,
@@ -113,11 +115,15 @@ public class LessonApiController {
         return new ResponseEntity<>(new ResponseDto<>("클래스 구독순으로 정렬", lessonSubscribeListDtos), HttpStatus.OK);
     }
 
-    @GetMapping("/api/category")
-    public ResponseEntity<?> getLessonListBySort() {
-        lessonService.getLessonListBySort();
-        return new ResponseEntity<>(new ResponseDto<>("추천순 정렬 완료", null),
-                HttpStatus.OK);
-    }
+    // @GetMapping("/api/category/{categoryId}")
+    // public ResponseEntity<?>
+    // getLessonListByCategoryWithSort(@AuthenticationPrincipal LoginUser loginUser,
+    // @PathVariable Long categoryId) {
+    // List<LessonSortListRespDto> lessonSortListRespDtoList = lessonService
+    // .getLessonListByCategoryWithSort(loginUser.getUser().getId(), categoryId);
+    // return new ResponseEntity<>(new ResponseDto<>("추천순 정렬 완료",
+    // lessonSortListRespDtoList),
+    // HttpStatus.OK);
+    // }
 
 }

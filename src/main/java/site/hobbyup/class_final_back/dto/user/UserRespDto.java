@@ -172,14 +172,17 @@ public class UserRespDto {
         private Long id;
         private String username;
         private String role;
+        private String email;
         private String createdAt;
 
         public UserInitRespDto(User user) {
             this.id = user.getId();
             this.username = user.getUsername();
+            this.email = user.getEmail();
             this.role = user.getRole().getValue();
             this.createdAt = user.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         }
 
     }
+
 }

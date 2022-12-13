@@ -1,6 +1,6 @@
 package site.hobbyup.class_final_back.dto.lesson;
 
-public interface LessonCategoryListDto {
+public interface LessonSortListRespDto {
   String getLessonName();
 
   Long getLessonPrice();
@@ -10,5 +10,11 @@ public interface LessonCategoryListDto {
   Long getTotalReviews();
 
   boolean isSubscribed();
+
+  Long getRecommand();
+
+  Long getRanking();
+
+  String getRecent();
 
 }

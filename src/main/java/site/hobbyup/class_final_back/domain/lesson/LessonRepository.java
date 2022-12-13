@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import site.hobbyup.class_final_back.dto.lesson.LessonCategoryListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonSortListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonSubscribeListDto;
 
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
@@ -61,12 +61,25 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
                         + " ORDER BY s2.sub_count DESC", nativeQuery = true)
         List<LessonSubscribeListDto> findAllBySubscribeNotLogin();
 
-        @Query(value = "SELECT l.photo as lessonPhoto, l.name AS lessonName, l.price AS lessonPrice, (case when r.count IS NULL then 0 ELSE r.count END) AS totalReview, (case when r.grade IS NULL then 0 ELSE r.grade END) AS avgGrade, (case when s.lesson_id IS NOT NULL then true ELSE false END) AS subscribed"
-                        + " FROM lesson l LEFT OUTER JOIN (SELECT AVG(grade) AS grade, COUNT(*) AS count, lesson_id FROM review GROUP BY lesson_id) r"
-                        + " ON l.id = r.lesson_id"
+        @Query(value = "select l.name as lessonName,"
+                        + " l.price as lessonPrice,"
+                        + " COUNT(r.id) AS totalReview,"
+                        + " (case when AVG(r.grade) IS null then 0.0 ELSE AVG(r.grade) END) AS avgGrade,"
+                        + " (case when s.lesson_id IS NOT NULL then true ELSE false END) AS isSubscribed,"
+                        + " (case when i.category_id IS NOT NULL then true ELSE false END) AS recommand,"
+                        + " (case when s2.count IS null then 0 ELSE s2.count END) AS ranking,"
+                        + " l.created_at AS recent"
+                        + " FROM lesson l LEFT OUTER JOIN review r ON l.id = r.lesson_id"
                         + " LEFT OUTER JOIN (SELECT lesson_id FROM subscribe WHERE user_id = :userId) s"
                         + " ON l.id = s.lesson_id"
-                        + " ORDER BY l.created_at DESC LIMIT 12")
-        List<LessonCategoryListDto> findAllByRecommand();
+                        + " LEFT OUTER JOIN (SELECT category_id FROM interest WHERE user_id = :userId) i"
+                        + " ON l.category_id = i.category_id"
+                        + " LEFT OUTER JOIN (SELECT COUNT(*) count, lesson_id FROM subscribe GROUP BY lesson_id) s2"
+                        + " ON l.id = s2.lesson_id"
+                        + " WHERE l.category_id = :categoryId"
+                        + " GROUP BY l.id"
+                        + " ORDER BY :sorting DESC;", nativeQuery = true)
+        List<LessonSortListRespDto> findAllByCategoryWithSort(@Param("userId") Long userId,
+                        @Param("categoryId") Long categoryId, @Param("sorting") String sorting);
 
 }

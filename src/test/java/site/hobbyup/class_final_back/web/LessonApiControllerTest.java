@@ -30,6 +30,8 @@ import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
 import site.hobbyup.class_final_back.domain.expert.Expert;
 import site.hobbyup.class_final_back.domain.expert.ExpertRepository;
+import site.hobbyup.class_final_back.domain.interest.Interest;
+import site.hobbyup.class_final_back.domain.interest.InterestRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
 import site.hobbyup.class_final_back.domain.profile.Profile;
@@ -80,16 +82,13 @@ public class LessonApiControllerTest extends DummyEntity {
   private ExpertRepository expertRepository;
 
   @Autowired
+  private InterestRepository interestRepository;
+
+  @Autowired
   private EntityManager em;
 
   @BeforeEach
   public void setUp() {
-    User ssar = userRepository.save(newUser("ssar"));
-    User cos = userRepository.save(newUser("cos"));
-    User hong = userRepository.save(newUser("expert"));
-
-    Expert expert1 = expertRepository.save(newExpert(hong));
-
     Category beauty = categoryRepository.save(newCategory("뷰티"));
     Category sports = categoryRepository.save(newCategory("스포츠"));
     Category dance = categoryRepository.save(newCategory("댄스"));
@@ -98,6 +97,16 @@ public class LessonApiControllerTest extends DummyEntity {
     Category crafts = categoryRepository.save(newCategory("공예"));
     Category game = categoryRepository.save(newCategory("게임"));
     Category others = categoryRepository.save(newCategory("기타"));
+
+    User ssar = userRepository.save(newUser("ssar"));
+    User cos = userRepository.save(newUser("cos"));
+    User hong = userRepository.save(newUser("expert"));
+
+    Interest ssarInterest = interestRepository.save(newInterest(ssar, beauty));
+    Interest ssarInterest2 = interestRepository.save(newInterest(ssar, sports));
+    Interest ssarInterest3 = interestRepository.save(newInterest(ssar, dance));
+
+    Expert expert1 = expertRepository.save(newExpert(hong));
 
     Profile ssarProfile = profileRepository
         .save(newProfile("", "안녕하세요 부산에서 가장 뷰티한 강사 ssar입니다.", "부산", "미용사", "5년", "박준 뷰티랩 양정점 원장 10년", ssar));
@@ -176,7 +185,7 @@ public class LessonApiControllerTest extends DummyEntity {
 
     // when
     ResultActions resultActions = mvc
-        .perform(get("/api/category/" + categoryId + "?min_price=" + minPrice + "&max_price=" + maxPrice));
+        .perform(get("/api/category/test/" + categoryId + "?min_price=" + minPrice + "&max_price=" + maxPrice));
     String responseBody = resultActions.andReturn().getResponse().getContentAsString();
     System.out.println("테스트 : " + responseBody);
 
@@ -277,6 +286,26 @@ public class LessonApiControllerTest extends DummyEntity {
     resultActions.andExpect(jsonPath("$.data.categoryName").value("뷰티"));
     resultActions.andExpect(jsonPath("$.data.expertId").value(1L));
     resultActions.andExpect(jsonPath("$.data.id").value(1L));
+
+  }
+
+  @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @Test
+  public void getLessonListByCategoryWithSort_test() throws Exception {
+    // given
+    Long categoryId = 1L;
+    String sorting = "recommand";
+
+    // when
+    ResultActions resultActions = mvc
+        .perform(get("/api/category/" + categoryId + "?sorting=" + sorting));
+    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+    System.out.println("테스트 : " + responseBody);
+
+    // then
+    resultActions.andExpect(status().isOk());
+    // resultActions.andExpect(jsonPath("$.data.lessonName").value("더미1"));
+    // resultActions.andExpect(jsonPath("$.data.").value("생각했던 것보다 더 좋네요!"));
 
   }
 
