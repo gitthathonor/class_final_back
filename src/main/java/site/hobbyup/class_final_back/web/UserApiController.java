@@ -51,7 +51,7 @@ public class UserApiController {
     }
 
     // 앱 세션의 유저정보 초기화
-    @GetMapping("/api/user/session")
+    @PostMapping("/api/user/session")
     public ResponseEntity<?> getInitSession(@AuthenticationPrincipal LoginUser loginUser) {
         UserInitRespDto userInitRespDto = userService.getInitSession(loginUser.getUser().getId());
         return new ResponseEntity<>(new ResponseDto<>("세션 초기화 완료", userInitRespDto), HttpStatus.OK);

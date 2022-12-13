@@ -168,13 +168,13 @@ public class UserRespDto {
     @Setter
     @Getter
     public static class UserInitRespDto {
-        private Long userId;
+        private Long id;
         private String username;
         private String role;
         private String createdAt;
 
         public UserInitRespDto(User user) {
-            this.userId = user.getId();
+            this.id = user.getId();
             this.username = user.getUsername();
             this.role = user.getRole().getValue();
             this.createdAt = user.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
