@@ -11,7 +11,7 @@ public interface LessonSortListRespDto {
 
   boolean isSubscribed();
 
-  Long getRecommand();
+  boolean getRecommand();
 
   Long getRanking();
 

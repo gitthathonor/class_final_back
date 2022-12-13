@@ -124,6 +124,16 @@ public class LessonApiControllerTest extends DummyEntity {
     Lesson lesson8 = lessonRepository.save(newLesson("더미8", 40000L, expert1, sports));
     Lesson lesson9 = lessonRepository.save(newLesson("더미9", 50000L, expert1, sports));
     Lesson lesson10 = lessonRepository.save(newLesson("더미10", 70000L, expert1, sports));
+    // Lesson lesson11 = lessonRepository.save(newLesson("더미11", 80000L, expert1,
+    // beauty));
+    // Lesson lesson12 = lessonRepository.save(newLesson("더미12", 90000L, expert1,
+    // dance));
+    // Lesson lesson13 = lessonRepository.save(newLesson("더미13", 2000L, expert1,
+    // beauty));
+    // Lesson lesson14 = lessonRepository.save(newLesson("더미14", 94000L, expert1,
+    // beauty));
+    // Lesson lesson15 = lessonRepository.save(newLesson("더미15", 7574000L, expert1,
+    // music));
 
     Review review1 = reviewRepository.save(newReivew("너무 좋은 강의입니다.", 4.5, ssar, lesson1));
     Review review2 = reviewRepository.save(newReivew("생각했던 것보다 더 좋네요!", 4.0, cos, lesson1));
@@ -294,11 +304,10 @@ public class LessonApiControllerTest extends DummyEntity {
   public void getLessonListByCategoryWithSort_test() throws Exception {
     // given
     Long categoryId = 1L;
-    String sorting = "recommand";
 
     // when
     ResultActions resultActions = mvc
-        .perform(get("/api/category/" + categoryId + "?sorting=" + sorting));
+        .perform(get("/api/category/" + categoryId));
     String responseBody = resultActions.andReturn().getResponse().getContentAsString();
     System.out.println("테스트 : " + responseBody);
 
