@@ -23,7 +23,6 @@ import site.hobbyup.class_final_back.dto.user.UserRespDto.MyLessonListRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.MyPageRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.UserDeleteRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.UserInitRespDto;
-import site.hobbyup.class_final_back.dto.user.UserRespDto.UserInitRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.UserUpdateRespDto;
 import site.hobbyup.class_final_back.service.UserService;
 
