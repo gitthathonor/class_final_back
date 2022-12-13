@@ -109,8 +109,8 @@ public class LessonApiController {
         return new ResponseEntity<>(new ResponseDto<>("클래스 구독순으로 정렬", lessonSubscribeListDtos), HttpStatus.OK);
     }
 
-    // @GetMapping("/api/category/")
-    // public ResponseEntity<?> getLessonListByRecommand() {
+    // @GetMapping("/api/category")
+    // public ResponseEntity<?> getLessonListBySort() {
 
     // }
 

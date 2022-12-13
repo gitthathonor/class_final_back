@@ -33,6 +33,7 @@ import site.hobbyup.class_final_back.dto.user.UserRespDto.JoinRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.MyLessonListRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.MyPageRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.UserDeleteRespDto;
+import site.hobbyup.class_final_back.dto.user.UserRespDto.UserInitRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.UserUpdateRespDto;
 
 @Transactional(readOnly = true)
@@ -181,5 +182,11 @@ public class UserService {
         } else {
             throw new CustomApiException("관리자 페이지에서 조회하세요.", HttpStatus.FORBIDDEN);
         }
+    }
+
+    public UserInitRespDto getInitSession(Long id) {
+        User userPS = userRepository.findById(id)
+                .orElseThrow(() -> new CustomApiException("유저 정보가 없습니다.", HttpStatus.BAD_REQUEST));
+        return new UserInitRespDto(userPS);
     }
 }
