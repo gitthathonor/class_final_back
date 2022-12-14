@@ -247,14 +247,36 @@ public class LessonService {
     return lessonRepository.findAllBySubscribeNotLogin();
   }
 
-  // 카테고리별 리스트 + 각각 정렬까지
-  public List<LessonSortListRespDto> getLessonListByCategoryWithSort(Long userId, Long categoryId) {
+  // 카테고리별 리스트(추천순)
+  public List<LessonSortListRespDto> getLessonListByRecommand(Long userId, Long categoryId) {
 
     // 회원 여부 체크
     User userPS = userRepository.findById(userId)
         .orElseThrow(() -> new CustomApiException("권한이 없습니다.", HttpStatus.BAD_REQUEST));
 
-    List<LessonSortListRespDto> lessonSortListRespDtoList = lessonRepository.findAllByCategoryWithSort(userId,
+    List<LessonSortListRespDto> lessonSortListRespDtoList = lessonRepository.findAllByRecommand(userId,
+        categoryId);
+    return lessonSortListRespDtoList;
+  }
+
+  // 카테고리별 리스트(인기순)
+  public List<LessonSortListRespDto> getLessonListByRanking(Long userId, Long categoryId) {
+    // 회원 여부 체크
+    User userPS = userRepository.findById(userId)
+        .orElseThrow(() -> new CustomApiException("권한이 없습니다.", HttpStatus.BAD_REQUEST));
+
+    List<LessonSortListRespDto> lessonSortListRespDtoList = lessonRepository.findAllByRanking(userId,
+        categoryId);
+    return lessonSortListRespDtoList;
+  }
+
+  // 카테고리별 리스트(최신순)
+  public List<LessonSortListRespDto> getLessonListByRecent(Long userId, Long categoryId) {
+    // 회원 여부 체크
+    User userPS = userRepository.findById(userId)
+        .orElseThrow(() -> new CustomApiException("권한이 없습니다.", HttpStatus.BAD_REQUEST));
+
+    List<LessonSortListRespDto> lessonSortListRespDtoList = lessonRepository.findAllByRecent(userId,
         categoryId);
     return lessonSortListRespDtoList;
   }

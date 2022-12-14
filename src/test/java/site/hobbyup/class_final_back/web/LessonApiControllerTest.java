@@ -299,22 +299,57 @@ public class LessonApiControllerTest extends DummyEntity {
 
   }
 
+  // 카테고리별 레슨 리스트(추천순)
   @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
   @Test
-  public void getLessonListByCategoryWithSort_test() throws Exception {
+  public void getLessonListByRecommand_test() throws Exception {
     // given
     Long categoryId = 1L;
 
     // when
     ResultActions resultActions = mvc
-        .perform(get("/api/category/" + categoryId));
+        .perform(get("/api/category/" + categoryId + "/recommand"));
     String responseBody = resultActions.andReturn().getResponse().getContentAsString();
     System.out.println("테스트 : " + responseBody);
 
     // then
     resultActions.andExpect(status().isOk());
-    // resultActions.andExpect(jsonPath("$.data.lessonName").value("더미1"));
-    // resultActions.andExpect(jsonPath("$.data.").value("생각했던 것보다 더 좋네요!"));
+
+  }
+
+  // 카테고리별 레슨 리스트(인기순)
+  @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @Test
+  public void getLessonListByRanking_test() throws Exception {
+    // given
+    Long categoryId = 1L;
+
+    // when
+    ResultActions resultActions = mvc
+        .perform(get("/api/category/" + categoryId + "/ranking"));
+    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+    System.out.println("테스트 : " + responseBody);
+
+    // then
+    resultActions.andExpect(status().isOk());
+
+  }
+
+  // 카테고리별 레슨 리스트(등록순)
+  @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @Test
+  public void getLessonListByRecent_test() throws Exception {
+    // given
+    Long categoryId = 1L;
+
+    // when
+    ResultActions resultActions = mvc
+        .perform(get("/api/category/" + categoryId + "/recent"));
+    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+    System.out.println("테스트 : " + responseBody);
+
+    // then
+    resultActions.andExpect(status().isOk());
 
   }
 
