@@ -186,7 +186,7 @@ public class LessonApiControllerTest extends DummyEntity {
     resultActions.andExpect(jsonPath("$.data.name").value("프로작곡가가 알려주는 하루만에 미디 작곡하는 법"));
     resultActions.andExpect(jsonPath("$.data.categoryName").value("음악"));
     resultActions.andExpect(jsonPath("$.data.expertId").value(1L));
-    resultActions.andExpect(jsonPath("$.data.id").value(11L));
+    resultActions.andExpect(jsonPath("$.data.id").value(16L));
   }
 
   @Test

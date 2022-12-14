@@ -20,7 +20,7 @@ public class ExpertApiController {
     private final ExpertService expertService;
 
     // 전문가 마이 페이지 보기
-    @GetMapping("/api/expert/{userId}")
+    @GetMapping("/api/expert/{userId}/mypage")
     public ResponseEntity<?> getExpertPage(@PathVariable Long userId, @AuthenticationPrincipal LoginUser loginUser) {
         if (userId != loginUser.getUser().getId()) {
             throw new CustomApiException("권한이 없습니다.", HttpStatus.FORBIDDEN);
