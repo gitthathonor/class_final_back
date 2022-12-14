@@ -3,6 +3,7 @@ package site.hobbyup.class_final_back.web;
 import java.io.IOException;
 import java.util.List;
 
+import org.h2.value.lob.LobData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -49,7 +50,7 @@ public class LessonApiController {
     }
 
     // lesson 리스트 보기(쿼리스트링으로 예산별 필터까지 적용)(이것도 안씀)
-    @GetMapping("/api/category/{categoryId}/test")
+    @GetMapping("/api/category/{categoryId}/test2")
     public ResponseEntity<?> getLessonCategoryList(@PathVariable Long categoryId,
             @RequestParam(name = "min_price") Long minPrice, @RequestParam(name = "max_price") Long maxPrice) {
         LessonCategoryListRespDto lessonCategoryListRespDto = lessonService.getLessonCategoryList(categoryId, minPrice,
@@ -146,14 +147,16 @@ public class LessonApiController {
     // 카테고리 별 레슨 리스트 출력 시에 쿼리 스트링 및 정렬까지 한 번에 처리하기
     @GetMapping("/api/category/{categoryId}/test")
     public ResponseEntity<?> getAllLessonList(@AuthenticationPrincipal LoginUser loginUser,
-            @PathVariable Long categoryId, @RequestParam("sort") String sort,
-            @RequestParam(value = "min_price", defaultValue = "0") Long minPrice,
-            @RequestParam(value = "max_price", defaultValue = "0") Long maxPrice) {
+            @PathVariable Long categoryId,
+            @RequestParam(name = "sort", required = false, defaultValue = "recent") String sort,
+            @RequestParam(name = "min_price", required = false, defaultValue = "0") Long minPrice,
+            @RequestParam(name = "max_price", required = false, defaultValue = "0") Long maxPrice) {
         // if (loginUser == null) {
         // return new ResponseEntity<>(new ResponseDto<>("최신순 정렬 완료",
         // lessonSortListRespDtoList),
         // HttpStatus.OK);
         // }
+        log.debug("디버그 : LessonApiController - getAllLessonList실행");
         List<LessonAllListRespDto> lessonAllListRespDtoList = lessonService
                 .getAllLessonList(loginUser.getUser().getId(), categoryId, sort, minPrice, maxPrice);
         return new ResponseEntity<>(new ResponseDto<>("카테고리별 리스트 출력 + 정렬까지 완료",

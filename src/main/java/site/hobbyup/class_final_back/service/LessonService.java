@@ -285,12 +285,17 @@ public class LessonService {
 
   public List<LessonAllListRespDto> getAllLessonList(Long userId, Long categoryId, String sort, Long minPrice,
       Long maxPrice) {
+    log.debug("디버그 : LessonService - getAllLessonList실행");
     // 회원 여부 체크
     User userPS = userRepository.findById(userId)
         .orElseThrow(() -> new CustomApiException("권한이 없습니다.", HttpStatus.BAD_REQUEST));
-
+    log.debug("디버그 : userPS : " + userPS.getUsername());
     List<LessonAllListRespDto> lessonAllListRespDtoList = lessonRepositoryQuery.findAllLessonList(userId, categoryId,
         sort, minPrice, maxPrice);
+    if (lessonAllListRespDtoList.size() == 0) {
+      throw new CustomApiException("조건에 맞는 서비스가 없습니다.", HttpStatus.BAD_REQUEST);
+    }
+    log.debug("디버그 : lessonAllListRespDtoList = " + lessonAllListRespDtoList.get(0).getLessonName());
     return lessonAllListRespDtoList;
   }
 

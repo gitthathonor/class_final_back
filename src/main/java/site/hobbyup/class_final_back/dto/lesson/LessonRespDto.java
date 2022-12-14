@@ -1,6 +1,8 @@
 package site.hobbyup.class_final_back.dto.lesson;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -199,6 +201,8 @@ public class LessonRespDto {
     }
   }
 
+  @NoArgsConstructor
+  @AllArgsConstructor
   @Setter
   @Getter
   public static class LessonAllListRespDto {
@@ -212,18 +216,18 @@ public class LessonRespDto {
     private Long ranking;
     private String recent;
 
-    public LessonAllListRespDto(BigInteger lessonId, String lessonName, BigInteger lessonPrice, Double avgGrade,
-        Long totalReviews,
-        boolean isSubscribed, boolean recommand, BigInteger ranking, String recent) {
+    public LessonAllListRespDto(BigInteger lessonId, String lessonName, BigInteger lessonPrice, BigInteger avgGrade,
+        BigDecimal totalReviews,
+        Boolean isSubscribed, Boolean recommand, BigInteger ranking, Timestamp recent) {
       this.lessonId = lessonId.longValue();
       this.lessonName = lessonName;
       this.lessonPrice = lessonPrice.longValue();
-      this.avgGrade = avgGrade;
-      this.totalReviews = totalReviews;
-      this.isSubscribed = isSubscribed;
-      this.recommand = recommand;
+      this.avgGrade = avgGrade.doubleValue();
+      this.totalReviews = totalReviews.longValue();
+      this.isSubscribed = isSubscribed.booleanValue();
+      this.recommand = recommand.booleanValue();
       this.ranking = ranking.longValue();
-      this.recent = recent;
+      this.recent = recent.toString();
     }
 
   }
