@@ -22,6 +22,7 @@ import site.hobbyup.class_final_back.dto.user.UserRespDto.JoinRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.MyLessonListRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.MyPageRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.UserDeleteRespDto;
+import site.hobbyup.class_final_back.dto.user.UserRespDto.UserInitRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.UserUpdateRespDto;
 import site.hobbyup.class_final_back.service.UserService;
 
@@ -39,15 +40,21 @@ public class UserApiController {
     }
 
     @PutMapping("/api/user/{id}")
-    public ResponseEntity<?> updateUser(@RequestBody UserUpdateReqDto userUpdateReqDto, @PathVariable Long id) {
+    public ResponseEntity<?> updateUser(@RequestBody UserUpdateReqDto userUpdateReqDto, @PathVariable Long id,
+            @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : UserApiController-updateUser 실행됨");
+        if (loginUser.getUser().getId() != id) {
+            throw new CustomApiException("권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
         UserUpdateRespDto userUpdateRespDto = userService.updateUser(userUpdateReqDto, id);
         return new ResponseEntity<>(new ResponseDto<>("회원정보 수정완료", userUpdateRespDto), HttpStatus.OK);
     }
 
-    @GetMapping("/api/user/session")
-    public String getSessionUser(@AuthenticationPrincipal LoginUser loginUser) {
-        return "role : " + loginUser.getUser().getRole();
+    // 앱 세션의 유저정보 초기화
+    @PostMapping("/api/user/session")
+    public ResponseEntity<?> getInitSession(@AuthenticationPrincipal LoginUser loginUser) {
+        UserInitRespDto userInitRespDto = userService.getInitSession(loginUser.getUser().getId());
+        return new ResponseEntity<>(new ResponseDto<>("세션 초기화 완료", userInitRespDto), HttpStatus.OK);
     }
 
     @PutMapping("/api/user/{id}/delete")

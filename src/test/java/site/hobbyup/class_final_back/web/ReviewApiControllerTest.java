@@ -1,5 +1,6 @@
 package site.hobbyup.class_final_back.web;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,8 +25,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import site.hobbyup.class_final_back.config.dummy.DummyEntity;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
+import site.hobbyup.class_final_back.domain.expert.Expert;
+import site.hobbyup.class_final_back.domain.expert.ExpertRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
+import site.hobbyup.class_final_back.domain.review.Review;
+import site.hobbyup.class_final_back.domain.review.ReviewRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.review.ReviewReqDto.ReviewSaveReqDto;
@@ -54,12 +59,21 @@ public class ReviewApiControllerTest extends DummyEntity {
   private CategoryRepository categoryRepository;
 
   @Autowired
+  private ExpertRepository expertRepository;
+
+  @Autowired
+  private ReviewRepository reviewRepository;
+
+  @Autowired
   private EntityManager em;
 
   @BeforeEach
   public void setUp() {
     User ssar = userRepository.save(newUser("ssar"));
     User cos = userRepository.save(newUser("cos"));
+    User hong = userRepository.save(newUser("expert"));
+
+    Expert expert1 = expertRepository.save(newExpert(hong));
 
     Category beauty = categoryRepository.save(newCategory("뷰티"));
     Category sports = categoryRepository.save(newCategory("스포츠"));
@@ -70,12 +84,23 @@ public class ReviewApiControllerTest extends DummyEntity {
     Category game = categoryRepository.save(newCategory("게임"));
     Category others = categoryRepository.save(newCategory("기타"));
 
-    Lesson lesson1 = lessonRepository.save(newLesson("더미1", 10000L, ssar, beauty));
-    Lesson lesson2 = lessonRepository.save(newLesson("더미2", 20000L, ssar, sports));
-    Lesson lesson3 = lessonRepository.save(newLesson("더미3", 50000L, ssar, music));
-    Lesson lesson4 = lessonRepository.save(newLesson("더미4", 34500L, cos, music));
-    Lesson lesson5 = lessonRepository.save(newLesson("더미5", 2400L, cos, music));
-    Lesson lesson6 = lessonRepository.save(newLesson("더미6", 98000000L, cos, beauty));
+    Lesson lesson1 = lessonRepository.save(newLesson("더미1", 10000L, expert1, beauty));
+    Lesson lesson2 = lessonRepository.save(newLesson("더미2", 20000L, expert1, sports));
+    Lesson lesson3 = lessonRepository.save(newLesson("더미3", 50000L, expert1, music));
+    Lesson lesson4 = lessonRepository.save(newLesson("더미4", 34500L, expert1, music));
+    Lesson lesson5 = lessonRepository.save(newLesson("더미5", 2400L, expert1, music));
+    Lesson lesson6 = lessonRepository.save(newLesson("더미6", 98000000L, expert1, beauty));
+    Lesson lesson7 = lessonRepository.save(newLesson("더미7", 30000L, expert1, sports));
+    Lesson lesson8 = lessonRepository.save(newLesson("더미8", 40000L, expert1, sports));
+    Lesson lesson9 = lessonRepository.save(newLesson("더미9", 50000L, expert1, sports));
+    Lesson lesson10 = lessonRepository.save(newLesson("더미10", 70000L, expert1, sports));
+
+    Review review1 = reviewRepository.save(newReivew("너무 좋은 강의입니다.", 4.5, ssar, lesson1));
+    Review review2 = reviewRepository.save(newReivew("생각했던 것보다 더 좋네요!", 4.0, cos, lesson1));
+    Review review3 = reviewRepository.save(newReivew("별로네요", 3.0, ssar, lesson2));
+    Review review4 = reviewRepository.save(newReivew("도대체 이 강의 하시는 이유가 뭐죠?", 2.5, ssar, lesson3));
+    Review review5 = reviewRepository.save(newReivew("피곤하다", 2.0, cos, lesson2));
+    Review review6 = reviewRepository.save(newReivew("이정도 퀄리티면 좋은 거 같아요, 다만 목소리가...", 3.5, cos, lesson8));
   }
 
   @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -103,5 +128,18 @@ public class ReviewApiControllerTest extends DummyEntity {
     resultActions.andExpect(jsonPath("$.data.grade").value(4.5));
 
   }
+
+  // @Test
+  // public void getReviews_test() throws Exception {
+  // // when
+  // ResultActions resultActions = mvc
+  // .perform(get("/api/review/test"));
+  // String responseBody =
+  // resultActions.andReturn().getResponse().getContentAsString();
+  // System.out.println("테스트 : " + responseBody);
+
+  // // then
+  // resultActions.andExpect(status().isOk());
+  // }
 
 }

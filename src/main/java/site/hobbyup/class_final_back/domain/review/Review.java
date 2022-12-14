@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,6 +32,7 @@ public class Review extends AuditingTime {
   private Double grade;
 
   @ManyToOne(fetch = FetchType.LAZY)
+  // @JsonIgnore
   private Lesson lesson;
 
   @ManyToOne(fetch = FetchType.LAZY)
