@@ -28,7 +28,7 @@ public class Profile extends AuditingTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String filePath;
     @Column(nullable = false, length = 50)
     private String introduction;
