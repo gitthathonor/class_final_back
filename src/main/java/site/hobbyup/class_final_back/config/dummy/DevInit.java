@@ -3,7 +3,6 @@ package site.hobbyup.class_final_back.config.dummy;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
 import lombok.RequiredArgsConstructor;
 import site.hobbyup.class_final_back.domain.category.Category;
@@ -13,6 +12,8 @@ import site.hobbyup.class_final_back.domain.expert.ExpertRepository;
 import site.hobbyup.class_final_back.domain.interest.InterestRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
+import site.hobbyup.class_final_back.domain.profile.Profile;
+import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.review.Review;
 import site.hobbyup.class_final_back.domain.review.ReviewRepository;
 import site.hobbyup.class_final_back.domain.subscribe.Subscribe;
@@ -24,11 +25,12 @@ import site.hobbyup.class_final_back.domain.user.UserRepository;
 @Configuration
 public class DevInit extends DummyEntity {
 
-    @Profile("dev")
+    @org.springframework.context.annotation.Profile("dev")
     @Bean
     public CommandLineRunner dataSetting(UserRepository userRepository, CategoryRepository categoryRepository,
             InterestRepository interestRepository, LessonRepository lessonRepository, ReviewRepository reviewRepository,
-            SubscribeRepository subscribeRepository, ExpertRepository expertRepository) {
+            SubscribeRepository subscribeRepository, ExpertRepository expertRepository,
+            ProfileRepository profileRepository) {
 
         return (args) -> {
             User ssar = userRepository.save(newUser("ssar"));
@@ -37,6 +39,9 @@ public class DevInit extends DummyEntity {
             User hong = userRepository.save(newUser("expert"));
 
             Expert expert = expertRepository.save(newExpert(hong));
+
+            Profile profile = profileRepository.save(newProfile("", "expert1의 프로필입니다.", "부산진구", "expert1의 자격증입니다.",
+                    "5년", "강남의 매장에서 10년간 점장으로 일함", hong));
 
             Category beauty = categoryRepository.save(newCategory("뷰티"));
             Category sports = categoryRepository.save(newCategory("스포츠"));
@@ -71,11 +76,8 @@ public class DevInit extends DummyEntity {
             Subscribe subscribe3 = subscribeRepository.save(newSubscribe(cos, lesson3));
             Subscribe subscribe4 = subscribeRepository.save(newSubscribe(cos, lesson8));
             Subscribe subscribe5 = subscribeRepository.save(newSubscribe(cos, lesson9));
-
             Subscribe subscribe6 = subscribeRepository.save(newSubscribe(ssar, lesson10));
-            Subscribe subscribe7 = subscribeRepository.save(newSubscribe(cos, lesson10));
-            Subscribe subscribe8 = subscribeRepository.save(newSubscribe(aa, lesson10));
-            Subscribe subscribe9 = subscribeRepository.save(newSubscribe(aa, lesson9));
+
         };
 
     }

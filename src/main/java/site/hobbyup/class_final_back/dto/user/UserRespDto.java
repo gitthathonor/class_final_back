@@ -112,6 +112,13 @@ public class UserRespDto {
             this.role = user.getRole();
             this.filePath = profile.getFilePath();
         }
+
+        public MyPageRespDto(User user) {
+            this.id = user.getId();
+            this.username = user.getUsername();
+            this.role = user.getRole();
+        }
+
     }
 
     @Setter

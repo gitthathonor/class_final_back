@@ -150,8 +150,9 @@ public class UserService {
                 .orElseThrow(() -> new CustomApiException("가입되지 않은 유저입니다.", HttpStatus.FORBIDDEN));
 
         Optional<Profile> profileOP = profileRepository.findByUserId(userPS.getId());
-        Profile profile = profileOP.orElseGet(() -> new Profile());
-
+        if (profileOP.isEmpty()) {
+            return new MyPageRespDto(userPS);
+        }
         return new MyPageRespDto(userPS, profileOP.get());
     }
 
