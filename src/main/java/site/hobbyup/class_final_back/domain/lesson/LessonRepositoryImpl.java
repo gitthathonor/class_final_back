@@ -1,34 +1,19 @@
 package site.hobbyup.class_final_back.domain.lesson;
 
-// interface Dao {
-//   List<LessonSortListRespDto> findAllByCategoryWithSort(Long userId, Long categoryId, String sorting);
-// }
+import java.util.List;
 
-public class LessonRepositoryImpl {
+import site.hobbyup.class_final_back.dto.lesson.LessonSortListRespDto;
 
-  // @Override
-  // public List<LessonSortListRespDto> findAllByCategoryWithSort(Long userId,
-  // Long categoryId, String sorting) {
-  // String sql = "";
-  // sql += "select t from Transaction t ";
-  // sql += "left join t.withdrawAccount wa ";
-  // sql += "left join t.depositAccount da ";
+interface Dao {
+  List<LessonSortListRespDto> findAllBySort(Long userId, Long categoryId, String sorting);
+}
 
-  // TypedQuery<Transaction> query = em.createQuery(sql, Transaction.class);
+public class LessonRepositoryImpl implements Dao {
 
-  // if (gubun == null || gubun.isEmpty()) {
-  // query = query.setParameter("withdrawAccountId", accountId);
-  // query = query.setParameter("depositAccountId", accountId);
-  // } else if (TransactionEnum.valueOf(gubun) == TransactionEnum.DEPOSIT) {
-  // query = query.setParameter("depositAccountId", accountId);
-  // } else if (TransactionEnum.valueOf(gubun) == TransactionEnum.WITHDRAW) {
-  // query = query.setParameter("withdrawAccountId", accountId);
-  // }
+  @Override
+  public List<LessonSortListRespDto> findAllBySort(Long userId, Long categoryId, String sorting) {
 
-  // query.setFirstResult(page * 3);
-  // query.setMaxResults(3);
-  // return query.getResultList();
-  // return null;
-  // }
+    return null;
+  }
 
 }
