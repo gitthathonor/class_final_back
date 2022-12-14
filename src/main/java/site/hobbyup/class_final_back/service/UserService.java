@@ -151,7 +151,7 @@ public class UserService {
 
         Optional<Profile> profileOP = profileRepository.findByUserId(userPS.getId());
         if (profileOP.isEmpty()) {
-            throw new CustomApiException("프로필 사진이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
+            return new MyPageRespDto(userPS);
         }
         return new MyPageRespDto(userPS, profileOP.get());
     }
