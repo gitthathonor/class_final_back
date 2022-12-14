@@ -20,6 +20,7 @@ import site.hobbyup.class_final_back.domain.expert.Expert;
 import site.hobbyup.class_final_back.domain.expert.ExpertRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
+import site.hobbyup.class_final_back.domain.lesson.LessonRepositoryQuery;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.review.Review;
@@ -29,9 +30,9 @@ import site.hobbyup.class_final_back.domain.subscribe.SubscribeRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
-import site.hobbyup.class_final_back.dto.lesson.LessonSubscribeListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonUpdateReqDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonAllListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonLatestListRespDto;
@@ -53,6 +54,7 @@ public class LessonService {
   private final ProfileRepository profileRepository;
   private final SubscribeRepository subscribeRepository;
   private final ExpertRepository expertRepository;
+  private final LessonRepositoryQuery lessonRepositoryQuery;
 
   // 클래스 생성하기
   @Transactional
@@ -279,6 +281,17 @@ public class LessonService {
     List<LessonSortListRespDto> lessonSortListRespDtoList = lessonRepository.findAllByRecent(userId,
         categoryId);
     return lessonSortListRespDtoList;
+  }
+
+  public List<LessonAllListRespDto> getAllLessonList(Long userId, Long categoryId, String sort, Long minPrice,
+      Long maxPrice) {
+    // 회원 여부 체크
+    User userPS = userRepository.findById(userId)
+        .orElseThrow(() -> new CustomApiException("권한이 없습니다.", HttpStatus.BAD_REQUEST));
+
+    List<LessonAllListRespDto> lessonAllListRespDtoList = lessonRepositoryQuery.findAllLessonList(userId, categoryId,
+        sort, minPrice, maxPrice);
+    return lessonAllListRespDtoList;
   }
 
 }

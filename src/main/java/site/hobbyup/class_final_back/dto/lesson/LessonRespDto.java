@@ -1,17 +1,19 @@
 package site.hobbyup.class_final_back.dto.lesson;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.review.Review;
-import site.hobbyup.class_final_back.domain.subscribe.Subscribe;
-import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto.LessonDto;
+import site.hobbyup.class_final_back.util.CustomDateUtil;
 
 public class LessonRespDto {
   @Setter
@@ -195,6 +197,35 @@ public class LessonRespDto {
       this.expertId = lesson.getExpert().getId();
       this.username = lesson.getExpert().getUser().getUsername();
     }
+  }
+
+  @Setter
+  @Getter
+  public static class LessonAllListRespDto {
+    private Long lessonId;
+    private String lessonName;
+    private Long lessonPrice;
+    private Double avgGrade;
+    private Long totalReviews;
+    private boolean isSubscribed;
+    private boolean recommand;
+    private Long ranking;
+    private String recent;
+
+    public LessonAllListRespDto(BigInteger lessonId, String lessonName, BigInteger lessonPrice, Double avgGrade,
+        Long totalReviews,
+        boolean isSubscribed, boolean recommand, BigInteger ranking, String recent) {
+      this.lessonId = lessonId.longValue();
+      this.lessonName = lessonName;
+      this.lessonPrice = lessonPrice.longValue();
+      this.avgGrade = avgGrade;
+      this.totalReviews = totalReviews;
+      this.isSubscribed = isSubscribed;
+      this.recommand = recommand;
+      this.ranking = ranking.longValue();
+      this.recent = recent;
+    }
+
   }
 
 }

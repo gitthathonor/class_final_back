@@ -22,6 +22,7 @@ import site.hobbyup.class_final_back.dto.ResponseDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonUpdateReqDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonAllListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonLatestListRespDto;
@@ -142,4 +143,21 @@ public class LessonApiController {
                 HttpStatus.OK);
     }
 
+    // 카테고리 별 레슨 리스트 출력 시에 쿼리 스트링 및 정렬까지 한 번에 처리하기
+    @GetMapping("/api/category/{categoryId}/test")
+    public ResponseEntity<?> getAllLessonList(@AuthenticationPrincipal LoginUser loginUser,
+            @PathVariable Long categoryId, @RequestParam("sort") String sort,
+            @RequestParam(value = "min_price", defaultValue = "0") Long minPrice,
+            @RequestParam(value = "max_price", defaultValue = "0") Long maxPrice) {
+        // if (loginUser == null) {
+        // return new ResponseEntity<>(new ResponseDto<>("최신순 정렬 완료",
+        // lessonSortListRespDtoList),
+        // HttpStatus.OK);
+        // }
+        List<LessonAllListRespDto> lessonAllListRespDtoList = lessonService
+                .getAllLessonList(loginUser.getUser().getId(), categoryId, sort, minPrice, maxPrice);
+        return new ResponseEntity<>(new ResponseDto<>("카테고리별 리스트 출력 + 정렬까지 완료",
+                lessonAllListRespDtoList),
+                HttpStatus.OK);
+    }
 }

@@ -97,4 +97,5 @@ public class ProfileService extends DecodeUtil {
                 profileOP.get().update(profileUpdateReqDto);
                 return new ProfileUpdateRespDto(profileRepository.save(profileOP.get()));
         }
+
 }

@@ -1,8 +1,6 @@
 package site.hobbyup.class_final_back.dto.user;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +13,6 @@ import site.hobbyup.class_final_back.domain.interest.Interest;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.user.User;
-import site.hobbyup.class_final_back.dto.user.UserRespDto.JoinRespDto.InterestDto;
 
 public class UserRespDto {
 

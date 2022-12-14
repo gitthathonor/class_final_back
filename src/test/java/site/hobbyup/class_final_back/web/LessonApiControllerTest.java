@@ -353,4 +353,22 @@ public class LessonApiControllerTest extends DummyEntity {
 
   }
 
+  // 카테고리별 레슨 리스트(쿼리스트링)
+  @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @Test
+  public void getAllLessonList_test() throws Exception {
+    // given
+    Long categoryId = 1L;
+
+    // when
+    ResultActions resultActions = mvc
+        .perform(get("/api/category/" + categoryId + "/test"));
+    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+    System.out.println("테스트 : " + responseBody);
+
+    // then
+    resultActions.andExpect(status().isOk());
+
+  }
+
 }
