@@ -13,6 +13,7 @@ import site.hobbyup.class_final_back.domain.interest.Interest;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.user.User;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDto.ProfileDto;
 
 public class UserRespDto {
 
@@ -101,19 +102,32 @@ public class UserRespDto {
         private Long id;
         private String username;
         private UserEnum role;
-        private String filePath;
+        private ProfileDto profileDto;
 
         public MyPageRespDto(User user, Profile profile) {
             this.id = user.getId();
             this.username = user.getUsername();
             this.role = user.getRole();
-            this.filePath = profile.getFilePath();
+            this.profileDto = new ProfileDto(profile);
         }
 
         public MyPageRespDto(User user) {
             this.id = user.getId();
             this.username = user.getUsername();
             this.role = user.getRole();
+        }
+
+        @Setter
+        @Getter
+        public class ProfileDto {
+            private Long id;
+            private String profilePhoto;
+
+            public ProfileDto(Profile profile) {
+                this.id = profile.getId();
+                this.profilePhoto = profile.getFilePath();
+            }
+
         }
 
     }

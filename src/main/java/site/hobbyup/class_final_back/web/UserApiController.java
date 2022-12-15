@@ -67,9 +67,11 @@ public class UserApiController {
     @GetMapping("/api/user/{userId}/mypage")
     public ResponseEntity<?> getMyPage(@PathVariable Long userId, @AuthenticationPrincipal LoginUser loginUser) {
         log.debug("디버그 : UserApiController-getMyPage 실행됨");
+
         if (userId != loginUser.getUser().getId()) {
             throw new CustomApiException("권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
+
         MyPageRespDto myPageRespDto = userService.getMyPage(userId);
         return new ResponseEntity<>(new ResponseDto<>("마이페이지 보기", myPageRespDto), HttpStatus.OK);
     }
