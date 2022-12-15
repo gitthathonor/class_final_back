@@ -38,10 +38,10 @@ public class ProfileService extends DecodeUtil {
         @Transactional
         public ProfileSaveRespDto saveProfile(ProfileSaveReqDto profileSaveReqDto, Long userId) throws IOException {
                 log.debug("디버그 : service - 프로필 등록 시작");
-
                 User userPS = userRepository.findById(userId)
                                 .orElseThrow(
                                                 () -> new CustomApiException("유저가 존재하지 않습니다.", HttpStatus.FORBIDDEN));
+
                 Optional<Profile> profileOP = profileRepository.findByUserId(userId);
                 if (profileOP.isPresent()) {
                         throw new CustomApiException("이미 프로필을 등록했습니다.", HttpStatus.FORBIDDEN);
@@ -62,6 +62,10 @@ public class ProfileService extends DecodeUtil {
                                 .orElseThrow(() -> new CustomApiException("탈퇴한 유저입니다.", HttpStatus.FORBIDDEN));
 
                 Optional<Profile> profileOP = profileRepository.findByUserId(userPS.getId());
+                if (profileOP.isEmpty()) {
+                        Profile profile = new Profile(userId, null, null, null, null, null, null, userPS);
+                        return new ProfileDetailRespDto(profile);
+                }
 
                 return new ProfileDetailRespDto(profileOP.get());
         }
