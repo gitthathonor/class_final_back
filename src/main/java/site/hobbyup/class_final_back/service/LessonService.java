@@ -141,6 +141,8 @@ public class LessonService {
       sum += reviewListPS.get(i).getGrade();
     }
     Double avgGrade = sum / reviewListPS.size();
+    Integer totalReviews = reviewListPS.size();
+    Long lessonTotalReviewsCount = totalReviews.longValue();
 
     // 찜 여부 확인하기
     boolean isSubscribed = false;
@@ -150,6 +152,7 @@ public class LessonService {
     }
 
     LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, dayList, profilePS, avgGrade,
+        lessonTotalReviewsCount,
         isSubscribed,
         reviewListPS);
     return lessonDetailRespDto;
@@ -187,11 +190,14 @@ public class LessonService {
       sum += reviewListPS.get(i).getGrade();
     }
     Double avgGrade = sum / reviewListPS.size();
+    Integer totalReviews = reviewListPS.size();
+    Long lessonTotalReviewsCount = totalReviews.longValue();
 
     // 찜 여부 확인하기
     boolean isSubscribed = false;
 
     LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, dayList, profileOP.get(), avgGrade,
+        lessonTotalReviewsCount,
         isSubscribed,
         reviewListPS);
     return lessonDetailRespDto;

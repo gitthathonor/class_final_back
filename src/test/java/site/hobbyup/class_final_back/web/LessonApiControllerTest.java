@@ -209,7 +209,7 @@ public class LessonApiControllerTest extends DummyEntity {
     resultActions.andExpect(jsonPath("$.data.lessonDtoList[0].lessonPrice").value("20000원"));
   }
 
-  @WithUserDetails(value = "cos", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
   @Test
   public void getLessonDetail_test() throws Exception {
     // given
@@ -225,7 +225,7 @@ public class LessonApiControllerTest extends DummyEntity {
     resultActions.andExpect(status().isOk());
     resultActions.andExpect(jsonPath("$.data.lessonDto.lessonName").value("더미1"));
     resultActions.andExpect(jsonPath("$.data.lessonReviewList[0].reviewContent").value("생각했던 것보다 더 좋네요!"));
-    resultActions.andExpect(jsonPath("$.data.subscribed").value(false));
+    resultActions.andExpect(jsonPath("$.data.subscribed").value(true));
   }
 
   // @WithUserDetails(value = "ssar", setupBefore =

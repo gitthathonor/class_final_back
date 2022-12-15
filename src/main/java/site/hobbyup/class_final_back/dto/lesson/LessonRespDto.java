@@ -15,6 +15,7 @@ import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.review.Review;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto.LessonDto;
 
 public class LessonRespDto {
   @Setter
@@ -88,15 +89,18 @@ public class LessonRespDto {
     private LessonDto lessonDto;
     private ProfileDto profileDto;
     private Double lessonAvgGrade;
+    private Long lessonTotalReviewsCount;
     private boolean isSubscribed;
     private List<ReviewDto> lessonReviewList = new ArrayList<>();
 
     public LessonDetailRespDto(Lesson lesson, List<String> dayList, Profile profile, Double avgGrade,
+        Long lessonTotalReviewsCount,
         boolean isSubscribed,
         List<Review> reviewList) {
       this.lessonDto = new LessonDto(lesson, dayList);
       this.profileDto = new ProfileDto(profile);
       this.lessonAvgGrade = avgGrade;
+      this.lessonTotalReviewsCount = lessonTotalReviewsCount;
       this.isSubscribed = isSubscribed;
       this.lessonReviewList = reviewList.stream().map((review) -> new ReviewDto(review))
           .collect(Collectors.toList());
