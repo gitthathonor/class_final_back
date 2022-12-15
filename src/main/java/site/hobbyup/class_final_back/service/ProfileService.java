@@ -66,6 +66,7 @@ public class ProfileService extends DecodeUtil {
                         Profile profile = new Profile(userId, null, null, null, null, null, null, userPS);
                         return new ProfileDetailRespDto(profile);
                 }
+
                 return new ProfileDetailRespDto(profileOP.get());
         }
 
