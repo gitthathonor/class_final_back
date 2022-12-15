@@ -1,16 +1,20 @@
 package site.hobbyup.class_final_back.dto.lesson;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.review.Review;
-import site.hobbyup.class_final_back.domain.subscribe.Subscribe;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto.LessonDto;
 
 public class LessonRespDto {
@@ -85,15 +89,18 @@ public class LessonRespDto {
     private LessonDto lessonDto;
     private ProfileDto profileDto;
     private Double lessonAvgGrade;
+    private Long lessonTotalReviewsCount;
     private boolean isSubscribed;
     private List<ReviewDto> lessonReviewList = new ArrayList<>();
 
     public LessonDetailRespDto(Lesson lesson, List<String> dayList, Profile profile, Double avgGrade,
+        Long lessonTotalReviewsCount,
         boolean isSubscribed,
         List<Review> reviewList) {
       this.lessonDto = new LessonDto(lesson, dayList);
       this.profileDto = new ProfileDto(profile);
       this.lessonAvgGrade = avgGrade;
+      this.lessonTotalReviewsCount = lessonTotalReviewsCount;
       this.isSubscribed = isSubscribed;
       this.lessonReviewList = reviewList.stream().map((review) -> new ReviewDto(review))
           .collect(Collectors.toList());
@@ -195,6 +202,37 @@ public class LessonRespDto {
       this.expertId = lesson.getExpert().getId();
       this.username = lesson.getExpert().getUser().getUsername();
     }
+  }
+
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @Setter
+  @Getter
+  public static class LessonAllListRespDto {
+    private Long lessonId;
+    private String lessonName;
+    private Long lessonPrice;
+    private Double avgGrade;
+    private Long totalReviews;
+    private boolean isSubscribed;
+    private boolean recommand;
+    private Long ranking;
+    private String recent;
+
+    public LessonAllListRespDto(BigInteger lessonId, String lessonName, BigInteger lessonPrice, BigInteger avgGrade,
+        BigDecimal totalReviews,
+        Boolean isSubscribed, Boolean recommand, BigInteger ranking, Timestamp recent) {
+      this.lessonId = lessonId.longValue();
+      this.lessonName = lessonName;
+      this.lessonPrice = lessonPrice.longValue();
+      this.avgGrade = avgGrade.doubleValue();
+      this.totalReviews = totalReviews.longValue();
+      this.isSubscribed = isSubscribed.booleanValue();
+      this.recommand = recommand.booleanValue();
+      this.ranking = ranking.longValue();
+      this.recent = recent.toString();
+    }
+
   }
 
 }

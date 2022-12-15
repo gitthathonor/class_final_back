@@ -81,7 +81,7 @@ public class ProfileApiControllerTest extends DummyEntity {
                 System.out.println("테스트 : " + responseBody);
                 // then
                 resultActions.andExpect(status().isCreated());
-                resultActions.andExpect(jsonPath("$.data.id").value(2L));
+                resultActions.andExpect(jsonPath("$.data.profileId").value(2L));
         }
 
         @WithUserDetails(value = "cos", setupBefore = TestExecutionEvent.TEST_EXECUTION)

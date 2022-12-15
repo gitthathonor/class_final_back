@@ -20,6 +20,7 @@ import site.hobbyup.class_final_back.domain.expert.Expert;
 import site.hobbyup.class_final_back.domain.expert.ExpertRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
+import site.hobbyup.class_final_back.domain.lesson.LessonRepositoryQuery;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.review.Review;
@@ -29,9 +30,9 @@ import site.hobbyup.class_final_back.domain.subscribe.SubscribeRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
-import site.hobbyup.class_final_back.dto.lesson.LessonSubscribeListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonUpdateReqDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonAllListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonLatestListRespDto;
@@ -53,6 +54,7 @@ public class LessonService {
   private final ProfileRepository profileRepository;
   private final SubscribeRepository subscribeRepository;
   private final ExpertRepository expertRepository;
+  private final LessonRepositoryQuery lessonRepositoryQuery;
 
   // 클래스 생성하기
   @Transactional
@@ -139,6 +141,8 @@ public class LessonService {
       sum += reviewListPS.get(i).getGrade();
     }
     Double avgGrade = sum / reviewListPS.size();
+    Integer totalReviews = reviewListPS.size();
+    Long lessonTotalReviewsCount = totalReviews.longValue();
 
     // 찜 여부 확인하기
     boolean isSubscribed = false;
@@ -148,6 +152,7 @@ public class LessonService {
     }
 
     LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, dayList, profilePS, avgGrade,
+        lessonTotalReviewsCount,
         isSubscribed,
         reviewListPS);
     return lessonDetailRespDto;
@@ -172,11 +177,8 @@ public class LessonService {
     }
 
     // 프로필 정보 영속화
-    Optional<Profile> profileOP = profileRepository.findByUserId(lessonPS.getExpert().getUser().getId());
-    if (profileOP.isEmpty()) {
-      throw new CustomApiException("프로필을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST);
-    }
-    log.debug("디버그 : " + profileOP.get());
+    Profile profilePS = profileRepository.findByUserId(lessonPS.getExpert().getUser().getId())
+        .orElseThrow(() -> new CustomApiException("프로필을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST));
 
     // 평균 리뷰 구하기 + 리뷰 리스트 뽑기
     List<Review> reviewListPS = reviewRepository.findAllByLessonId(lessonPS.getId());
@@ -185,11 +187,14 @@ public class LessonService {
       sum += reviewListPS.get(i).getGrade();
     }
     Double avgGrade = sum / reviewListPS.size();
+    Integer totalReviews = reviewListPS.size();
+    Long lessonTotalReviewsCount = totalReviews.longValue();
 
     // 찜 여부 확인하기
     boolean isSubscribed = false;
 
-    LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, dayList, profileOP.get(), avgGrade,
+    LessonDetailRespDto lessonDetailRespDto = new LessonDetailRespDto(lessonPS, dayList, profilePS, avgGrade,
+        lessonTotalReviewsCount,
         isSubscribed,
         reviewListPS);
     return lessonDetailRespDto;
@@ -247,16 +252,54 @@ public class LessonService {
     return lessonRepository.findAllBySubscribeNotLogin();
   }
 
-  // 카테고리별 리스트 + 각각 정렬까지
-  public List<LessonSortListRespDto> getLessonListByCategoryWithSort(Long userId, Long categoryId) {
+  // 카테고리별 리스트(추천순)
+  public List<LessonSortListRespDto> getLessonListByRecommand(Long userId, Long categoryId) {
 
     // 회원 여부 체크
     User userPS = userRepository.findById(userId)
         .orElseThrow(() -> new CustomApiException("권한이 없습니다.", HttpStatus.BAD_REQUEST));
 
-    List<LessonSortListRespDto> lessonSortListRespDtoList = lessonRepository.findAllByCategoryWithSort(userId,
+    List<LessonSortListRespDto> lessonSortListRespDtoList = lessonRepository.findAllByRecommand(userId,
         categoryId);
     return lessonSortListRespDtoList;
+  }
+
+  // 카테고리별 리스트(인기순)
+  public List<LessonSortListRespDto> getLessonListByRanking(Long userId, Long categoryId) {
+    // 회원 여부 체크
+    User userPS = userRepository.findById(userId)
+        .orElseThrow(() -> new CustomApiException("권한이 없습니다.", HttpStatus.BAD_REQUEST));
+
+    List<LessonSortListRespDto> lessonSortListRespDtoList = lessonRepository.findAllByRanking(userId,
+        categoryId);
+    return lessonSortListRespDtoList;
+  }
+
+  // 카테고리별 리스트(최신순)
+  public List<LessonSortListRespDto> getLessonListByRecent(Long userId, Long categoryId) {
+    // 회원 여부 체크
+    User userPS = userRepository.findById(userId)
+        .orElseThrow(() -> new CustomApiException("권한이 없습니다.", HttpStatus.BAD_REQUEST));
+
+    List<LessonSortListRespDto> lessonSortListRespDtoList = lessonRepository.findAllByRecent(userId,
+        categoryId);
+    return lessonSortListRespDtoList;
+  }
+
+  public List<LessonAllListRespDto> getAllLessonList(Long userId, Long categoryId, String sort, Long minPrice,
+      Long maxPrice) {
+    log.debug("디버그 : LessonService - getAllLessonList실행");
+    // 회원 여부 체크
+    User userPS = userRepository.findById(userId)
+        .orElseThrow(() -> new CustomApiException("권한이 없습니다.", HttpStatus.BAD_REQUEST));
+    log.debug("디버그 : userPS : " + userPS.getUsername());
+    List<LessonAllListRespDto> lessonAllListRespDtoList = lessonRepositoryQuery.findAllLessonList(userId, categoryId,
+        sort, minPrice, maxPrice);
+    if (lessonAllListRespDtoList.size() == 0) {
+      throw new CustomApiException("조건에 맞는 서비스가 없습니다.", HttpStatus.BAD_REQUEST);
+    }
+    log.debug("디버그 : lessonAllListRespDtoList = " + lessonAllListRespDtoList.get(0).getLessonName());
+    return lessonAllListRespDtoList;
   }
 
 }

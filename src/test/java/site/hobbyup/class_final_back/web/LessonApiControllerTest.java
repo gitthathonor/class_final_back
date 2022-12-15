@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
@@ -34,6 +35,7 @@ import site.hobbyup.class_final_back.domain.interest.Interest;
 import site.hobbyup.class_final_back.domain.interest.InterestRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
+import site.hobbyup.class_final_back.domain.lesson.LessonRepositoryQuery;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.review.Review;
@@ -47,6 +49,7 @@ import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonUpdateReqDto;
 import site.hobbyup.class_final_back.util.DecodeUtil;
 
 @Sql("classpath:db/truncate.sql") // 롤백 대신 사용 (auto_increment 초기화 + 데이터 비우기)
+@Import(LessonRepositoryQuery.class)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
@@ -85,6 +88,9 @@ public class LessonApiControllerTest extends DummyEntity {
   private InterestRepository interestRepository;
 
   @Autowired
+  private LessonRepositoryQuery lessonRepositoryQuery;
+
+  @Autowired
   private EntityManager em;
 
   @BeforeEach
@@ -118,22 +124,17 @@ public class LessonApiControllerTest extends DummyEntity {
     Lesson lesson2 = lessonRepository.save(newLesson("더미2", 20000L, expert1, sports));
     Lesson lesson3 = lessonRepository.save(newLesson("더미3", 50000L, expert1, music));
     Lesson lesson4 = lessonRepository.save(newLesson("더미4", 34500L, expert1, music));
-    Lesson lesson5 = lessonRepository.save(newLesson("더미5", 2400L, expert1, music));
-    Lesson lesson6 = lessonRepository.save(newLesson("더미6", 98000000L, expert1, beauty));
-    Lesson lesson7 = lessonRepository.save(newLesson("더미7", 30000L, expert1, sports));
+    Lesson lesson5 = lessonRepository.save(newLesson("더미5", 2400L, expert1, crafts));
+    Lesson lesson6 = lessonRepository.save(newLesson("더미6", 9800000L, expert1, beauty));
+    Lesson lesson7 = lessonRepository.save(newLesson("더미7", 30000L, expert1, crafts));
     Lesson lesson8 = lessonRepository.save(newLesson("더미8", 40000L, expert1, sports));
-    Lesson lesson9 = lessonRepository.save(newLesson("더미9", 50000L, expert1, sports));
+    Lesson lesson9 = lessonRepository.save(newLesson("더미9", 50000L, expert1, beauty));
     Lesson lesson10 = lessonRepository.save(newLesson("더미10", 70000L, expert1, sports));
-    // Lesson lesson11 = lessonRepository.save(newLesson("더미11", 80000L, expert1,
-    // beauty));
-    // Lesson lesson12 = lessonRepository.save(newLesson("더미12", 90000L, expert1,
-    // dance));
-    // Lesson lesson13 = lessonRepository.save(newLesson("더미13", 2000L, expert1,
-    // beauty));
-    // Lesson lesson14 = lessonRepository.save(newLesson("더미14", 94000L, expert1,
-    // beauty));
-    // Lesson lesson15 = lessonRepository.save(newLesson("더미15", 7574000L, expert1,
-    // music));
+    Lesson lesson11 = lessonRepository.save(newLesson("더미11", 1500L, expert1, crafts));
+    Lesson lesson12 = lessonRepository.save(newLesson("더미12", 520000L, expert1, game));
+    Lesson lesson13 = lessonRepository.save(newLesson("더미13", 43250L, expert1, music));
+    Lesson lesson14 = lessonRepository.save(newLesson("더미14", 8500000L, expert1, music));
+    Lesson lesson15 = lessonRepository.save(newLesson("더미15", 6500L, expert1, art));
 
     Review review1 = reviewRepository.save(newReivew("너무 좋은 강의입니다.", 4.5, ssar, lesson1));
     Review review2 = reviewRepository.save(newReivew("생각했던 것보다 더 좋네요!", 4.0, cos, lesson1));
@@ -148,6 +149,8 @@ public class LessonApiControllerTest extends DummyEntity {
     Subscribe subscribe3 = subscribeRepository.save(newSubscribe(cos, lesson3));
     Subscribe subscribe4 = subscribeRepository.save(newSubscribe(cos, lesson8));
     Subscribe subscribe5 = subscribeRepository.save(newSubscribe(cos, lesson9));
+    Subscribe subscribe6 = subscribeRepository.save(newSubscribe(ssar, lesson11));
+    Subscribe subscribe7 = subscribeRepository.save(newSubscribe(ssar, lesson9));
 
   }
 
@@ -170,6 +173,7 @@ public class LessonApiControllerTest extends DummyEntity {
     lessonSaveReqDto.setPrice(500000L);
 
     String requestBody = om.writeValueAsString(lessonSaveReqDto);
+    System.out.println("테스트 : " + requestBody);
 
     // when
     ResultActions resultActions = mvc
@@ -183,7 +187,7 @@ public class LessonApiControllerTest extends DummyEntity {
     resultActions.andExpect(jsonPath("$.data.name").value("프로작곡가가 알려주는 하루만에 미디 작곡하는 법"));
     resultActions.andExpect(jsonPath("$.data.categoryName").value("음악"));
     resultActions.andExpect(jsonPath("$.data.expertId").value(1L));
-    resultActions.andExpect(jsonPath("$.data.id").value(11L));
+    resultActions.andExpect(jsonPath("$.data.id").value(16L));
   }
 
   @Test
@@ -195,7 +199,7 @@ public class LessonApiControllerTest extends DummyEntity {
 
     // when
     ResultActions resultActions = mvc
-        .perform(get("/api/category/test/" + categoryId + "?min_price=" + minPrice + "&max_price=" + maxPrice));
+        .perform(get("/api/category/" + categoryId + "/test2?min_price=" + minPrice + "&max_price=" + maxPrice));
     String responseBody = resultActions.andReturn().getResponse().getContentAsString();
     System.out.println("테스트 : " + responseBody);
 
@@ -205,7 +209,7 @@ public class LessonApiControllerTest extends DummyEntity {
     resultActions.andExpect(jsonPath("$.data.lessonDtoList[0].lessonPrice").value("20000원"));
   }
 
-  @WithUserDetails(value = "cos", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
   @Test
   public void getLessonDetail_test() throws Exception {
     // given
@@ -221,7 +225,7 @@ public class LessonApiControllerTest extends DummyEntity {
     resultActions.andExpect(status().isOk());
     resultActions.andExpect(jsonPath("$.data.lessonDto.lessonName").value("더미1"));
     resultActions.andExpect(jsonPath("$.data.lessonReviewList[0].reviewContent").value("생각했던 것보다 더 좋네요!"));
-    resultActions.andExpect(jsonPath("$.data.subscribed").value(false));
+    resultActions.andExpect(jsonPath("$.data.subscribed").value(true));
   }
 
   // @WithUserDetails(value = "ssar", setupBefore =
@@ -299,22 +303,78 @@ public class LessonApiControllerTest extends DummyEntity {
 
   }
 
+  // 카테고리별 레슨 리스트(추천순)
   @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
   @Test
-  public void getLessonListByCategoryWithSort_test() throws Exception {
+  public void getLessonListByRecommand_test() throws Exception {
     // given
     Long categoryId = 1L;
 
     // when
     ResultActions resultActions = mvc
-        .perform(get("/api/category/" + categoryId));
+        .perform(get("/api/category/" + categoryId + "/recommand"));
     String responseBody = resultActions.andReturn().getResponse().getContentAsString();
     System.out.println("테스트 : " + responseBody);
 
     // then
     resultActions.andExpect(status().isOk());
-    // resultActions.andExpect(jsonPath("$.data.lessonName").value("더미1"));
-    // resultActions.andExpect(jsonPath("$.data.").value("생각했던 것보다 더 좋네요!"));
+
+  }
+
+  // 카테고리별 레슨 리스트(인기순)
+  @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @Test
+  public void getLessonListByRanking_test() throws Exception {
+    // given
+    Long categoryId = 6L;
+
+    // when
+    ResultActions resultActions = mvc
+        .perform(get("/api/category/" + categoryId + "/ranking"));
+    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+    System.out.println("테스트 : " + responseBody);
+
+    // then
+    resultActions.andExpect(status().isOk());
+
+  }
+
+  // 카테고리별 레슨 리스트(등록순)
+  @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @Test
+  public void getLessonListByRecent_test() throws Exception {
+    // given
+    Long categoryId = 1L;
+
+    // when
+    ResultActions resultActions = mvc
+        .perform(get("/api/category/" + categoryId + "/recent"));
+    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+    System.out.println("테스트 : " + responseBody);
+
+    // then
+    resultActions.andExpect(status().isOk());
+
+  }
+
+  // 카테고리별 레슨 리스트(쿼리스트링)
+  @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @Test
+  public void getAllLessonList_test() throws Exception {
+    // given
+    Long categoryId = 6L;
+    String sort = "recommand";
+    Long minPrice = 0L;
+    Long maxPrice = 0L;
+
+    // when
+    ResultActions resultActions = mvc
+        .perform(get("/api/category/" + categoryId + "/test"));
+    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+    System.out.println("테스트 : " + responseBody);
+
+    // then
+    resultActions.andExpect(status().isOk());
 
   }
 

@@ -78,8 +78,50 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
                         + " ON l.id = s2.lesson_id"
                         + " WHERE l.category_id = :categoryId"
                         + " GROUP BY l.id"
-                        + " ORDER BY recommand DESC;", nativeQuery = true)
-        List<LessonSortListRespDto> findAllByCategoryWithSort(@Param("userId") Long userId,
+                        + " ORDER BY recommand DESC", nativeQuery = true)
+        List<LessonSortListRespDto> findAllByRecommand(@Param("userId") Long userId,
+                        @Param("categoryId") Long categoryId);
+
+        @Query(value = "select l.name as lessonName,"
+                        + " l.price as lessonPrice,"
+                        + " COUNT(r.id) AS totalReviews,"
+                        + " (case when AVG(r.grade) IS null then 0.0 ELSE AVG(r.grade) END) AS avgGrade,"
+                        + " (case when s.lesson_id IS NOT NULL then true ELSE false END) AS subscribed,"
+                        + " (case when i.category_id IS NOT NULL then true ELSE false END) AS recommand,"
+                        + " (case when s2.count IS null then 0 ELSE s2.count END) AS ranking,"
+                        + " l.created_at AS recent"
+                        + " FROM lesson l LEFT OUTER JOIN review r ON l.id = r.lesson_id"
+                        + " LEFT OUTER JOIN (SELECT lesson_id FROM subscribe WHERE user_id = :userId) s"
+                        + " ON l.id = s.lesson_id"
+                        + " LEFT OUTER JOIN (SELECT category_id FROM interest WHERE user_id = :userId) i"
+                        + " ON l.category_id = i.category_id"
+                        + " LEFT OUTER JOIN (SELECT COUNT(*) count, lesson_id FROM subscribe GROUP BY lesson_id) s2"
+                        + " ON l.id = s2.lesson_id"
+                        + " WHERE l.category_id = :categoryId"
+                        + " GROUP BY l.id"
+                        + " ORDER BY ranking DESC", nativeQuery = true)
+        List<LessonSortListRespDto> findAllByRanking(@Param("userId") Long userId,
+                        @Param("categoryId") Long categoryId);
+
+        @Query(value = "select l.name as lessonName,"
+                        + " l.price as lessonPrice,"
+                        + " COUNT(r.id) AS totalReviews,"
+                        + " (case when AVG(r.grade) IS null then 0.0 ELSE AVG(r.grade) END) AS avgGrade,"
+                        + " (case when s.lesson_id IS NOT NULL then true ELSE false END) AS subscribed,"
+                        + " (case when i.category_id IS NOT NULL then true ELSE false END) AS recommand,"
+                        + " (case when s2.count IS null then 0 ELSE s2.count END) AS ranking,"
+                        + " l.created_at AS recent"
+                        + " FROM lesson l LEFT OUTER JOIN review r ON l.id = r.lesson_id"
+                        + " LEFT OUTER JOIN (SELECT lesson_id FROM subscribe WHERE user_id = :userId) s"
+                        + " ON l.id = s.lesson_id"
+                        + " LEFT OUTER JOIN (SELECT category_id FROM interest WHERE user_id = :userId) i"
+                        + " ON l.category_id = i.category_id"
+                        + " LEFT OUTER JOIN (SELECT COUNT(*) count, lesson_id FROM subscribe GROUP BY lesson_id) s2"
+                        + " ON l.id = s2.lesson_id"
+                        + " WHERE l.category_id = :categoryId"
+                        + " GROUP BY l.id"
+                        + " ORDER BY recent DESC", nativeQuery = true)
+        List<LessonSortListRespDto> findAllByRecent(@Param("userId") Long userId,
                         @Param("categoryId") Long categoryId);
 
 }
