@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import site.hobbyup.class_final_back.domain.AuditingTime;
 import site.hobbyup.class_final_back.domain.user.User;
+import site.hobbyup.class_final_back.dto.profile.ProfileReqDto.ProfileSaveReqDto;
 import site.hobbyup.class_final_back.dto.profile.ProfileReqDto.ProfileUpdateReqDto;
 
 @ToString
@@ -30,15 +31,15 @@ public class Profile extends AuditingTime {
     private Long id;
     @Column(nullable = true)
     private String filePath;
-    @Column(nullable = false, length = 50)
+    @Column(nullable = true, length = 50)
     private String introduction;
-    @Column(nullable = false, length = 20)
+    @Column(nullable = true, length = 20)
     private String region;
-    @Column(nullable = false, length = 50)
+    @Column(nullable = true, length = 50)
     private String certification;
-    @Column(nullable = false, length = 20)
+    @Column(nullable = true, length = 20)
     private String careerYear;
-    @Column(nullable = false, length = 50)
+    @Column(nullable = true, length = 50)
     private String career;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(unique = true)
@@ -65,6 +66,15 @@ public class Profile extends AuditingTime {
         this.certification = profileUpdateReqDto.getCertification();
         this.careerYear = profileUpdateReqDto.getCareerYear();
         this.career = profileUpdateReqDto.getCareer();
+    }
+
+    public void update(ProfileSaveReqDto profileSaveReqDto) {
+        this.filePath = profileSaveReqDto.getFilePath();
+        this.introduction = profileSaveReqDto.getIntroduction();
+        this.region = profileSaveReqDto.getRegion();
+        this.certification = profileSaveReqDto.getCertification();
+        this.careerYear = profileSaveReqDto.getCareerYear();
+        this.career = profileSaveReqDto.getCareer();
     }
 
 }
