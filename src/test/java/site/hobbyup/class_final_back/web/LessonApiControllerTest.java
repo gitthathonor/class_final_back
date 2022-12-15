@@ -173,6 +173,7 @@ public class LessonApiControllerTest extends DummyEntity {
     lessonSaveReqDto.setPrice(500000L);
 
     String requestBody = om.writeValueAsString(lessonSaveReqDto);
+    System.out.println("테스트 : " + requestBody);
 
     // when
     ResultActions resultActions = mvc

@@ -31,7 +31,7 @@ public class ProfileApiController {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final ProfileService profileService;
 
-    @PutMapping("/api/profile")
+    @PostMapping("/api/profile")
     public ResponseEntity<?> saveProfile(@RequestBody ProfileSaveReqDto profileSaveReqDto,
             @AuthenticationPrincipal LoginUser loginUser) throws IOException {
         log.debug("디버그 : controller - 프로필 등록 시작");
