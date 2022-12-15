@@ -190,24 +190,26 @@ public class LessonApiControllerTest extends DummyEntity {
     resultActions.andExpect(jsonPath("$.data.id").value(16L));
   }
 
-  @Test
-  public void getLessonCategoryList_test() throws Exception {
-    // given
-    Long categoryId = 2L;
-    Long minPrice = 5000L;
-    Long maxPrice = 50000L;
+  // @Test
+  // public void getLessonCategoryList_test() throws Exception {
+  // // given
+  // Long categoryId = 2L;
+  // Long minPrice = 5000L;
+  // Long maxPrice = 50000L;
 
-    // when
-    ResultActions resultActions = mvc
-        .perform(get("/api/category/" + categoryId + "/test2?min_price=" + minPrice + "&max_price=" + maxPrice));
-    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-    System.out.println("테스트 : " + responseBody);
+  // // when
+  // ResultActions resultActions = mvc
+  // .perform(get("/api/category/" + categoryId + "/test2?min_price=" + minPrice +
+  // "&max_price=" + maxPrice));
+  // String responseBody =
+  // resultActions.andReturn().getResponse().getContentAsString();
+  // System.out.println("테스트 : " + responseBody);
 
-    // then
-    resultActions.andExpect(status().isOk());
-    resultActions.andExpect(jsonPath("$.data.categoryDto.categoryName").value("스포츠"));
-    resultActions.andExpect(jsonPath("$.data.lessonDtoList[0].lessonPrice").value("20000원"));
-  }
+  // // then
+  // resultActions.andExpect(status().isOk());
+  // resultActions.andExpect(jsonPath("$.data.categoryDto.categoryName").value("스포츠"));
+  // resultActions.andExpect(jsonPath("$.data.lessonDtoList[0].lessonPrice").value("20000원"));
+  // }
 
   @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
   @Test
@@ -230,40 +232,43 @@ public class LessonApiControllerTest extends DummyEntity {
 
   // @WithUserDetails(value = "ssar", setupBefore =
   // TestExecutionEvent.TEST_EXECUTION)
-  @Test
-  public void getLessonCommonList_test() throws Exception {
-    // when
-    ResultActions resultActions = mvc
-        .perform(get("/api/main"));
-    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-    System.out.println("테스트 : " + responseBody);
+  // @Test
+  // public void getLessonCommonList_test() throws Exception {
+  // // when
+  // ResultActions resultActions = mvc
+  // .perform(get("/api/main"));
+  // String responseBody =
+  // resultActions.andReturn().getResponse().getContentAsString();
+  // System.out.println("테스트 : " + responseBody);
 
-    // then
-    resultActions.andExpect(status().isOk());
-    resultActions.andExpect(jsonPath("$.data[0].lessonPrice").value(70000L));
-    resultActions.andExpect(jsonPath("$.data[9].avgGrade").value(4.25));
-    resultActions.andExpect(jsonPath("$.data[8].subscribed").value(false));
-    resultActions.andExpect(jsonPath("$.data[8].totalReview").value(2L));
+  // // then
+  // resultActions.andExpect(status().isOk());
+  // resultActions.andExpect(jsonPath("$.data[0].lessonPrice").value(70000L));
+  // resultActions.andExpect(jsonPath("$.data[9].avgGrade").value(4.25));
+  // resultActions.andExpect(jsonPath("$.data[8].subscribed").value(false));
+  // resultActions.andExpect(jsonPath("$.data[8].totalReview").value(2L));
 
-  }
+  // }
 
-  @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
-  @Test
-  public void getLessonSubscribeList_test() throws Exception {
-    // when
-    ResultActions resultActions = mvc
-        .perform(get("/api/lesson/subscribe"));
-    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-    System.out.println("테스트 : " + responseBody);
+  // @WithUserDetails(value = "ssar", setupBefore =
+  // TestExecutionEvent.TEST_EXECUTION)
+  // @Test
+  // public void getLessonSubscribeList_test() throws Exception {
+  // // when
+  // ResultActions resultActions = mvc
+  // .perform(get("/api/lesson/subscribe"));
+  // String responseBody =
+  // resultActions.andReturn().getResponse().getContentAsString();
+  // System.out.println("테스트 : " + responseBody);
 
-    // then
-    resultActions.andExpect(status().isOk());
-    resultActions.andExpect(jsonPath("$.data[0].lessonPrice").value(10000L));
-    resultActions.andExpect(jsonPath("$.data[0].avgGrade").value(4.25));
-    resultActions.andExpect(jsonPath("$.data[1].subscribed").value(true));
-    resultActions.andExpect(jsonPath("$.data[2].totalReview").value(1L));
+  // // then
+  // resultActions.andExpect(status().isOk());
+  // resultActions.andExpect(jsonPath("$.data[0].lessonPrice").value(10000L));
+  // resultActions.andExpect(jsonPath("$.data[0].avgGrade").value(4.25));
+  // resultActions.andExpect(jsonPath("$.data[1].subscribed").value(true));
+  // resultActions.andExpect(jsonPath("$.data[2].totalReview").value(1L));
 
-  }
+  // }
 
   @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
   @Test
@@ -304,63 +309,69 @@ public class LessonApiControllerTest extends DummyEntity {
   }
 
   // 카테고리별 레슨 리스트(추천순)
-  @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
-  @Test
-  public void getLessonListByRecommand_test() throws Exception {
-    // given
-    Long categoryId = 1L;
+  // @WithUserDetails(value = "ssar", setupBefore =
+  // TestExecutionEvent.TEST_EXECUTION)
+  // @Test
+  // public void getLessonListByRecommand_test() throws Exception {
+  // // given
+  // Long categoryId = 1L;
 
-    // when
-    ResultActions resultActions = mvc
-        .perform(get("/api/category/" + categoryId + "/recommand"));
-    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-    System.out.println("테스트 : " + responseBody);
+  // // when
+  // ResultActions resultActions = mvc
+  // .perform(get("/api/category/" + categoryId + "/recommand"));
+  // String responseBody =
+  // resultActions.andReturn().getResponse().getContentAsString();
+  // System.out.println("테스트 : " + responseBody);
 
-    // then
-    resultActions.andExpect(status().isOk());
+  // // then
+  // resultActions.andExpect(status().isOk());
 
-  }
+  // }
 
   // 카테고리별 레슨 리스트(인기순)
-  @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
-  @Test
-  public void getLessonListByRanking_test() throws Exception {
-    // given
-    Long categoryId = 6L;
+  // @WithUserDetails(value = "ssar", setupBefore =
+  // TestExecutionEvent.TEST_EXECUTION)
+  // @Test
+  // public void getLessonListByRanking_test() throws Exception {
+  // // given
+  // Long categoryId = 6L;
 
-    // when
-    ResultActions resultActions = mvc
-        .perform(get("/api/category/" + categoryId + "/ranking"));
-    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-    System.out.println("테스트 : " + responseBody);
+  // // when
+  // ResultActions resultActions = mvc
+  // .perform(get("/api/category/" + categoryId + "/ranking"));
+  // String responseBody =
+  // resultActions.andReturn().getResponse().getContentAsString();
+  // System.out.println("테스트 : " + responseBody);
 
-    // then
-    resultActions.andExpect(status().isOk());
+  // // then
+  // resultActions.andExpect(status().isOk());
 
-  }
+  // }
 
   // 카테고리별 레슨 리스트(등록순)
-  @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
-  @Test
-  public void getLessonListByRecent_test() throws Exception {
-    // given
-    Long categoryId = 1L;
+  // @WithUserDetails(value = "ssar", setupBefore =
+  // TestExecutionEvent.TEST_EXECUTION)
+  // @Test
+  // public void getLessonListByRecent_test() throws Exception {
+  // // given
+  // Long categoryId = 1L;
 
-    // when
-    ResultActions resultActions = mvc
-        .perform(get("/api/category/" + categoryId + "/recent"));
-    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-    System.out.println("테스트 : " + responseBody);
+  // // when
+  // ResultActions resultActions = mvc
+  // .perform(get("/api/category/" + categoryId + "/recent"));
+  // String responseBody =
+  // resultActions.andReturn().getResponse().getContentAsString();
+  // System.out.println("테스트 : " + responseBody);
 
-    // then
-    resultActions.andExpect(status().isOk());
+  // // then
+  // resultActions.andExpect(status().isOk());
 
-  }
+  // }
 
   // 카테고리별 레슨 리스트(쿼리스트링)
   @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
   @Test
-  public void getAllLessonList_test() throws Exception {
+  public void getLessonCategoryList_test() throws Exception {
     // given
     Long categoryId = 6L;
     String sort = "recommand";
@@ -369,7 +380,7 @@ public class LessonApiControllerTest extends DummyEntity {
 
     // when
     ResultActions resultActions = mvc
-        .perform(get("/api/category/" + categoryId + "/test"));
+        .perform(get("/api/category/" + categoryId));
     String responseBody = resultActions.andReturn().getResponse().getContentAsString();
     System.out.println("테스트 : " + responseBody);
 

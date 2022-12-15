@@ -1,20 +1,20 @@
-package site.hobbyup.class_final_back.dto.lesson;
+// package site.hobbyup.class_final_back.dto.lesson;
 
-public interface LessonSortListRespDto {
-  String getLessonName();
+// public interface LessonSortListRespDto {
+// String getLessonName();
 
-  Long getLessonPrice();
+// Long getLessonPrice();
 
-  Double getAvgGrade();
+// Double getAvgGrade();
 
-  Long getTotalReviews();
+// Long getTotalReviews();
 
-  boolean isSubscribed();
+// boolean isSubscribed();
 
-  boolean getRecommand();
+// boolean getRecommand();
 
-  Long getRanking();
+// Long getRanking();
 
-  String getRecent();
+// String getRecent();
 
-}
+// }
