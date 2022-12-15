@@ -3,7 +3,6 @@ package site.hobbyup.class_final_back.dto.lesson;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -222,6 +221,36 @@ public class LessonRespDto {
     private String recent;
 
     public LessonCategoryListRespDto(BigInteger lessonId, String lessonName, BigInteger lessonPrice,
+        BigInteger avgGrade,
+        BigDecimal totalReviews,
+        Boolean isSubscribed, Boolean recommand, BigInteger ranking, Timestamp recent) {
+      this.lessonId = lessonId.longValue();
+      this.lessonName = lessonName;
+      this.lessonPrice = lessonPrice.longValue();
+      this.avgGrade = avgGrade.doubleValue();
+      this.totalReviews = totalReviews.longValue();
+      this.isSubscribed = isSubscribed.booleanValue();
+      this.recommand = recommand.booleanValue();
+      this.ranking = ranking.longValue();
+      this.recent = recent.toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
+  }
+
+  @Setter
+  @Getter
+  public static class LessonSearchListRespDto {
+    private Long lessonId;
+    private String lessonName;
+    private Long lessonPrice;
+    private Double avgGrade;
+    private Long totalReviews;
+    private boolean isSubscribed;
+    private boolean recommand;
+    private Long ranking;
+    private String recent;
+
+    public LessonSearchListRespDto(BigInteger lessonId, String lessonName, BigInteger lessonPrice,
         BigInteger avgGrade,
         BigDecimal totalReviews,
         Boolean isSubscribed, Boolean recommand, BigInteger ranking, Timestamp recent) {

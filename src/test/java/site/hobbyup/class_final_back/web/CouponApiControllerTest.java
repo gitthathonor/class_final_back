@@ -94,7 +94,7 @@ public class CouponApiControllerTest extends DummyEntity {
 
                 // then
                 resultActions.andExpect(status().isOk());
-                resultActions.andExpect(jsonPath("$.data.couponList.length()").value(3));
+                resultActions.andExpect(jsonPath("$.data.couponList.length()").value(2));
         }
 
 }

@@ -16,8 +16,8 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
         // @Param("minPrice") Long minPrice,
         // @Param("maxPrice") Long maxPrice);
 
-        @Query("select l from Lesson l where l.name LIKE %:keyword%")
-        List<Lesson> findAllByKeyword(@Param("keyword") String keyword);
+        // @Query("select l from Lesson l where l.name LIKE %:keyword%")
+        // List<Lesson> findAllByKeyword(@Param("keyword") String keyword);
 
         @Query("select l from Lesson l join fetch l.expert u where l.expert.user.id = :userId")
         List<Lesson> findByUserId(@Param("userId") Long userId);
