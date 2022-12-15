@@ -19,6 +19,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.val;
 import site.hobbyup.class_final_back.domain.AuditingTime;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.expert.Expert;
@@ -64,6 +65,9 @@ public class Lesson extends AuditingTime {
 
   @Column(nullable = true)
   private Timestamp deadline;
+
+  @ColumnDefault(value = "false")
+  private boolean isDisabled;
 
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
   private Expert expert;

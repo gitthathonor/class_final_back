@@ -3,6 +3,8 @@ package site.hobbyup.class_final_back.dto.lesson;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,11 +13,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.review.Review;
-import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto.LessonDto;
 
 public class LessonRespDto {
   @Setter
@@ -38,50 +38,52 @@ public class LessonRespDto {
     }
   }
 
-  @Setter
-  @Getter
-  public static class LessonCategoryListRespDto {
-    private CategoryDto categoryDto;
-    private List<LessonDto> lessonDtoList;
+  // @Setter
+  // @Getter
+  // public static class LessonCategoryListRespDto {
+  // private CategoryDto categoryDto;
+  // private List<LessonDto> lessonDtoList;
 
-    public LessonCategoryListRespDto(Category category, List<Lesson> lessonList) {
-      this.categoryDto = new CategoryDto(category);
-      this.lessonDtoList = lessonList.stream().map((lesson) -> new LessonDto(lesson))
-          .collect(Collectors.toList());
-    }
+  // public LessonCategoryListRespDto(Category category, List<Lesson> lessonList)
+  // {
+  // this.categoryDto = new CategoryDto(category);
+  // this.lessonDtoList = lessonList.stream().map((lesson) -> new
+  // LessonDto(lesson))
+  // .collect(Collectors.toList());
+  // }
 
-    @Setter
-    @Getter
-    public class CategoryDto {
-      private String categoryName;
+  // @Setter
+  // @Getter
+  // public class CategoryDto {
+  // private String categoryName;
 
-      public CategoryDto(Category category) {
-        this.categoryName = category.getName();
-      }
+  // public CategoryDto(Category category) {
+  // this.categoryName = category.getName();
+  // }
 
-    }
+  // }
 
-    @Setter
-    @Getter
-    public class LessonDto {
-      private Long lessonId;
-      private String lessonName;
-      private String lessonPrice;
-      private Long lessonReviewsCount;
-      private Double lessonAvgGrade;
-      private boolean isSubscribed; // 로그인 되었을 때만
+  // @Setter
+  // @Getter
+  // public class LessonDto {
+  // private Long lessonId;
+  // private String lessonName;
+  // private String lessonPrice;
+  // private Long lessonReviewsCount;
+  // private Double lessonAvgGrade;
+  // private boolean isSubscribed; // 로그인 되었을 때만
 
-      public LessonDto(Lesson lesson) {
-        this.lessonId = lesson.getId();
-        this.lessonName = lesson.getName();
-        this.lessonPrice = lesson.getPrice() + "원";
-        this.lessonReviewsCount = 0L;
-        this.lessonAvgGrade = 0.0;
-        this.isSubscribed = false;
-      }
+  // public LessonDto(Lesson lesson) {
+  // this.lessonId = lesson.getId();
+  // this.lessonName = lesson.getName();
+  // this.lessonPrice = lesson.getPrice() + "원";
+  // this.lessonReviewsCount = 0L;
+  // this.lessonAvgGrade = 0.0;
+  // this.isSubscribed = false;
+  // }
 
-    }
-  }
+  // }
+  // }
 
   @Setter
   @Getter
@@ -208,7 +210,7 @@ public class LessonRespDto {
   @AllArgsConstructor
   @Setter
   @Getter
-  public static class LessonAllListRespDto {
+  public static class LessonCategoryListRespDto {
     private Long lessonId;
     private String lessonName;
     private Long lessonPrice;
@@ -219,7 +221,8 @@ public class LessonRespDto {
     private Long ranking;
     private String recent;
 
-    public LessonAllListRespDto(BigInteger lessonId, String lessonName, BigInteger lessonPrice, BigInteger avgGrade,
+    public LessonCategoryListRespDto(BigInteger lessonId, String lessonName, BigInteger lessonPrice,
+        BigInteger avgGrade,
         BigDecimal totalReviews,
         Boolean isSubscribed, Boolean recommand, BigInteger ranking, Timestamp recent) {
       this.lessonId = lessonId.longValue();
@@ -230,7 +233,7 @@ public class LessonRespDto {
       this.isSubscribed = isSubscribed.booleanValue();
       this.recommand = recommand.booleanValue();
       this.ranking = ranking.longValue();
-      this.recent = recent.toString();
+      this.recent = recent.toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
   }
