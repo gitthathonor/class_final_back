@@ -62,9 +62,7 @@ public class ProfileService extends DecodeUtil {
                                 .orElseThrow(() -> new CustomApiException("탈퇴한 유저입니다.", HttpStatus.FORBIDDEN));
 
                 Optional<Profile> profileOP = profileRepository.findByUserId(userPS.getId());
-                if (profileOP.isEmpty()) {
-                        throw new CustomApiException("프로필이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
-                }
+
                 return new ProfileDetailRespDto(profileOP.get());
         }
 
