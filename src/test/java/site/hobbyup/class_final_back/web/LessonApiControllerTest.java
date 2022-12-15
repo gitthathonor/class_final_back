@@ -389,4 +389,22 @@ public class LessonApiControllerTest extends DummyEntity {
 
   }
 
+  @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @Test
+  public void getLessonListBySearch_test() throws Exception {
+    // given
+    String keyword = "미1";
+
+    // when
+    ResultActions resultActions = mvc
+        .perform(get("/api/lesson/search?keyword=" + keyword));
+    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+    System.out.println("테스트 : " + responseBody);
+
+    // then
+    resultActions.andExpect(status().isOk());
+    resultActions.andExpect(jsonPath("$.data[6].lessonName").value("더미1"));
+
+  }
+
 }
