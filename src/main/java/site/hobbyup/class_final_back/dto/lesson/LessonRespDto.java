@@ -15,7 +15,6 @@ import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.review.Review;
-import site.hobbyup.class_final_back.util.CustomDateUtil;
 
 public class LessonRespDto {
   @Setter
