@@ -189,16 +189,17 @@ public class LessonApiController {
         public ResponseEntity<?> getLessonListBySearch(@AuthenticationPrincipal LoginUser loginUser,
                         @RequestParam(name = "keyword") String keyword) {
                 log.debug("디버그 : LessonApiController - getLessonListBySearch실행");
-                // if (loginUser == null) {
-                // log.debug("디버그 : LessonApiController - 비로그인 시 카테고리별 페이지 보기");
-                // List<LessonSearchListRespDto> lessonSearchListRespDtoList = lessonService
-                // .getLessonListBySearchNotLogin(keyword);
-                // return new ResponseEntity<>(new ResponseDto<>("비로그인시, 카테고리 정렬 완료",
-                // lessonSearchListRespDtoList),
-                // HttpStatus.OK);
-                // }
+                if (loginUser == null) {
+                        log.debug("디버그 : LessonApiController - loginUser가 null");
+                        List<LessonSearchListRespDto> lessonSearchListRespDtoList = lessonService
+                                        .getLessonListBySearchNotLogin(keyword);
+                        return new ResponseEntity<>(new ResponseDto<>("비로그인 시, 검색 성공",
+                                        lessonSearchListRespDtoList),
+                                        HttpStatus.OK);
+                }
                 List<LessonSearchListRespDto> lessonSearchListRespDtoList = lessonService
                                 .getLessonListBySearch(loginUser.getUser().getId(), keyword);
-                return new ResponseEntity<>(new ResponseDto<>("검색 성공", lessonSearchListRespDtoList), HttpStatus.OK);
+                return new ResponseEntity<>(new ResponseDto<>("로그인 시, 검색 성공", lessonSearchListRespDtoList),
+                                HttpStatus.OK);
         }
 }

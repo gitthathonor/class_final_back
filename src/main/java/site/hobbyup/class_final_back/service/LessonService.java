@@ -339,8 +339,13 @@ public class LessonService {
     return lessonSearchListRespDtoList;
   }
 
+  // 검색, 비로그인 시
   public List<LessonSearchListRespDto> getLessonListBySearchNotLogin(String keyword) {
-    return null;
+    log.debug("디버그 : LessonService - getLessonListBySearchNotLogin실행");
+    List<LessonSearchListRespDto> lessonSearchListRespDtoList = lessonRepositoryQuery
+        .findAllLessonWithNotLoginByKeyword(keyword);
+    log.debug("디버그 : lessonSearchListRespDtoList = " + lessonSearchListRespDtoList.get(0).getLessonName());
+    return lessonSearchListRespDtoList;
   }
 
 }
