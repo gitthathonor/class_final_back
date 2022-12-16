@@ -1,7 +1,9 @@
 package site.hobbyup.class_final_back.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +26,7 @@ import site.hobbyup.class_final_back.domain.subscribe.SubscribeRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.payment.PaymentReqDto.PaymentSaveReqDto;
+import site.hobbyup.class_final_back.dto.payment.PaymentRespDto.PaymentForSellingRespDto;
 import site.hobbyup.class_final_back.dto.payment.PaymentRespDto.PaymentListRespDto;
 import site.hobbyup.class_final_back.dto.payment.PaymentRespDto.PaymentSaveRespDto;
 
@@ -50,7 +53,7 @@ public class PaymentService {
     // 2. 유저가 찜을 하고 있다면 찜한 목록에서 제거하기
     if (subscribeOP.isPresent()) {
       Subscribe subscribePS = subscribeOP.get();
-      subscribeRepository.delete(subscribePS);
+      subscribeRepository.deleteById(subscribePS.getId());
     }
 
     // 3. 결제정보 등록하기
@@ -58,12 +61,19 @@ public class PaymentService {
         .orElseThrow(() -> new CustomApiException("가입된 유저가 없습니다.", HttpStatus.BAD_REQUEST));
     Lesson lessonPS = lessonRepository.findById(lessonId)
         .orElseThrow(() -> new CustomApiException("개설된 레슨이 없습니다.", HttpStatus.BAD_REQUEST));
+
     List<Coupon> couponListPS = couponRepository.findAllByUserId(userId);
     Coupon couponPS = couponListPS.get(0);
+
     PaymentType paymentTypePS = paymentTypeRepository.findById(paymentSaveReqDto.getPaymentTypeId())
         .orElseThrow(() -> new CustomApiException("없는 결제 방식입니다..", HttpStatus.BAD_REQUEST));
+
     Payment payment = paymentSaveReqDto.toEntity(userPS, couponPS, lessonPS, paymentTypePS);
     Payment paymentPS = paymentRepository.save(payment);
+
+    // 4. 사용한 쿠폰 삭제
+    couponRepository.deleteById(couponPS.getId());
+
     return new PaymentSaveRespDto(paymentPS);
   }
 
@@ -79,6 +89,20 @@ public class PaymentService {
   }
 
   // 판매 내역 보기
+  public PaymentForSellingRespDto getExpertSellingList(Long userId) {
+    // 1. 현재 전문가의 id로 등록되어 있는 모든 레슨을 찾음
+    List<Lesson> lessonListPS = lessonRepository.findByUserId(userId);
+    List<Long> lessonIdList = new ArrayList<>();
+
+    for (int i = 0; i < lessonListPS.size(); i++) {
+      lessonIdList.add(lessonListPS.get(i).getId());
+    }
+
+    // 2. 그 레슨들을 다시 결제 내역에서 찾음
+    List<Payment> paymentSellingListPS = paymentRepository.findAllById(lessonIdList);
+
+    return new PaymentForSellingRespDto(paymentSellingListPS);
+  }
 
   // 결제 취소하기
 
