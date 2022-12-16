@@ -24,7 +24,6 @@ public class UserRespDto {
         private Long id;
         private String username;
         private boolean isDisabled;
-        private boolean isDisabled;
         private List<InterestDto> interestList;
 
         public JoinRespDto(User user, List<Interest> interestList) {
@@ -58,7 +57,6 @@ public class UserRespDto {
     public static class LoginRespDto {
         private Long id;
         private String username;
-        private String role;
         private String role;
         private String createdAt;
 
