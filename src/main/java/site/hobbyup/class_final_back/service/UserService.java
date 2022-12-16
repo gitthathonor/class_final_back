@@ -48,7 +48,6 @@ public class UserService {
     private final ProfileRepository profileRepository;
     private final CouponRepository couponRepository;
     private final LessonRepository lessonRepository;
-    private final ExpertRepository expertRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     // 회원가입
@@ -84,18 +83,7 @@ public class UserService {
         Coupon coupon = Coupon.builder().title("회원가입 쿠폰").price(10000L).expiredDate("2022-12-22").user(userPS).build();
         couponRepository.save(coupon);
 
-        // 6. role=expert일 시, expert 테이블에도 추가 입력
-        if (userPS.getRole().getValue().equals("전문가")) {
-            expertRepository
-                    .save(Expert.builder()
-                            .satisfaction(0L)
-                            .totalLesson(0L)
-                            .isApproval(false)
-                            .user(userPS)
-                            .build());
-        }
-
-        // 67 DTO 응답
+        // 6. DTO 응답
         return new JoinRespDto(userPS, interestListPS);
     }
 
