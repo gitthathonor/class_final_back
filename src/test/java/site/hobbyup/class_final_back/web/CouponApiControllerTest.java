@@ -1,8 +1,6 @@
 package site.hobbyup.class_final_back.web;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,14 +26,13 @@ import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
 import site.hobbyup.class_final_back.domain.coupon.Coupon;
 import site.hobbyup.class_final_back.domain.coupon.CouponRepository;
+import site.hobbyup.class_final_back.domain.expert.Expert;
+import site.hobbyup.class_final_back.domain.expert.ExpertRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
-import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
-import site.hobbyup.class_final_back.domain.subscribe.Subscribe;
 import site.hobbyup.class_final_back.domain.subscribe.SubscribeRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
-import site.hobbyup.class_final_back.dto.subscribe.SubscribeReqDto.SubscribeSaveReqDto;
 
 @Sql("classpath:db/truncate.sql") // 롤백 대신 사용 (auto_increment 초기화 + 데이터 비우기)
 @ActiveProfiles("test")
@@ -62,16 +59,21 @@ public class CouponApiControllerTest extends DummyEntity {
         private LessonRepository lessonRepository;
         @Autowired
         private CouponRepository couponRepository;
+        @Autowired
+        private ExpertRepository expertRepository;
 
         @BeforeEach
         public void setUp() throws IOException {
                 User ssar = userRepository.save(newUser("ssar"));
                 User cos = userRepository.save(newUser("cos"));
+                User hong = userRepository.save(newUser("expert"));
+
+                Expert expert1 = expertRepository.save(newExpert(hong));
 
                 Category beauty = categoryRepository.save(newCategory("뷰티"));
 
-                Lesson lesson1 = lessonRepository.save(newLesson("더미1", 10000L, ssar, beauty));
-                Lesson lesson2 = lessonRepository.save(newLesson("더미1", 10000L, ssar, beauty));
+                Lesson lesson1 = lessonRepository.save(newLesson("더미1", 10000L, expert1, beauty));
+                Lesson lesson2 = lessonRepository.save(newLesson("더미1", 10000L, expert1, beauty));
 
                 Coupon coupon1 = couponRepository.save(newCoupon("회원가입 쿠폰", 10000L, "2022-12-22", cos));
                 Coupon coupon2 = couponRepository.save(newCoupon("회원가입 쿠폰", 10000L, "2022-12-22", cos));
@@ -92,7 +94,7 @@ public class CouponApiControllerTest extends DummyEntity {
 
                 // then
                 resultActions.andExpect(status().isOk());
-                resultActions.andExpect(jsonPath("$.data.couponList.length()").value(3));
+                resultActions.andExpect(jsonPath("$.data.couponList.length()").value(2));
         }
 
 }

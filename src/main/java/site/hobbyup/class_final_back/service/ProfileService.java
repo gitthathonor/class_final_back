@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.Optional;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
@@ -38,10 +39,10 @@ public class ProfileService extends DecodeUtil {
         @Transactional
         public ProfileSaveRespDto saveProfile(ProfileSaveReqDto profileSaveReqDto, Long userId) throws IOException {
                 log.debug("디버그 : service - 프로필 등록 시작");
-
                 User userPS = userRepository.findById(userId)
                                 .orElseThrow(
                                                 () -> new CustomApiException("유저가 존재하지 않습니다.", HttpStatus.FORBIDDEN));
+
                 Optional<Profile> profileOP = profileRepository.findByUserId(userId);
                 if (profileOP.isPresent()) {
                         throw new CustomApiException("이미 프로필을 등록했습니다.", HttpStatus.FORBIDDEN);
@@ -52,7 +53,6 @@ public class ProfileService extends DecodeUtil {
 
                 profileSaveReqDto.setFilePath(filePath);
                 Profile profilePS = profileRepository.save(profileSaveReqDto.toEntity(userPS));
-
                 return new ProfileSaveRespDto(profilePS);
         }
 
@@ -64,8 +64,10 @@ public class ProfileService extends DecodeUtil {
 
                 Optional<Profile> profileOP = profileRepository.findByUserId(userPS.getId());
                 if (profileOP.isEmpty()) {
-                        throw new CustomApiException("프로필이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
+                        Profile profile = new Profile(userId, null, null, null, null, null, null, userPS);
+                        return new ProfileDetailRespDto(profile);
                 }
+
                 return new ProfileDetailRespDto(profileOP.get());
         }
 
@@ -98,4 +100,5 @@ public class ProfileService extends DecodeUtil {
                 profileOP.get().update(profileUpdateReqDto);
                 return new ProfileUpdateRespDto(profileRepository.save(profileOP.get()));
         }
+
 }

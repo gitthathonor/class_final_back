@@ -12,20 +12,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import site.hobbyup.class_final_back.config.enums.UserEnum;
-import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.config.exception.CustomApiException;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
 import site.hobbyup.class_final_back.domain.coupon.Coupon;
 import site.hobbyup.class_final_back.domain.coupon.CouponRepository;
-import site.hobbyup.class_final_back.domain.coupon.Coupon;
-import site.hobbyup.class_final_back.domain.coupon.CouponRepository;
+import site.hobbyup.class_final_back.domain.expert.Expert;
+import site.hobbyup.class_final_back.domain.expert.ExpertRepository;
 import site.hobbyup.class_final_back.domain.interest.Interest;
 import site.hobbyup.class_final_back.domain.interest.InterestRepository;
-import site.hobbyup.class_final_back.domain.lesson.Lesson;
-import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
-import site.hobbyup.class_final_back.domain.profile.Profile;
-import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
 import site.hobbyup.class_final_back.domain.profile.Profile;
@@ -38,6 +33,7 @@ import site.hobbyup.class_final_back.dto.user.UserRespDto.JoinRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.MyLessonListRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.MyPageRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.UserDeleteRespDto;
+import site.hobbyup.class_final_back.dto.user.UserRespDto.UserInitRespDto;
 import site.hobbyup.class_final_back.dto.user.UserRespDto.UserUpdateRespDto;
 
 @Transactional(readOnly = true)
@@ -68,6 +64,10 @@ public class UserService {
 
         // 3. 관심사 저장
         log.debug("디버그 : JoinReqDto가 선택한 카테고리들 : " + joinReqDto.getCategoryIds());
+
+        if (joinReqDto.getCategoryIds() == null) {
+            return new JoinRespDto(userPS);
+        }
         List<Category> categoryListPS = categoryRepository.findAllById(joinReqDto.getCategoryIds());
 
         for (Category category : categoryListPS) {
@@ -92,17 +92,29 @@ public class UserService {
     public UserUpdateRespDto updateUser(UserUpdateReqDto userUpdateReqDto, Long id) {
         log.debug("디버그 : UserService-updateUser 실행됨");
 
-        // 회원이 DB에 존재하는지 확인
-        User userOP = userRepository.findById(id)
+        // 회원 영속화
+        User userPS = userRepository.findById(id)
                 .orElseThrow(() -> new CustomApiException("가입되지 않은 유저입니다.", HttpStatus.FORBIDDEN));
-        log.debug("디버그 : userOP의 id : " + userOP.getId());
+        log.debug("디버그 : userPS의 id : " + userPS.getId());
         String rawPassword = userUpdateReqDto.getPassword();
         String encPassword = passwordEncoder.encode(rawPassword);
         userUpdateReqDto.setPassword(encPassword);
 
-        userOP.update(userUpdateReqDto);
+        // ReqDto에서 받은 카테고리 id로 참조
+        List<Category> categoryListPS = categoryRepository.findAllById(userUpdateReqDto.getCategoryIds());
 
-        return new UserUpdateRespDto(userRepository.save(userOP));
+        // 관심사 테이블 영속화
+        List<Interest> interestPS = interestRepository.findAllByUserId(userPS.getId());
+
+        // 관심사 테이블의 카테고리들을 업데이트 시켜주기
+        for (int i = 0; i < interestPS.size(); i++) {
+            interestPS.get(i).update(categoryListPS.get(i));
+        }
+        interestRepository.saveAll(interestPS);
+
+        userPS.update(userUpdateReqDto);
+
+        return new UserUpdateRespDto(userRepository.save(userPS), interestPS);
     }
 
     // 회원탈퇴
@@ -127,7 +139,7 @@ public class UserService {
 
         Optional<Profile> profileOP = profileRepository.findByUserId(userPS.getId());
         if (profileOP.isEmpty()) {
-            throw new CustomApiException("프로필 사진이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
+            return new MyPageRespDto(userPS);
         }
         return new MyPageRespDto(userPS, profileOP.get());
     }
@@ -147,7 +159,7 @@ public class UserService {
             return new MyLessonListRespDto(null);
 
             // 전문가일 때
-        } else if (userPS.getRole().getValue() == UserEnum.MASTER.getValue()) {
+        } else if (userPS.getRole().getValue() == UserEnum.EXPERT.getValue()) {
             // 레슨 테이블에서 생성한 레슨이 있는지 id로 조회 - 없으면 exception
             List<Lesson> lessonList = lessonRepository.findByUserId(userPS.getId());
             if (lessonList.size() == 0) {
@@ -159,4 +171,11 @@ public class UserService {
             throw new CustomApiException("관리자 페이지에서 조회하세요.", HttpStatus.FORBIDDEN);
         }
     }
+
+    public UserInitRespDto getInitSession(Long id) {
+        User userPS = userRepository.findById(id)
+                .orElseThrow(() -> new CustomApiException("유저 정보가 없습니다.", HttpStatus.BAD_REQUEST));
+        return new UserInitRespDto(userPS);
+    }
+
 }

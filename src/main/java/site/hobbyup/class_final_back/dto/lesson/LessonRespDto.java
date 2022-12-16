@@ -1,17 +1,20 @@
 package site.hobbyup.class_final_back.dto.lesson;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.Timestamp;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.review.Review;
-import site.hobbyup.class_final_back.domain.user.User;
 
 public class LessonRespDto {
   @Setter
@@ -19,104 +22,125 @@ public class LessonRespDto {
   public static class LessonSaveRespDto {
     private Long id;
     private String name;
-    private Category category;
-    private User user;
+    private String categoryName;
+    private Long expertId;
+    private List<String> possibleDays = new ArrayList<>();
+    private String username;
 
-    public LessonSaveRespDto(Lesson lesson) {
+    public LessonSaveRespDto(Lesson lesson, List<String> dayList) {
       this.id = lesson.getId();
       this.name = lesson.getName();
-      this.category = lesson.getCategory();
-      this.user = lesson.getUser();
+      this.categoryName = lesson.getCategory().getName();
+      this.expertId = lesson.getExpert().getId();
+      this.possibleDays = dayList;
+      this.username = lesson.getExpert().getUser().getUsername();
     }
   }
 
-  @Setter
-  @Getter
-  public static class LessonCategoryListRespDto {
-    private CategoryDto categoryDto;
-    private List<LessonDto> lessonDtoList;
+  // @Setter
+  // @Getter
+  // public static class LessonCategoryListRespDto {
+  // private CategoryDto categoryDto;
+  // private List<LessonDto> lessonDtoList;
 
-    public LessonCategoryListRespDto(Category category, List<Lesson> lessonList) {
-      this.categoryDto = new CategoryDto(category);
-      this.lessonDtoList = lessonList.stream().map((lesson) -> new LessonDto(lesson))
-          .collect(Collectors.toList());
-    }
+  // public LessonCategoryListRespDto(Category category, List<Lesson> lessonList)
+  // {
+  // this.categoryDto = new CategoryDto(category);
+  // this.lessonDtoList = lessonList.stream().map((lesson) -> new
+  // LessonDto(lesson))
+  // .collect(Collectors.toList());
+  // }
 
-    @Setter
-    @Getter
-    public class CategoryDto {
-      private String categoryName;
+  // @Setter
+  // @Getter
+  // public class CategoryDto {
+  // private String categoryName;
 
-      public CategoryDto(Category category) {
-        this.categoryName = category.getName();
-      }
+  // public CategoryDto(Category category) {
+  // this.categoryName = category.getName();
+  // }
 
-    }
+  // }
 
-    @Setter
-    @Getter
-    public class LessonDto {
-      private Long lessonId;
-      private String lessonName;
-      private String lessonPrice;
-      private Long lessonReviewsCount;
-      private Double lessonAvgGrade;
-      private boolean isSubscribed; // 로그인 되었을 때만
+  // @Setter
+  // @Getter
+  // public class LessonDto {
+  // private Long lessonId;
+  // private String lessonName;
+  // private String lessonPrice;
+  // private Long lessonReviewsCount;
+  // private Double lessonAvgGrade;
+  // private boolean isSubscribed; // 로그인 되었을 때만
 
-      public LessonDto(Lesson lesson) {
-        this.lessonId = lesson.getId();
-        this.lessonName = lesson.getName();
-        this.lessonPrice = lesson.getPrice() + "원";
-        this.lessonReviewsCount = 0L;
-        this.lessonAvgGrade = 0.0;
-        this.isSubscribed = false;
-      }
+  // public LessonDto(Lesson lesson) {
+  // this.lessonId = lesson.getId();
+  // this.lessonName = lesson.getName();
+  // this.lessonPrice = lesson.getPrice() + "원";
+  // this.lessonReviewsCount = 0L;
+  // this.lessonAvgGrade = 0.0;
+  // this.isSubscribed = false;
+  // }
 
-    }
-  }
+  // }
+  // }
 
   @Setter
   @Getter
   public static class LessonDetailRespDto {
-    private String lessonName;
-    private Long lessonPrice;
-    private Long lessonTime;
-    private Long lessonCount;
-    private String lessonCurriculum;
-    private String lessonPlace;
-    private String possibleDays;
-    private String lessonPolicy;
-    private String masterName;
-    private String masterImg;
-    private String masterIntroduction;
+    private LessonDto lessonDto;
+    private ProfileDto profileDto;
+    private Double lessonAvgGrade;
+    private Long lessonTotalReviewsCount;
+    private boolean isSubscribed;
     private List<ReviewDto> lessonReviewList = new ArrayList<>();
 
-    public LessonDetailRespDto(Lesson lesson, Profile profile,
+    public LessonDetailRespDto(Lesson lesson, List<String> dayList, Profile profile, Double avgGrade,
+        Long lessonTotalReviewsCount,
+        boolean isSubscribed,
         List<Review> reviewList) {
-      this.lessonName = lesson.getName();
-      this.lessonPrice = lesson.getPrice();
-      this.lessonTime = lesson.getLessonTime();
-      this.lessonCount = lesson.getLessonCount();
-      this.lessonCurriculum = lesson.getCurriculum();
-      this.lessonPlace = lesson.getPlace();
-      this.possibleDays = lesson.getPossibleDays().getValue();
-      this.lessonPolicy = lesson.getPolicy();
-      this.masterName = lesson.getUser().getUsername();
-      this.masterImg = profile.getFilePath();
-      this.masterIntroduction = profile.getIntroduction();
+      this.lessonDto = new LessonDto(lesson, dayList);
+      this.profileDto = new ProfileDto(profile);
+      this.lessonAvgGrade = avgGrade;
+      this.lessonTotalReviewsCount = lessonTotalReviewsCount;
+      this.isSubscribed = isSubscribed;
       this.lessonReviewList = reviewList.stream().map((review) -> new ReviewDto(review))
           .collect(Collectors.toList());
     }
 
     @Setter
     @Getter
+    public class LessonDto {
+      private String lessonName;
+      private Long lessonPrice;
+      private Long lessonTime;
+      private Long lessonCount;
+      private String curriculum;
+      private String lessonPlace;
+      private List<String> possibleDays;
+      private String lessonPolicy;
+
+      public LessonDto(Lesson lesson, List<String> dayList) {
+        this.lessonName = lesson.getName();
+        this.lessonPrice = lesson.getPrice();
+        this.lessonTime = lesson.getLessonTime();
+        this.lessonCount = lesson.getLessonCount();
+        this.curriculum = lesson.getCurriculum();
+        this.lessonPlace = lesson.getPlace();
+        this.possibleDays = dayList;
+        this.lessonPolicy = lesson.getPolicy();
+      }
+
+    }
+
+    @Setter
+    @Getter
     public class ProfileDto {
-      private String masterImg;
-      private String masterIntroduction;
+      private String expertPhoto;
+      private String expertIntroduction;
 
       public ProfileDto(Profile profile) {
-        this.masterImg = profile.getFilePath();
-        this.masterIntroduction = profile.getIntroduction();
+        this.expertPhoto = profile.getFilePath();
+        this.expertIntroduction = profile.getIntroduction();
       }
     }
 
@@ -162,4 +186,85 @@ public class LessonRespDto {
       this.photo = lesson.getPhoto();
     }
   }
+
+  @Setter
+  @Getter
+  public static class LessonUpdateRespDto {
+    private Long id;
+    private String name;
+    private String categoryName;
+    private Long expertId;
+    private String username;
+
+    public LessonUpdateRespDto(Lesson lesson) {
+      this.id = lesson.getId();
+      this.name = lesson.getName();
+      this.categoryName = lesson.getCategory().getName();
+      this.expertId = lesson.getExpert().getId();
+      this.username = lesson.getExpert().getUser().getUsername();
+    }
+  }
+
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @Setter
+  @Getter
+  public static class LessonCategoryListRespDto {
+    private Long lessonId;
+    private String lessonName;
+    private Long lessonPrice;
+    private Double avgGrade;
+    private Long totalReviews;
+    private boolean isSubscribed;
+    private boolean recommand;
+    private Long ranking;
+    private String recent;
+
+    public LessonCategoryListRespDto(BigInteger lessonId, String lessonName, BigInteger lessonPrice,
+        BigInteger avgGrade,
+        BigDecimal totalReviews,
+        Boolean isSubscribed, Boolean recommand, BigInteger ranking, Timestamp recent) {
+      this.lessonId = lessonId.longValue();
+      this.lessonName = lessonName;
+      this.lessonPrice = lessonPrice.longValue();
+      this.avgGrade = avgGrade.doubleValue();
+      this.totalReviews = totalReviews.longValue();
+      this.isSubscribed = isSubscribed.booleanValue();
+      this.recommand = recommand.booleanValue();
+      this.ranking = ranking.longValue();
+      this.recent = recent.toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
+  }
+
+  @Setter
+  @Getter
+  public static class LessonSearchListRespDto {
+    private Long lessonId;
+    private String lessonName;
+    private Long lessonPrice;
+    private Double avgGrade;
+    private Long totalReviews;
+    private boolean isSubscribed;
+    private boolean recommand;
+    private Long ranking;
+    private String recent;
+
+    public LessonSearchListRespDto(BigInteger lessonId, String lessonName, BigInteger lessonPrice,
+        BigInteger avgGrade,
+        BigDecimal totalReviews,
+        Boolean isSubscribed, Boolean recommand, BigInteger ranking, Timestamp recent) {
+      this.lessonId = lessonId.longValue();
+      this.lessonName = lessonName;
+      this.lessonPrice = lessonPrice.longValue();
+      this.avgGrade = avgGrade.doubleValue();
+      this.totalReviews = totalReviews.longValue();
+      this.isSubscribed = isSubscribed.booleanValue();
+      this.recommand = recommand.booleanValue();
+      this.ranking = ranking.longValue();
+      this.recent = recent.toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
+  }
+
 }

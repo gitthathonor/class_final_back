@@ -4,10 +4,9 @@ import java.sql.Timestamp;
 
 import lombok.Getter;
 import lombok.Setter;
-import site.hobbyup.class_final_back.config.enums.DayEnum;
 import site.hobbyup.class_final_back.domain.category.Category;
+import site.hobbyup.class_final_back.domain.expert.Expert;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
-import site.hobbyup.class_final_back.domain.user.User;
 
 public class LessonReqDto {
   @Setter
@@ -19,15 +18,15 @@ public class LessonReqDto {
     private String place;
     private Long lessonTime;
     private Long lessonCount;
-    private DayEnum possibleDays;
+    private String possibleDays;
     private String curriculum;
     private String policy;
-    private Timestamp expiredAt;
+    private Timestamp deadline;
     private Long categoryId;
 
-    public Lesson toEntity(Category category, User user) {
+    public Lesson toEntity(Category category, Expert expert) {
       return Lesson.builder()
-          .user(user)
+          .expert(expert)
           .name(name)
           .photo(photo)
           .price(price)
@@ -37,9 +36,43 @@ public class LessonReqDto {
           .possibleDays(possibleDays)
           .curriculum(curriculum)
           .policy(policy)
-          .expiredAt(expiredAt)
+          .deadline(deadline)
           .category(category)
           .build();
     }
   }
+
+  @Setter
+  @Getter
+  public static class LessonUpdateReqDto {
+    private String name;
+    private String photo;
+    private Long price;
+    private String place;
+    private Long lessonTime;
+    private Long lessonCount;
+    private String possibleDays;
+    private String curriculum;
+    private String policy;
+    private Timestamp deadline;
+    private Long categoryId;
+
+    public Lesson toEntity(Category category, Expert expert) {
+      return Lesson.builder()
+          .expert(expert)
+          .name(name)
+          .photo(photo)
+          .price(price)
+          .place(place)
+          .lessonTime(lessonTime)
+          .lessonCount(lessonCount)
+          .possibleDays(possibleDays)
+          .curriculum(curriculum)
+          .policy(policy)
+          .deadline(deadline)
+          .category(category)
+          .build();
+    }
+  }
+
 }

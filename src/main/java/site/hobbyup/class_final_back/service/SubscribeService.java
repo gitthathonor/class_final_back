@@ -74,9 +74,7 @@ public class SubscribeService {
 
                 // 구독 리스트 확인
                 List<Subscribe> subscribeList = subscribeRepository.findAllByUserId(userPS.getId());
-                if (subscribeList.size() == 0) {
-                        throw new CustomApiException("구독한 클래스가 존재하지 않습니다.", HttpStatus.FORBIDDEN);
-                }
+
                 return new SubscribeListRespDto(subscribeList);
         }
 

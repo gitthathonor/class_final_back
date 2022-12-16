@@ -45,6 +45,7 @@ public class UserReqDto {
         private String password;
         private String email;
         private String phoneNum;
+        private List<Long> categoryIds;
 
         public User toEntity() {
             return User.builder()

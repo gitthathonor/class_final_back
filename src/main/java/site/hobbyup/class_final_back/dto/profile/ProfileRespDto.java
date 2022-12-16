@@ -10,8 +10,8 @@ public class ProfileRespDto {
     @Setter
     @Getter
     public static class ProfileSaveRespDto {
-        private Long id;
-        private UserDto userId;
+        private Long profileId;
+        private UserDto user;
 
         @Setter
         @Getter
@@ -24,8 +24,8 @@ public class ProfileRespDto {
         }
 
         public ProfileSaveRespDto(Profile profile) {
-            this.id = profile.getId();
-            this.userId = new UserDto(profile.getUser());
+            this.profileId = profile.getId();
+            this.user = new UserDto(profile.getUser());
         }
     }
 

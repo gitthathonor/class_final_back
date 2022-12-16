@@ -27,6 +27,8 @@ import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
 import site.hobbyup.class_final_back.domain.coupon.Coupon;
 import site.hobbyup.class_final_back.domain.coupon.CouponRepository;
+import site.hobbyup.class_final_back.domain.expert.Expert;
+import site.hobbyup.class_final_back.domain.expert.ExpertRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
 import site.hobbyup.class_final_back.domain.payment.Payment;
@@ -84,12 +86,18 @@ public class PaymentApiControllerTest extends DummyEntity {
   private SubscribeRepository subscribeRepository;
 
   @Autowired
+  private ExpertRepository expertRepository;
+
+  @Autowired
   private EntityManager em;
 
   @BeforeEach
   public void setUp() {
     User ssar = userRepository.save(newUser("ssar"));
     User cos = userRepository.save(newUser("cos"));
+    User hong = userRepository.save(newUser("expert"));
+
+    Expert expert1 = expertRepository.save(newExpert(hong));
 
     Category beauty = categoryRepository.save(newCategory("뷰티"));
     Category sports = categoryRepository.save(newCategory("스포츠"));
@@ -103,16 +111,16 @@ public class PaymentApiControllerTest extends DummyEntity {
     Profile ssarProfile = profileRepository
         .save(newProfile("", "안녕하세요 부산에서 가장 뷰티한 강사 ssar입니다.", "부산", "미용사", "5년", "박준 뷰티랩 양정점 원장 10년", ssar));
 
-    Lesson lesson1 = lessonRepository.save(newLesson("더미1", 10000L, ssar, beauty));
-    Lesson lesson2 = lessonRepository.save(newLesson("더미2", 20000L, ssar, sports));
-    Lesson lesson3 = lessonRepository.save(newLesson("더미3", 50000L, ssar, music));
-    Lesson lesson4 = lessonRepository.save(newLesson("더미4", 34500L, cos, music));
-    Lesson lesson5 = lessonRepository.save(newLesson("더미5", 2400L, cos, music));
-    Lesson lesson6 = lessonRepository.save(newLesson("더미6", 98000000L, cos, beauty));
-    Lesson lesson7 = lessonRepository.save(newLesson("더미7", 30000L, ssar, sports));
-    Lesson lesson8 = lessonRepository.save(newLesson("더미8", 40000L, ssar, sports));
-    Lesson lesson9 = lessonRepository.save(newLesson("더미9", 50000L, ssar, sports));
-    Lesson lesson10 = lessonRepository.save(newLesson("더미10", 70000L, ssar, sports));
+    Lesson lesson1 = lessonRepository.save(newLesson("더미1", 10000L, expert1, beauty));
+    Lesson lesson2 = lessonRepository.save(newLesson("더미2", 20000L, expert1, sports));
+    Lesson lesson3 = lessonRepository.save(newLesson("더미3", 50000L, expert1, music));
+    Lesson lesson4 = lessonRepository.save(newLesson("더미4", 34500L, expert1, music));
+    Lesson lesson5 = lessonRepository.save(newLesson("더미5", 2400L, expert1, music));
+    Lesson lesson6 = lessonRepository.save(newLesson("더미6", 98000000L, expert1, beauty));
+    Lesson lesson7 = lessonRepository.save(newLesson("더미7", 30000L, expert1, sports));
+    Lesson lesson8 = lessonRepository.save(newLesson("더미8", 40000L, expert1, sports));
+    Lesson lesson9 = lessonRepository.save(newLesson("더미9", 50000L, expert1, sports));
+    Lesson lesson10 = lessonRepository.save(newLesson("더미10", 70000L, expert1, sports));
 
     PaymentType card = paymentTypeRepository.save(newPaymentType("신용카드"));
     PaymentType kakaoPay = paymentTypeRepository.save(newPaymentType("카카오페이"));
