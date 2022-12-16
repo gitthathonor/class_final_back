@@ -52,7 +52,7 @@ public class ProfileService extends DecodeUtil {
 
                 profileSaveReqDto.setFilePath(filePath);
                 Profile profilePS = profileRepository.save(profileSaveReqDto.toEntity(userPS));
-                Profile profilePS = profileRepository.save(profileSaveReqDto.toEntity(userPS));
+
                 return new ProfileSaveRespDto(profilePS);
         }
 
@@ -60,7 +60,6 @@ public class ProfileService extends DecodeUtil {
         public ProfileDetailRespDto detailProfile(Long userId) {
                 log.debug("디버그 : service - 프로필 상세보기 시작");
                 User userPS = userRepository.findById(userId)
-                                .orElseThrow(() -> new CustomApiException("탈퇴한 유저입니다.", HttpStatus.FORBIDDEN));
                                 .orElseThrow(() -> new CustomApiException("탈퇴한 유저입니다.", HttpStatus.FORBIDDEN));
 
                 Optional<Profile> profileOP = profileRepository.findByUserId(userPS.getId());
@@ -75,7 +74,6 @@ public class ProfileService extends DecodeUtil {
                         throws IOException {
                 log.debug("디버그 : service - 프로필 수정 시작");
                 User userPS = userRepository.findById(userId)
-                                .orElseThrow(() -> new CustomApiException("유저가 존재하지 않습니다.", HttpStatus.FORBIDDEN));
                                 .orElseThrow(() -> new CustomApiException("유저가 존재하지 않습니다.", HttpStatus.FORBIDDEN));
 
                 // db에 있는 userId 이용해서 프로필 찾기

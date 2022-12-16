@@ -52,9 +52,6 @@ public class UserService {
     private final ProfileRepository profileRepository;
     private final CouponRepository couponRepository;
     private final LessonRepository lessonRepository;
-    private final ProfileRepository profileRepository;
-    private final CouponRepository couponRepository;
-    private final LessonRepository lessonRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     // 회원가입
@@ -86,11 +83,7 @@ public class UserService {
         Coupon coupon = Coupon.builder().title("회원가입 쿠폰").price(10000L).expiredDate("2022-12-22").user(userPS).build();
         couponRepository.save(coupon);
 
-        // 5. 쿠폰 증정
-        Coupon coupon = Coupon.builder().title("회원가입 쿠폰").price(10000L).expiredDate("2022-12-22").user(userPS).build();
-        couponRepository.save(coupon);
-
-        // 4. DTO 응답
+        // 6. DTO 응답
         return new JoinRespDto(userPS, interestListPS);
     }
 
