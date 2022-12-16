@@ -1,8 +1,5 @@
 package site.hobbyup.class_final_back.domain.coupon;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,8 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.springframework.data.annotation.CreatedDate;
 
 import lombok.AccessLevel;
 import lombok.Builder;

@@ -60,8 +60,14 @@ public class SecurityConfig {
         http.apply(new MyCustomDsl());
         http.authorizeHttpRequests()
                 .antMatchers("/api/user/**").authenticated()
-                .antMatchers("/api/admin/**").hasRole("ROLE_" + UserEnum.ADMIN)
+                .antMatchers("/api/expert/**").authenticated()
+                .antMatchers("/api/admin/**").hasRole("" + UserEnum.ADMIN)
+                .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().permitAll();
+        // http.logout() // 로그아웃 기능 작동함
+        // .logoutUrl("/logout") // 로그아웃 처리 URL, default: /logout, 원칙적으로 post 방식만 지원
+        // .logoutSuccessUrl("/login") // 로그아웃 성공 후 이동페이지
+        // .deleteCookies("JSESSIONID", "remember-me"); // 로그아웃 후 쿠키 삭제
 
         return http.build();
     }

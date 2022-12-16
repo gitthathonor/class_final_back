@@ -9,10 +9,13 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.hobbyup.class_final_back.domain.AuditingTime;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.user.User;
 
@@ -20,7 +23,7 @@ import site.hobbyup.class_final_back.domain.user.User;
 @Getter
 @Table(name = "review")
 @Entity
-public class Review {
+public class Review extends AuditingTime {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -29,6 +32,7 @@ public class Review {
   private Double grade;
 
   @ManyToOne(fetch = FetchType.LAZY)
+  // @JsonIgnore
   private Lesson lesson;
 
   @ManyToOne(fetch = FetchType.LAZY)

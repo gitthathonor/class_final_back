@@ -1,14 +1,14 @@
 package site.hobbyup.class_final_back.config.dummy;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import site.hobbyup.class_final_back.config.enums.DayEnum;
 import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.coupon.Coupon;
+import site.hobbyup.class_final_back.domain.expert.Expert;
+import site.hobbyup.class_final_back.domain.interest.Interest;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.payment.Payment;
 import site.hobbyup.class_final_back.domain.paymentType.PaymentType;
@@ -27,7 +27,7 @@ public class DummyEntity {
                 .password(encPassword)
                 .email(username + "@nate.com")
                 .phoneNum("010" + (++phoneNum))
-                .role(username.equals("admin") ? UserEnum.ADMIN : UserEnum.USER)
+                .role(username.equals("expert") ? UserEnum.EXPERT : UserEnum.USER)
                 .build();
         return user;
     }
@@ -53,16 +53,16 @@ public class DummyEntity {
         return category;
     }
 
-    protected Lesson newLesson(String dummy, Long dummyNum, User user, Category category) {
+    protected Lesson newLesson(String dummy, Long dummyNum, Expert expert, Category category) {
         return Lesson.builder()
                 .name(dummy)
                 .photo(dummy)
                 .price(dummyNum)
                 .place(dummy)
-                .possibleDays(DayEnum.MONDAY)
-                .user(user)
+                .possibleDays("월요일,화요일")
+                .expert(expert)
                 .curriculum("커리큘럼" + dummy)
-                .expiredAt(new Timestamp(50000))
+                .deadline(new Timestamp(50000))
                 .policy("취소 환불 정책" + dummy)
                 .category(category)
                 .build();
@@ -110,6 +110,22 @@ public class DummyEntity {
                 .lesson(lesson)
                 .user(user)
                 .paymentType(paymentType)
+                .build();
+    }
+
+    protected Expert newExpert(User user) {
+        return Expert.builder()
+                .satisfaction(0L)
+                .totalLesson(0L)
+                .isApproval(true)
+                .user(user)
+                .build();
+    }
+
+    protected Interest newInterest(User user, Category category) {
+        return Interest.builder()
+                .user(user)
+                .category(category)
                 .build();
     }
 
