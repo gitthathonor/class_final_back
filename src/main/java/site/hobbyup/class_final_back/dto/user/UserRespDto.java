@@ -1,6 +1,7 @@
 package site.hobbyup.class_final_back.dto.user;
 
 import java.sql.Timestamp;
+import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +24,13 @@ public class UserRespDto {
         private Long id;
         private String username;
         private boolean isDisabled;
+        private boolean isDisabled;
         private List<InterestDto> interestList;
 
         public JoinRespDto(User user, List<Interest> interestList) {
             this.id = user.getId();
             this.username = user.getUsername();
+            this.isDisabled = user.isDisabled();
             this.isDisabled = user.isDisabled();
             this.interestList = interestList.stream().map((interest) -> new InterestDto(interest))
                     .collect(Collectors.toList());
@@ -56,11 +59,13 @@ public class UserRespDto {
         private Long id;
         private String username;
         private String role;
+        private String role;
         private String createdAt;
 
         public LoginRespDto(User user) {
             this.id = user.getId();
             this.username = user.getUsername();
+            this.role = user.getRole().getValue();
             this.role = user.getRole().getValue();
             this.createdAt = user.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         }

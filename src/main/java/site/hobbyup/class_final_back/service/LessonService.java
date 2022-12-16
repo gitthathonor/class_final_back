@@ -35,7 +35,6 @@ import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryList
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSearchListRespDto;
-import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSearchListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonUpdateRespDto;
 import site.hobbyup.class_final_back.util.DecodeUtil;
 
