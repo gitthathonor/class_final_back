@@ -61,7 +61,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests()
                 .antMatchers("/api/user/**").authenticated()
                 .antMatchers("/api/expert/**").authenticated()
-                .antMatchers("/api/admin/**").hasRole("ROLE_" + UserEnum.ADMIN)
+                .antMatchers("/api/admin/**").hasRole("" + UserEnum.ADMIN)
                 .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().permitAll();
         // http.logout() // 로그아웃 기능 작동함

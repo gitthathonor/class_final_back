@@ -35,6 +35,7 @@ import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryList
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSearchListRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSearchListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonUpdateRespDto;
 import site.hobbyup.class_final_back.util.DecodeUtil;
 
@@ -339,8 +340,13 @@ public class LessonService {
     return lessonSearchListRespDtoList;
   }
 
+  // 검색, 비로그인 시
   public List<LessonSearchListRespDto> getLessonListBySearchNotLogin(String keyword) {
-    return null;
+    log.debug("디버그 : LessonService - getLessonListBySearchNotLogin실행");
+    List<LessonSearchListRespDto> lessonSearchListRespDtoList = lessonRepositoryQuery
+        .findAllLessonWithNotLoginByKeyword(keyword);
+    log.debug("디버그 : lessonSearchListRespDtoList = " + lessonSearchListRespDtoList.get(0).getLessonName());
+    return lessonSearchListRespDtoList;
   }
 
 }
