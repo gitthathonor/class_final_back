@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import site.hobbyup.class_final_back.config.auth.LoginUser;
-import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
-import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
 import site.hobbyup.class_final_back.dto.ResponseDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
@@ -27,7 +25,6 @@ import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonUpdateReqDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
-import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSearchListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSearchListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonUpdateRespDto;
 import site.hobbyup.class_final_back.service.LessonService;
@@ -65,17 +62,12 @@ public class LessonApiController {
         // lesson 상세보기
         @GetMapping("/api/category/lesson/{id}")
         public ResponseEntity<?> getLessonDetail(@PathVariable Long id,
-
-        @GetMapping("/api/category/lesson/{id}")
-        public ResponseEntity<?> getLessonDetail(@PathVariable Long id,
                         @AuthenticationPrincipal LoginUser loginUser) {
                 if (loginUser == null) {
-                        LessonDetailRespDto lessonDetailRespDto = lessonService.getLessonDetailNotLogin(id);
                         LessonDetailRespDto lessonDetailRespDto = lessonService.getLessonDetailNotLogin(id);
                         return new ResponseEntity<>(new ResponseDto<>("클래스 상세보기 성공", lessonDetailRespDto),
                                         HttpStatus.OK);
                 }
-                LessonDetailRespDto lessonDetailRespDto = lessonService.getLessonDetail(id,
                 LessonDetailRespDto lessonDetailRespDto = lessonService.getLessonDetail(id,
                                 loginUser.getUser().getId());
                 return new ResponseEntity<>(new ResponseDto<>("클래스 상세보기 성공", lessonDetailRespDto), HttpStatus.OK);
