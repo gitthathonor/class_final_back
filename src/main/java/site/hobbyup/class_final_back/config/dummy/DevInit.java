@@ -11,6 +11,8 @@ import site.hobbyup.class_final_back.domain.category.CategoryRepository;
 import site.hobbyup.class_final_back.domain.interest.InterestRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
+import site.hobbyup.class_final_back.domain.review.Review;
+import site.hobbyup.class_final_back.domain.review.ReviewRepository;
 import site.hobbyup.class_final_back.domain.subscribe.Subscribe;
 import site.hobbyup.class_final_back.domain.subscribe.SubscribeRepository;
 import site.hobbyup.class_final_back.domain.user.User;
@@ -24,7 +26,7 @@ public class DevInit extends DummyEntity {
     @Bean
     public CommandLineRunner dataSetting(UserRepository userRepository, CategoryRepository categoryRepository,
             InterestRepository interestRepository, LessonRepository lessonRepository,
-            SubscribeRepository subscribeRepository) {
+            SubscribeRepository subscribeRepository, ReviewRepository reviewRepository) {
 
         return (args) -> {
             User ssar = userRepository.save(newUser("ssar"));
@@ -57,6 +59,12 @@ public class DevInit extends DummyEntity {
             Subscribe subscribe4 = subscribeRepository.save(newSubscribe(aa, lesson9));
             Subscribe subscribe5 = subscribeRepository.save(newSubscribe(cos, lesson9));
             Subscribe subscribe6 = subscribeRepository.save(newSubscribe(ssar, lesson8));
+
+            Review review1 = reviewRepository.save(newReivew("리뷰1", 2.5, ssar, lesson));
+            Review review2 = reviewRepository.save(newReivew("리뷰1", 2.5, ssar, lesson));
+            Review review3 = reviewRepository.save(newReivew("리뷰1", 2.5, ssar, lesson));
+            Review review4 = reviewRepository.save(newReivew("리뷰1", 2.5, ssar, lesson));
+
         };
 
     }
