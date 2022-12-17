@@ -10,7 +10,8 @@ import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.review.Review;
-import site.hobbyup.class_final_back.domain.user.User;
+import site.hobbyup.class_final_back.domain.subscribe.Subscribe;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto.LessonDto;
 
 public class LessonRespDto {
   @Setter
@@ -18,14 +19,18 @@ public class LessonRespDto {
   public static class LessonSaveRespDto {
     private Long id;
     private String name;
-    private Category category;
-    private User user;
+    private String categoryName;
+    private Long expertId;
+    private List<String> possibleDays = new ArrayList<>();
+    private String username;
 
-    public LessonSaveRespDto(Lesson lesson) {
+    public LessonSaveRespDto(Lesson lesson, List<String> dayList) {
       this.id = lesson.getId();
       this.name = lesson.getName();
-      this.category = lesson.getCategory();
-      this.user = lesson.getUser();
+      this.categoryName = lesson.getCategory().getName();
+      this.expertId = lesson.getExpert().getId();
+      this.possibleDays = dayList;
+      this.username = lesson.getExpert().getUser().getUsername();
     }
   }
 
@@ -77,34 +82,17 @@ public class LessonRespDto {
   @Setter
   @Getter
   public static class LessonDetailRespDto {
-    private String lessonName;
-    private Long lessonPrice;
-    private Long lessonTime;
-    private Long lessonCount;
-    private String lessonCurriculum;
-    private String lessonPlace;
-    private String possibleDays;
-    private String lessonPolicy;
-    private String masterName;
-    private String masterImg;
-    private String masterIntroduction;
+    private LessonDto lessonDto;
+    private ProfileDto profileDto;
     private Double lessonAvgGrade;
     private boolean isSubscribed;
     private List<ReviewDto> lessonReviewList = new ArrayList<>();
 
-    public LessonDetailRespDto(Lesson lesson, Profile profile, Double avgGrade, boolean isSubscribed,
+    public LessonDetailRespDto(Lesson lesson, List<String> dayList, Profile profile, Double avgGrade,
+        boolean isSubscribed,
         List<Review> reviewList) {
-      this.lessonName = lesson.getName();
-      this.lessonPrice = lesson.getPrice();
-      this.lessonTime = lesson.getLessonTime();
-      this.lessonCount = lesson.getLessonCount();
-      this.lessonCurriculum = lesson.getCurriculum();
-      this.lessonPlace = lesson.getPlace();
-      this.possibleDays = lesson.getPossibleDays().getValue();
-      this.lessonPolicy = lesson.getPolicy();
-      this.masterName = lesson.getUser().getUsername();
-      this.masterImg = profile.getFilePath();
-      this.masterIntroduction = profile.getIntroduction();
+      this.lessonDto = new LessonDto(lesson, dayList);
+      this.profileDto = new ProfileDto(profile);
       this.lessonAvgGrade = avgGrade;
       this.isSubscribed = isSubscribed;
       this.lessonReviewList = reviewList.stream().map((review) -> new ReviewDto(review))
@@ -113,13 +101,38 @@ public class LessonRespDto {
 
     @Setter
     @Getter
+    public class LessonDto {
+      private String lessonName;
+      private Long lessonPrice;
+      private Long lessonTime;
+      private Long lessonCount;
+      private String curriculum;
+      private String lessonPlace;
+      private List<String> possibleDays;
+      private String lessonPolicy;
+
+      public LessonDto(Lesson lesson, List<String> dayList) {
+        this.lessonName = lesson.getName();
+        this.lessonPrice = lesson.getPrice();
+        this.lessonTime = lesson.getLessonTime();
+        this.lessonCount = lesson.getLessonCount();
+        this.curriculum = lesson.getCurriculum();
+        this.lessonPlace = lesson.getPlace();
+        this.possibleDays = dayList;
+        this.lessonPolicy = lesson.getPolicy();
+      }
+
+    }
+
+    @Setter
+    @Getter
     public class ProfileDto {
-      private String masterImg;
-      private String masterIntroduction;
+      private String expertPhoto;
+      private String expertIntroduction;
 
       public ProfileDto(Profile profile) {
-        this.masterImg = profile.getFilePath();
-        this.masterIntroduction = profile.getIntroduction();
+        this.expertPhoto = profile.getFilePath();
+        this.expertIntroduction = profile.getIntroduction();
       }
     }
 
@@ -171,14 +184,17 @@ public class LessonRespDto {
   public static class LessonUpdateRespDto {
     private Long id;
     private String name;
-    private Category category;
-    private User user;
+    private String categoryName;
+    private Long expertId;
+    private String username;
 
     public LessonUpdateRespDto(Lesson lesson) {
       this.id = lesson.getId();
       this.name = lesson.getName();
-      this.category = lesson.getCategory();
-      this.user = lesson.getUser();
+      this.categoryName = lesson.getCategory().getName();
+      this.expertId = lesson.getExpert().getId();
+      this.username = lesson.getExpert().getUser().getUsername();
     }
   }
+
 }

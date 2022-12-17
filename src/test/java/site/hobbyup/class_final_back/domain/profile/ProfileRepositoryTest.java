@@ -1,4 +1,4 @@
-package site.hobbyup.class_final_back.domain.account;
+package site.hobbyup.class_final_back.domain.profile;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -14,8 +14,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import site.hobbyup.class_final_back.config.dummy.DummyEntity;
-import site.hobbyup.class_final_back.domain.profile.Profile;
-import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
 

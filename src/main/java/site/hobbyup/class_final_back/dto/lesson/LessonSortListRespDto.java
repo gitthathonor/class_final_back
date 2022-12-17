@@ -1,19 +1,20 @@
 package site.hobbyup.class_final_back.dto.lesson;
 
-public interface LessonCommonListDto {
-
-  Long getLessonId();
-
-  String getLessonPhoto();
-
+public interface LessonSortListRespDto {
   String getLessonName();
 
   Long getLessonPrice();
 
-  Long getTotalReview();
-
   Double getAvgGrade();
 
+  Long getTotalReviews();
+
   boolean isSubscribed();
+
+  boolean getRecommand();
+
+  Long getRanking();
+
+  String getRecent();
 
 }

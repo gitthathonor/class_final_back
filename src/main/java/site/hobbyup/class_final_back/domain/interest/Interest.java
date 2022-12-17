@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.user.User;
+import site.hobbyup.class_final_back.dto.user.UserReqDto.UserUpdateReqDto;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -36,6 +37,10 @@ public class Interest {
   public Interest(Long id, User user, Category category) {
     this.id = id;
     this.user = user;
+    this.category = category;
+  }
+
+  public void update(Category category) {
     this.category = category;
   }
 
