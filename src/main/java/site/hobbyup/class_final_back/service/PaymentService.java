@@ -3,7 +3,6 @@ package site.hobbyup.class_final_back.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -105,5 +104,8 @@ public class PaymentService {
   }
 
   // 결제 취소하기
+  public void cancelPayment() {
+
+  }
 
 }

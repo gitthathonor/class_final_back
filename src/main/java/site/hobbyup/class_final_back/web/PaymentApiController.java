@@ -72,4 +72,10 @@ public class PaymentApiController {
     return new ResponseEntity<>(new ResponseDto<>("판매 내역 불러오기 성공", paymentForSellingRespDto), HttpStatus.OK);
   }
 
+  @PostMapping("/payments/cancel")
+  public ResponseEntity<?> cancelPayments() {
+
+    return new ResponseEntity<>(new ResponseDto<>("결제 완료", null), HttpStatus.CREATED);
+  }
+
 }

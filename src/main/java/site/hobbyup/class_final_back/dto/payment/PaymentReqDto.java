@@ -15,6 +15,7 @@ public class PaymentReqDto {
 
     private Integer totalCount;
     private Long paymentTypeId;
+    private String impId;
 
     public Payment toEntity(User user, Coupon coupon, Lesson lesson, PaymentType paymentType) {
       return Payment.builder()
@@ -25,6 +26,7 @@ public class PaymentReqDto {
           .paymentType(paymentType)
           .user(user)
           .lesson(lesson)
+          .impId(impId)
           .build();
     }
   }
