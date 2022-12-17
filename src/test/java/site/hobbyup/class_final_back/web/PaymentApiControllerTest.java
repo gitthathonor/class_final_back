@@ -172,11 +172,28 @@ public class PaymentApiControllerTest extends DummyEntity {
 
     // then
     resultActions.andExpect(status().isOk());
-    resultActions.andExpect(jsonPath("$.data.paymentDtoList[0].lessonName").value("더미1"));
-    resultActions.andExpect(jsonPath("$.data.paymentDtoList[0].paymentType").value("신용카드"));
-    resultActions.andExpect(jsonPath("$.data.paymentDtoList[0].finalPrice").value(18000L));
-    resultActions.andExpect(jsonPath("$.data.paymentDtoList[1].lessonName").value("더미2"));
-    resultActions.andExpect(jsonPath("$.data.paymentDtoList[1].paymentType").value("카카오페이"));
-    resultActions.andExpect(jsonPath("$.data.paymentDtoList[1].finalPrice").value(57000L));
+    resultActions.andExpect(jsonPath("$.data.paymentDtoList[1].lessonName").value("더미1"));
+    resultActions.andExpect(jsonPath("$.data.paymentDtoList[1].paymentType").value("신용카드"));
+    resultActions.andExpect(jsonPath("$.data.paymentDtoList[1].finalPrice").value(18000L));
+    resultActions.andExpect(jsonPath("$.data.paymentDtoList[0].lessonName").value("더미2"));
+    resultActions.andExpect(jsonPath("$.data.paymentDtoList[0].paymentType").value("카카오페이"));
+    resultActions.andExpect(jsonPath("$.data.paymentDtoList[0].finalPrice").value(57000L));
+  }
+
+  @WithUserDetails(value = "expert", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @Test
+  public void getExpertSellingList_test() throws Exception {
+    // given
+    Long userId = 3L;
+
+    // when
+    ResultActions resultActions = mvc
+        .perform(get("/api/expert/" + userId + "/mypage/selling"));
+    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+    System.out.println("테스트 : " + responseBody);
+
+    // then
+    resultActions.andExpect(status().isOk());
+
   }
 }
