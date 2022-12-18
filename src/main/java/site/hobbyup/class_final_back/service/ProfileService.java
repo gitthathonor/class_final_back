@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Optional;
 
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -60,7 +61,6 @@ public class ProfileService extends DecodeUtil {
             Profile profile = new Profile(userId, null, null, null, null, null, null, userPS);
             return new ProfileDetailRespDto(profile);
         }
-
 
         byte[] decodeByte = Base64.decodeBase64(profileOP.get().getFilePath());
         String filePath = new String(decodeByte);

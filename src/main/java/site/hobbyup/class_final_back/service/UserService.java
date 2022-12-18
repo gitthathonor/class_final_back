@@ -3,6 +3,7 @@ package site.hobbyup.class_final_back.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -153,6 +154,10 @@ public class UserService {
         if (profileOP.isEmpty()) {
             return new MyPageRespDto(userPS);
         }
+        byte[] decodeByte = Base64.decodeBase64(profileOP.get().getFilePath());
+        String filePath = new String(decodeByte);
+
+        profileOP.get().setFilePath(filePath);
         return new MyPageRespDto(userPS, profileOP.get());
     }
 
