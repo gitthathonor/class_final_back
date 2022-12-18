@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Optional;
-import java.util.Optional;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
@@ -64,6 +63,10 @@ public class ProfileService extends DecodeUtil {
             return new ProfileDetailRespDto(profile);
         }
 
+        byte[] decodeByte = Base64.decodeBase64(profileOP.get().getFilePath());
+        String filePath = new String(decodeByte);
+
+        profileOP.get().setFilePath(filePath);
         return new ProfileDetailRespDto(profileOP.get());
     }
 
@@ -79,6 +82,11 @@ public class ProfileService extends DecodeUtil {
         if (profileOP.isEmpty()) {
             throw new CustomApiException("프로필이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
         }
+
+        // 파일 디코딩
+        byte[] decodeByte = Base64.decodeBase64(profileUpdateReqDto.getFilePath());
+        String filePath = new String(decodeByte);
+        profileUpdateReqDto.setFilePath(filePath);
 
         profileOP.get().update(profileUpdateReqDto);
         return new ProfileUpdateRespDto(profileRepository.save(profileOP.get()));

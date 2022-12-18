@@ -15,6 +15,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import site.hobbyup.class_final_back.domain.AuditingTime;
 import site.hobbyup.class_final_back.domain.user.User;
@@ -23,6 +24,7 @@ import site.hobbyup.class_final_back.dto.profile.ProfileReqDto.ProfileUpdateReqD
 
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
 @Getter
 @Table(name = "profile")
 @Entity
