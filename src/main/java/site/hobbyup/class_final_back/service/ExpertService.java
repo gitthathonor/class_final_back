@@ -2,7 +2,6 @@ package site.hobbyup.class_final_back.service;
 
 import java.util.Optional;
 
-import org.hibernate.type.TrueFalseType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
