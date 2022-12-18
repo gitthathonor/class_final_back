@@ -4,13 +4,13 @@ server:
     encoding:
       charset: utf-8
       force: true
-  
+
 spring:
   datasource:
     url: jdbc:h2:mem:test;MODE=MySQL
     driver-class-name: org.h2.Driver
     username: sa
-    password: 
+    password:
   h2:
     console:
       enabled: true
@@ -20,11 +20,35 @@ spring:
       ddl-auto: create
     properties:
       #'[hibernate.default_batch_fetch_size]': 100
-      '[hibernate.format_sql]': true
+      "[hibernate.format_sql]": true
     show-sql: true
-  output: 
+  output:
     ansi:
       enabled: always
+#   security:
+#     oauth2:
+#       client:
+#         registration:
+#           kakao:
+#             client-name: kakao
+#             client-id: ff4464b0234d6ac15b780cbac3a127cb
+#             client-secret: kIGwb67gUKqHuI2Jk7QFObSE0wbLinRH
+#             redirect-uri: "http://localhost:8080/auth/kakao"
+#             authorization-grant-type: authorization_code
+#             scope:
+#               - account_email
+#               - profile_nickname
+#               - profile_image
+#             client-authentication-method: POST
+#         provider:
+#           kakao:
+#             authorization-uri: https://kauth.kakao.com/oauth/authorize
+#             user-info-uri: https://kapi.kakao.com/v2/user/me
+#             token-uri: https://kauth.kakao.com/oauth/token
+#             user-name-attribute: id
+#   config:
+#     activate:
+#       on-profile: kakao
 
 security:
     oauth2:
@@ -50,4 +74,4 @@ security:
 
 logging:
   level:
-    '[site.hobbyup.class_final_back]': DEBUG
+    "[site.hobbyup.class_final_back]": DEBUG
