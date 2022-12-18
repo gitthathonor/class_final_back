@@ -242,59 +242,6 @@ public class LessonService {
     return new LessonUpdateRespDto(lessonPS);
   }
 
-  // 로그인 구독순 리스트(사용안함)
-  // public List<LessonSubscribeListDto> getLessonSubscribeList(Long userId) {
-  // return lessonRepository.findAllBySubscribe(userId);
-  // }
-
-  // 비로그인 구독순 리스트(사용안함)
-  // public List<LessonSubscribeListDto> getLessonSubscribeListNotLogin() {
-  // return lessonRepository.findAllBySubscribeNotLogin();
-  // }
-
-  // 카테고리별 리스트(추천순)
-  // public List<LessonSortListRespDto> getLessonListByRecommand(Long userId, Long
-  // categoryId) {
-
-  // // 회원 여부 체크
-  // User userPS = userRepository.findById(userId)
-  // .orElseThrow(() -> new CustomApiException("권한이 없습니다.",
-  // HttpStatus.BAD_REQUEST));
-
-  // List<LessonSortListRespDto> lessonSortListRespDtoList =
-  // lessonRepository.findAllByRecommand(userId,
-  // categoryId);
-  // return lessonSortListRespDtoList;
-  // }
-
-  // 카테고리별 리스트(인기순)
-  // public List<LessonSortListRespDto> getLessonListByRanking(Long userId, Long
-  // categoryId) {
-  // // 회원 여부 체크
-  // User userPS = userRepository.findById(userId)
-  // .orElseThrow(() -> new CustomApiException("권한이 없습니다.",
-  // HttpStatus.BAD_REQUEST));
-
-  // List<LessonSortListRespDto> lessonSortListRespDtoList =
-  // lessonRepository.findAllByRanking(userId,
-  // categoryId);
-  // return lessonSortListRespDtoList;
-  // }
-
-  // 카테고리별 리스트(최신순)
-  // public List<LessonSortListRespDto> getLessonListByRecent(Long userId, Long
-  // categoryId) {
-  // // 회원 여부 체크
-  // User userPS = userRepository.findById(userId)
-  // .orElseThrow(() -> new CustomApiException("권한이 없습니다.",
-  // HttpStatus.BAD_REQUEST));
-
-  // List<LessonSortListRespDto> lessonSortListRespDtoList =
-  // lessonRepository.findAllByRecent(userId,
-  // categoryId);
-  // return lessonSortListRespDtoList;
-  // }
-
   // 카테고리별 레슨 리스트 보기(정렬 및 예산 필터까지 적용)(로그인 시)
   public List<LessonCategoryListRespDto> getLessonCategoryList(Long userId, Long categoryId, String sort, Long minPrice,
       Long maxPrice) {
