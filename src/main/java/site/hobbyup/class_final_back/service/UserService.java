@@ -154,10 +154,7 @@ public class UserService {
         if (profileOP.isEmpty()) {
             return new MyPageRespDto(userPS);
         }
-        byte[] decodeByte = Base64.decodeBase64(profileOP.get().getFilePath());
-        String filePath = new String(decodeByte);
 
-        profileOP.get().setFilePath(filePath);
         return new MyPageRespDto(userPS, profileOP.get());
     }
 
