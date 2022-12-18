@@ -1,0 +1,60 @@
+package site.hobbyup.class_final_back.domain.payment;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import site.hobbyup.class_final_back.domain.AuditingTime;
+import site.hobbyup.class_final_back.domain.lesson.Lesson;
+import site.hobbyup.class_final_back.domain.paymentType.PaymentType;
+import site.hobbyup.class_final_back.domain.user.User;
+
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@Table(name = "payment")
+@Entity
+public class Payment extends AuditingTime {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id; // pk
+  private Long totalPrice; // 총 금액
+  private Integer totalCount; // 총 수량
+  private Long discountPrice; // 할인 금액
+  private Long finalPrice; // 총 결제 금액
+  // 결제일자는 자동으로 생성됨
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  private User user;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  private Lesson lesson;
+
+  @OneToOne(fetch = FetchType.LAZY)
+  private PaymentType paymentType;
+
+  private String impId; // 아임포트 고유 결제번호
+
+  @Builder
+  public Payment(Long id, Long totalPrice, Integer totalCount, Long discountPrice, Long finalPrice, User user,
+      Lesson lesson, PaymentType paymentType, String impId) {
+    this.id = id;
+    this.totalPrice = totalPrice;
+    this.totalCount = totalCount;
+    this.discountPrice = discountPrice;
+    this.finalPrice = finalPrice;
+    this.user = user;
+    this.lesson = lesson;
+    this.paymentType = paymentType;
+    this.impId = impId;
+  }
+
+}

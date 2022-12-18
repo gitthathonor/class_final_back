@@ -46,6 +46,7 @@ public class SecurityConfig {
         log.debug("디버그 : SecurityConfig의 filterChain");
         http.headers().frameOptions().disable();
         http.csrf().disable();
+        http.cors().configurationSource(configurationSource());
 
         // ExceptionTranslationFilter (인가처리를 하는 과정에서 발생하는 예외처리 필터)
         http.exceptionHandling().authenticationEntryPoint(
@@ -59,13 +60,18 @@ public class SecurityConfig {
         http.apply(new MyCustomDsl());
         http.authorizeHttpRequests()
                 .antMatchers("/api/user/**").authenticated()
-                .antMatchers("/api/admin/**").hasRole("ROLE_" + UserEnum.ADMIN)
+                .antMatchers("/api/expert/**").hasRole("" + UserEnum.EXPERT)
+                .antMatchers("/api/admin/**").hasRole("" + UserEnum.ADMIN)
+                .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().permitAll();
+        // http.logout() // 로그아웃 기능 작동함
+        // .logoutUrl("/logout") // 로그아웃 처리 URL, default: /logout, 원칙적으로 post 방식만 지원
+        // .logoutSuccessUrl("/login") // 로그아웃 성공 후 이동페이지
+        // .deleteCookies("JSESSIONID", "remember-me"); // 로그아웃 후 쿠키 삭제
 
         return http.build();
     }
 
-    @Bean
     public CorsConfigurationSource configurationSource() { // 공식문서 코드
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedHeader("*");

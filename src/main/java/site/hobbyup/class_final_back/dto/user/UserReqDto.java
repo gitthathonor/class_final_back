@@ -1,5 +1,7 @@
 package site.hobbyup.class_final_back.dto.user;
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,6 +19,7 @@ public class UserReqDto {
         private String email;
         private String phoneNum;
         private UserEnum role;
+        private List<Long> categoryIds;
 
         public User toEntity() {
             return User.builder()
@@ -42,6 +45,7 @@ public class UserReqDto {
         private String password;
         private String email;
         private String phoneNum;
+        private List<Long> categoryIds;
 
         public User toEntity() {
             return User.builder()
