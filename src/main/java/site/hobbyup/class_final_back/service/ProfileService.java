@@ -61,6 +61,12 @@ public class ProfileService extends DecodeUtil {
             return new ProfileDetailRespDto(profile);
         }
 
+
+        byte[] decodeByte = Base64.decodeBase64(profileOP.get().getFilePath());
+        String filePath = new String(decodeByte);
+
+        profileOP.get().setFilePath(filePath);
+
         return new ProfileDetailRespDto(profileOP.get());
     }
 
