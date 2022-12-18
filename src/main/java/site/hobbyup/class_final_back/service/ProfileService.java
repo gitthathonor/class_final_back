@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Optional;
-import java.util.Optional;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
@@ -63,6 +62,11 @@ public class ProfileService extends DecodeUtil {
             Profile profile = new Profile(userId, null, null, null, null, null, null, userPS);
             return new ProfileDetailRespDto(profile);
         }
+
+        byte[] decodeByte = Base64.decodeBase64(profileOP.get().getFilePath());
+        String filePath = new String(decodeByte);
+
+        profileOP.get().setFilePath(filePath);
 
         return new ProfileDetailRespDto(profileOP.get());
     }
