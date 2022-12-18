@@ -14,7 +14,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.user.User;
-import site.hobbyup.class_final_back.dto.user.UserReqDto.UserUpdateReqDto;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
