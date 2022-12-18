@@ -1,4 +1,4 @@
-package site.hobbyup.class_final_back.dto.oauth;
+package site.hobbyup.class_final_back.oauth.dto;
 
 import lombok.Data;
 

@@ -44,9 +44,11 @@ public class User extends AuditingTime {
     @Column(name = "is_disabled")
     private boolean isDisabled; // default가 false, 탈퇴하면 true
 
+    private String oauth;
+
     @Builder
     public User(Long id, String username, String password, String email, String phoneNum, UserEnum role,
-            boolean isDisabled) {
+            boolean isDisabled, String oauth) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -54,6 +56,7 @@ public class User extends AuditingTime {
         this.phoneNum = phoneNum;
         this.role = role;
         this.isDisabled = isDisabled;
+        this.oauth = oauth;
     }
 
     public void update(UserUpdateReqDto userUpdateReqDto) {
