@@ -12,7 +12,6 @@ import site.hobbyup.class_final_back.domain.expert.ExpertRepository;
 import site.hobbyup.class_final_back.domain.interest.InterestRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
-import site.hobbyup.class_final_back.domain.payment.Payment;
 import site.hobbyup.class_final_back.domain.paymentType.PaymentType;
 import site.hobbyup.class_final_back.domain.paymentType.PaymentTypeRepository;
 import site.hobbyup.class_final_back.domain.profile.Profile;

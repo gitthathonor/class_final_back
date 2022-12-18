@@ -45,6 +45,7 @@ public class PaymentApiController {
     return iamportClient.paymentByImpUid(imp_uid);
   }
 
+  // 결제정보 입력
   @PostMapping("/api/lesson/{lessonId}/payment")
   public ResponseEntity<?> savePayment(@RequestBody PaymentSaveReqDto paymentSaveReqDto,
       @AuthenticationPrincipal LoginUser loginUser, @PathVariable Long lessonId) {
@@ -53,6 +54,7 @@ public class PaymentApiController {
     return new ResponseEntity<>(new ResponseDto<>("결제 완료", paymentSaveRespDto), HttpStatus.CREATED);
   }
 
+  // 결제내역 보기
   @GetMapping("/api/user/{userId}/mypage/payment")
   public ResponseEntity<?> getUserPaymentList(@PathVariable Long userId, @AuthenticationPrincipal LoginUser loginUser) {
     if (userId != loginUser.getUser().getId()) {
@@ -62,6 +64,7 @@ public class PaymentApiController {
     return new ResponseEntity<>(new ResponseDto<>("결제 내역 불러오기 성공", paymentListRespDto), HttpStatus.OK);
   }
 
+  // 판매내역 보기
   @GetMapping("/api/expert/{userId}/mypage/selling")
   public ResponseEntity<?> getExpertSellingList(@PathVariable Long userId,
       @AuthenticationPrincipal LoginUser loginUser) {
@@ -72,10 +75,10 @@ public class PaymentApiController {
     return new ResponseEntity<>(new ResponseDto<>("판매 내역 불러오기 성공", paymentForSellingRespDto), HttpStatus.OK);
   }
 
+  // 결제 취소
   @PostMapping("/payments/cancel")
   public ResponseEntity<?> cancelPayments() {
-
-    return new ResponseEntity<>(new ResponseDto<>("결제 완료", null), HttpStatus.CREATED);
+    return new ResponseEntity<>(new ResponseDto<>("결제 취소 완료", null), HttpStatus.CREATED);
   }
 
 }

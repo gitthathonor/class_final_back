@@ -60,7 +60,7 @@ public class SecurityConfig {
         http.apply(new MyCustomDsl());
         http.authorizeHttpRequests()
                 .antMatchers("/api/user/**").authenticated()
-                .antMatchers("/api/expert/**").authenticated()
+                .antMatchers("/api/expert/**").hasRole("" + UserEnum.EXPERT)
                 .antMatchers("/api/admin/**").hasRole("" + UserEnum.ADMIN)
                 .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().permitAll();
