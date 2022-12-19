@@ -29,4 +29,5 @@ public class ExpertApiController {
         ExpertPageRespDto expertPageRespDto = expertService.getExpertPage(userId);
         return new ResponseEntity<>(new ResponseDto<>("전문가 페이지 보기 성공", expertPageRespDto), HttpStatus.OK);
     }
+
 }

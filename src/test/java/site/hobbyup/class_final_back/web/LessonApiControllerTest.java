@@ -373,7 +373,7 @@ public class LessonApiControllerTest extends DummyEntity {
   @Test
   public void getLessonCategoryList_test() throws Exception {
     // given
-    Long categoryId = 6L;
+    Long categoryId = 8L;
     String sort = "recommand";
     Long minPrice = 0L;
     Long maxPrice = 0L;
@@ -404,6 +404,24 @@ public class LessonApiControllerTest extends DummyEntity {
     // then
     resultActions.andExpect(status().isOk());
     resultActions.andExpect(jsonPath("$.data[6].lessonName").value("더미1"));
+
+  }
+
+  @WithUserDetails(value = "expert", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @Test
+  public void getSellingLessonList_test() throws Exception {
+    // given
+    Long userId = 3L;
+
+    // when
+    ResultActions resultActions = mvc
+        .perform(get("/api/expert/" + userId + "/sellingList"));
+    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+    System.out.println("테스트 : " + responseBody);
+
+    // then
+    resultActions.andExpect(status().isOk());
+    // resultActions.andExpect(jsonPath("$.data[6].lessonName").value("더미1"));
 
   }
 

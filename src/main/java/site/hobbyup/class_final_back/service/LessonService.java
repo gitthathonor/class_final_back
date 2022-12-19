@@ -35,6 +35,8 @@ import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryList
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSearchListRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSellingByExpertDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSubscribedListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonUpdateRespDto;
 import site.hobbyup.class_final_back.util.DecodeUtil;
 
@@ -256,7 +258,8 @@ public class LessonService {
             categoryId,
             sort, minPrice, maxPrice);
     if (lessonCategoryListRespDtoList.size() == 0) {
-      throw new CustomApiException("조건에 맞는 서비스가 없습니다.", HttpStatus.BAD_REQUEST);
+      return null;
+      // throw new CustomApiException("조건에 맞는 서비스가 없습니다.", HttpStatus.BAD_REQUEST);
     }
     log.debug("디버그 : lessonCategoryListRespDtoList = " + lessonCategoryListRespDtoList.get(0).getLessonName());
     return lessonCategoryListRespDtoList;
@@ -293,6 +296,28 @@ public class LessonService {
         .findAllLessonWithNotLoginByKeyword(keyword);
     log.debug("디버그 : lessonSearchListRespDtoList = " + lessonSearchListRespDtoList.get(0).getLessonName());
     return lessonSearchListRespDtoList;
+  }
+
+  // 찜한 클래스 목록보기
+  public List<LessonSubscribedListRespDto> getLessonSubscribedList(Long userId) {
+    log.debug("디버그 : LessonService - getLessonSubscribedList() 실행");
+    List<LessonSubscribedListRespDto> lessonSubscribedListRespDtoList = lessonRepositoryQuery
+        .findAllLessonBySubscribed(userId);
+    return lessonSubscribedListRespDtoList;
+  }
+
+  // 전문가가 판매중인 레슨 리스트 보기
+  public LessonSellingByExpertDto getSellingLessonList(Long userId) {
+    Expert expertPS = expertRepository.findByUserId(userId)
+        .orElseThrow(() -> new CustomApiException("전문가 등록이 필요합니다.",
+            HttpStatus.BAD_REQUEST));
+
+    List<Lesson> lessonListPS = lessonRepository.findAllLessonByExpertId(expertPS.getId());
+
+    if (lessonListPS.size() == 0) {
+      return new LessonSellingByExpertDto(expertPS);
+    }
+    return new LessonSellingByExpertDto(expertPS, lessonListPS);
   }
 
 }
