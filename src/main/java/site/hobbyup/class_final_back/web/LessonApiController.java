@@ -26,6 +26,7 @@ import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryList
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSearchListRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSubscribedListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonUpdateRespDto;
 import site.hobbyup.class_final_back.service.LessonService;
 
@@ -124,6 +125,14 @@ public class LessonApiController {
                 List<LessonSearchListRespDto> lessonSearchListRespDtoList = lessonService
                                 .getLessonListBySearch(loginUser.getUser().getId(), keyword);
                 return new ResponseEntity<>(new ResponseDto<>("로그인 시, 검색 성공", lessonSearchListRespDtoList),
+                                HttpStatus.OK);
+        }
+
+        @GetMapping()
+        public ResponseEntity<?> getLessonSubscribedList(@AuthenticationPrincipal LoginUser loginUser) {
+                List<LessonSubscribedListRespDto> lessonSubscribedListRespDtoList = lessonService
+                                .getLessonSubscribedList(loginUser.getUser().getId());
+                return new ResponseEntity<>(new ResponseDto<>("찜한 레슨 목록 보기 성공", lessonSubscribedListRespDtoList),
                                 HttpStatus.OK);
         }
 }
