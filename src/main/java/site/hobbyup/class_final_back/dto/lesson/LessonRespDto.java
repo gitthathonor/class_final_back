@@ -320,11 +320,13 @@ public class LessonRespDto {
     @Setter
     @Getter
     public class LessonDto {
+      private String lessonPhoto;
       private String lessonName;
       private Long lessonPrice;
       private String lessonDeadLine;
 
       public LessonDto(Lesson lesson) {
+        this.lessonPhoto = lesson.getPhoto();
         this.lessonName = lesson.getName();
         this.lessonPrice = lesson.getPrice();
         this.lessonDeadLine = lesson.getDeadline().toLocalDateTime()
