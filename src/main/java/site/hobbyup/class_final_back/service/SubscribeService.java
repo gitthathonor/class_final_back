@@ -65,17 +65,19 @@ public class SubscribeService {
                 subscribeRepository.deleteById(subscribePS.getId());
         }
 
-        @Transactional
-        public SubscribeListRespDto getSubscribeList(Long userId) {
-                log.debug("디버그 : 구독목록보기 service");
-                // 유저확인
-                User userPS = userRepository.findById(userId)
-                                .orElseThrow(() -> new CustomApiException("유저가 존재하지 않습니다.", HttpStatus.FORBIDDEN));
+        // @Transactional
+        // public SubscribeListRespDto getSubscribeList(Long userId) {
+        // log.debug("디버그 : 구독목록보기 service");
+        // // 유저확인
+        // User userPS = userRepository.findById(userId)
+        // .orElseThrow(() -> new CustomApiException("유저가 존재하지 않습니다.",
+        // HttpStatus.FORBIDDEN));
 
-                // 구독 리스트 확인
-                List<Subscribe> subscribeList = subscribeRepository.findAllByUserId(userPS.getId());
+        // // 구독 리스트 확인
+        // List<Subscribe> subscribeList =
+        // subscribeRepository.findAllByUserId(userPS.getId());
 
-                return new SubscribeListRespDto(subscribeList);
-        }
+        // return new SubscribeListRespDto(subscribeList);
+        // }
 
 }

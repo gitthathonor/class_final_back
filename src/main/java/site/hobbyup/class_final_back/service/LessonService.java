@@ -296,17 +296,6 @@ public class LessonService {
 
   // 전문가가 판매중인 레슨 리스트 보기
   public LessonSellingByExpertDto getSellingLessonList(Long userId) {
-    // Expert expertPS = expertRepository.findByUserId(userId)
-    // .orElseThrow(() -> new CustomApiException("전문가 등록이 필요합니다.",
-    // HttpStatus.BAD_REQUEST));
-
-    // List<Lesson> lessonListPS =
-    // lessonRepository.findAllLessonByExpertId(expertPS.getId());
-
-    // if (lessonListPS.size() == 0) {
-    // return new LessonSellingByExpertDto(expertPS);
-    // }
-    // return new LessonSellingByExpertDto(expertPS, lessonListPS);
     log.debug("디버그 : LessonService - getSellingLessonList실행");
     Expert expert = expertRepository.findByUserId(userId)
         .orElseThrow(() -> new CustomApiException("전문가 등록이 필요합니다.", HttpStatus.BAD_REQUEST));

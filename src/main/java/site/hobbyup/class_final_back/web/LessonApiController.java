@@ -132,7 +132,7 @@ public class LessonApiController {
         }
 
         // 찜한 레슨 목록보기
-        @GetMapping()
+        @GetMapping("/api/user/{userId}/subscribe")
         public ResponseEntity<?> getLessonSubscribedList(@AuthenticationPrincipal LoginUser loginUser) {
                 List<LessonSubscribedListRespDto> lessonSubscribedListRespDtoList = lessonService
                                 .getLessonSubscribedList(loginUser.getUser().getId());
