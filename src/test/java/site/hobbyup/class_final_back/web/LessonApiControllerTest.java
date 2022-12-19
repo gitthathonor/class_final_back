@@ -393,4 +393,23 @@ public class LessonApiControllerTest extends DummyEntity {
 
   }
 
+  // 리뷰 작성 시 레슨 정보 담아가기 테스트
+  @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @Test
+  public void getLessonForReview_test() throws Exception {
+    // given
+    Long userId = 1L;
+    Long lessonId = 1L;
+
+    // when
+    ResultActions resultActions = mvc
+        .perform(get("/api/user/" + userId + "/buyingList/" + lessonId));
+    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+    System.out.println("테스트 : " + responseBody);
+
+    // then
+    resultActions.andExpect(status().isOk());
+
+  }
+
 }
