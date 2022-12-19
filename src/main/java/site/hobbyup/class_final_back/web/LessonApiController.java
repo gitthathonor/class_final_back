@@ -177,7 +177,7 @@ public class LessonApiController {
                         throw new CustomApiException("권한이 없습니다.", HttpStatus.FORBIDDEN);
                 }
                 LessonReviewDto lessonReviewDto = lessonService.getLessonForReview(lessonId);
-                return new ResponseEntity<>(new ResponseDto<>("리뷰 작성 페이지 보기 성공", null),
+                return new ResponseEntity<>(new ResponseDto<>("리뷰 작성 페이지 보기 성공", lessonReviewDto),
                                 HttpStatus.OK);
         }
 
