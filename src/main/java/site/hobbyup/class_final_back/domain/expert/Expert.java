@@ -16,6 +16,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -45,6 +47,7 @@ public class Expert {
     private boolean isApproval; // 레슨 판매 권한 있으면 true
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private User user;
 
     @OneToMany(mappedBy = "expert", fetch = FetchType.LAZY)

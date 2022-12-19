@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import site.hobbyup.class_final_back.config.auth.LoginUser;
 import site.hobbyup.class_final_back.config.exception.CustomApiException;
+import site.hobbyup.class_final_back.config.exception.CustomApiException;
 import site.hobbyup.class_final_back.dto.ResponseDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
@@ -27,6 +28,7 @@ import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryList
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSearchListRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSellingByExpertDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSubscribedListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonUpdateRespDto;
 import site.hobbyup.class_final_back.service.LessonService;
@@ -144,7 +146,8 @@ public class LessonApiController {
                 if (userId != loginUser.getUser().getId()) {
                         throw new CustomApiException("권한이 없습니다.", HttpStatus.FORBIDDEN);
                 }
-
-                return new ResponseEntity<>(new ResponseDto<>("판매중인 레슨 리스트 보기", null), HttpStatus.OK);
+                LessonSellingByExpertDto lessonSellingByExpertDto = lessonService.getSellingLessonList(userId);
+                return new ResponseEntity<>(new ResponseDto<>("판매중인 레슨 리스트 보기", lessonSellingByExpertDto),
+                                HttpStatus.OK);
         }
 }
