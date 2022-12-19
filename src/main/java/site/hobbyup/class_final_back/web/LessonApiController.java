@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import site.hobbyup.class_final_back.config.auth.LoginUser;
 import site.hobbyup.class_final_back.config.exception.CustomApiException;
+import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.dto.ResponseDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
@@ -26,6 +27,7 @@ import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonUpdateReqDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonBuyingByUserRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonReviewDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSearchListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSellingByExpertRespDto;
@@ -166,4 +168,17 @@ public class LessonApiController {
                 return new ResponseEntity<>(new ResponseDto<>("수강중인 레슨 리스트 보기", lessonBuyingByUserRespDtoList),
                                 HttpStatus.OK);
         }
+
+        // 리뷰 작성 페이지 보기
+        @GetMapping("/api/user/{userId}/buyingList/{lessonId}")
+        public ResponseEntity<?> getLessonForReview(@PathVariable("userId") Long userId,
+                        @PathVariable("lessonId") Long lessonId, @AuthenticationPrincipal LoginUser loginUser) {
+                if (userId != loginUser.getUser().getId()) {
+                        throw new CustomApiException("권한이 없습니다.", HttpStatus.FORBIDDEN);
+                }
+                LessonReviewDto lessonReviewDto = lessonService.getLessonForReview(lessonId);
+                return new ResponseEntity<>(new ResponseDto<>("리뷰 작성 페이지 보기 성공", null),
+                                HttpStatus.OK);
+        }
+
 }

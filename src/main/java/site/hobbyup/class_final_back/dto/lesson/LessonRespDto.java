@@ -359,4 +359,24 @@ public class LessonRespDto {
 
   }
 
+  @Setter
+  @Getter
+  public static class LessonReviewDto {
+    private Long lessonId;
+    private String lessonPhoto;
+    private String lessonName;
+    private Long lessonPrice;
+    private String lessonDeadline;
+
+    public LessonReviewDto(Lesson lesson) {
+      this.lessonId = lesson.getId();
+      this.lessonPhoto = lesson.getPhoto();
+      this.lessonName = lesson.getName();
+      this.lessonPrice = lesson.getPrice();
+      this.lessonDeadline = lesson.getDeadline().toLocalDateTime()
+          .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
+  }
+
 }

@@ -35,6 +35,7 @@ import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonUpdateReqDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonBuyingByUserRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonReviewDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSearchListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSellingByExpertRespDto;
@@ -98,23 +99,6 @@ public class LessonService {
 
     return new LessonSaveRespDto(lessonPS, dayList);
   }
-
-  // 클래스 리스트 보기(카테고리별 + 예산별 필터링 적용)
-  // public LessonCategoryListRespDto getLessonCategoryList(Long categoryId, Long
-  // minPrice, Long maxPrice) {
-
-  // // @PathVariable로 넘겨받은 categoryId를 통해서 카테고리를 영속화
-  // Category categoryPS = categoryRepository.findById(categoryId)
-  // .orElseThrow(() -> new CustomApiException("존재하지 않는 카테고리 입니다.",
-  // HttpStatus.BAD_REQUEST));
-
-  // // 영속화시킨 카테고리의 id로 where절을 걸어서 Lesson의 list를 반환
-  // List<Lesson> lessonListPS =
-  // lessonRepository.findByCategory(categoryPS.getId(), minPrice, maxPrice);
-
-  // // 영속화시킨 lesson의
-  // return new LessonCategoryListRespDto(categoryPS, lessonListPS);
-  // }
 
   // 레슨 상세보기(로그인 시)
   @Transactional
@@ -313,6 +297,13 @@ public class LessonService {
     List<LessonBuyingByUserRespDto> lessonBuyingByUserRespDtoList = lessonRepositoryQuery
         .findAllLessonWithPayment(userId);
     return lessonBuyingByUserRespDtoList;
+  }
+
+  // 리뷰 작성 페이지 이동
+  public LessonReviewDto getLessonForReview(Long lessonId) {
+    Lesson lessonPS = lessonRepository.findById(lessonId)
+        .orElseThrow(() -> new CustomApiException("개설되지 않은 레슨입니다.", HttpStatus.BAD_REQUEST));
+    return new LessonReviewDto(lessonPS);
   }
 
 }
