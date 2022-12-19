@@ -304,4 +304,14 @@ public class LessonService {
     return lessonSubscribedListRespDtoList;
   }
 
+  // 전문가가 판매중인 레슨 리스트 보기
+  // public ExpertSellingLessonListRespDto getSellingLessonList(Long userId) {
+  // Expert expertPS = expertRepository.findByUserId(userId)
+  // .orElseThrow(() -> new CustomApiException("전문가 등록이 필요합니다.",
+  // HttpStatus.BAD_REQUEST));
+  // ExpertSellingLessonListRespDto expertSellingLessonListRespDto =
+  // expertRepository.findAllByExpertId();
+  // return expertSellingLessonListRespDto;
+  // }
+
 }

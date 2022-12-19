@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.bytebuddy.implementation.FieldAccessor.PropertyConfigurable;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.review.Review;
@@ -136,10 +137,12 @@ public class LessonRespDto {
     @Getter
     public class ProfileDto {
       private String expertPhoto;
+      private String expertName;
       private String expertIntroduction;
 
       public ProfileDto(Profile profile) {
         this.expertPhoto = profile.getFilePath();
+        this.expertName = profile.getUser().getUsername();
         this.expertIntroduction = profile.getIntroduction();
       }
     }
@@ -161,31 +164,31 @@ public class LessonRespDto {
 
   }
 
-  @Setter
-  @Getter
-  public static class LessonLatestListRespDto {
-    List<LessonLatestRespDto> lessonList = new ArrayList<>();
+  // @Setter
+  // @Getter
+  // public static class LessonLatestListRespDto {
+  // List<LessonLatestRespDto> lessonList = new ArrayList<>();
 
-    public LessonLatestListRespDto(List<Lesson> lessonList) {
-      this.lessonList = lessonList.stream().map(
-          (lesson) -> new LessonLatestRespDto(lesson))
-          .collect(Collectors.toList());
-    }
-  }
+  // public LessonLatestListRespDto(List<Lesson> lessonList) {
+  // this.lessonList = lessonList.stream().map(
+  // (lesson) -> new LessonLatestRespDto(lesson))
+  // .collect(Collectors.toList());
+  // }
+  // }
 
-  @Setter
-  @Getter
-  public static class LessonLatestRespDto {
-    private String name;
-    private Long price;
-    private String photo;
+  // @Setter
+  // @Getter
+  // public static class LessonLatestRespDto {
+  // private String name;
+  // private Long price;
+  // private String photo;
 
-    public LessonLatestRespDto(Lesson lesson) {
-      this.name = lesson.getName();
-      this.price = lesson.getPrice();
-      this.photo = lesson.getPhoto();
-    }
-  }
+  // public LessonLatestRespDto(Lesson lesson) {
+  // this.name = lesson.getName();
+  // this.price = lesson.getPrice();
+  // this.photo = lesson.getPhoto();
+  // }
+  // }
 
   @Setter
   @Getter

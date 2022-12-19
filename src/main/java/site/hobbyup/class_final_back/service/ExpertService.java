@@ -25,6 +25,7 @@ public class ExpertService {
     private final ProfileRepository profileRepository;
     private final ExpertRepository expertRepository;
 
+    // 전문가 마이페이지 보기
     public ExpertPageRespDto getExpertPage(Long userId) {
         Expert expertPS = expertRepository.findByUserId(userId)
                 .orElseThrow(() -> new CustomApiException("전문가 등록이 필요합니다.", HttpStatus.BAD_REQUEST));
@@ -36,4 +37,5 @@ public class ExpertService {
 
         return new ExpertPageRespDto(profilePS, expertPS);
     }
+
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import site.hobbyup.class_final_back.config.auth.LoginUser;
+import site.hobbyup.class_final_back.config.exception.CustomApiException;
 import site.hobbyup.class_final_back.dto.ResponseDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
@@ -134,5 +135,16 @@ public class LessonApiController {
                                 .getLessonSubscribedList(loginUser.getUser().getId());
                 return new ResponseEntity<>(new ResponseDto<>("찜한 레슨 목록 보기 성공", lessonSubscribedListRespDtoList),
                                 HttpStatus.OK);
+        }
+
+        // 전문가가 판매중인 레슨 리스트 보기
+        @GetMapping("/api/expert/{userId}/sellingList")
+        public ResponseEntity<?> getSellingLessonList(@PathVariable Long userId,
+                        @AuthenticationPrincipal LoginUser loginUser) {
+                if (userId != loginUser.getUser().getId()) {
+                        throw new CustomApiException("권한이 없습니다.", HttpStatus.FORBIDDEN);
+                }
+
+                return new ResponseEntity<>(new ResponseDto<>("판매중인 레슨 리스트 보기", null), HttpStatus.OK);
         }
 }
