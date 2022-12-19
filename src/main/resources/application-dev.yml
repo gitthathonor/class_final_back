@@ -25,32 +25,7 @@ spring:
   output:
     ansi:
       enabled: always
-#   security:
-#     oauth2:
-#       client:
-#         registration:
-#           kakao:
-#             client-name: kakao
-#             client-id: ff4464b0234d6ac15b780cbac3a127cb
-#             client-secret: kIGwb67gUKqHuI2Jk7QFObSE0wbLinRH
-#             redirect-uri: "http://localhost:8080/auth/kakao"
-#             authorization-grant-type: authorization_code
-#             scope:
-#               - account_email
-#               - profile_nickname
-#               - profile_image
-#             client-authentication-method: POST
-#         provider:
-#           kakao:
-#             authorization-uri: https://kauth.kakao.com/oauth/authorize
-#             user-info-uri: https://kapi.kakao.com/v2/user/me
-#             token-uri: https://kauth.kakao.com/oauth/token
-#             user-name-attribute: id
-#   config:
-#     activate:
-#       on-profile: kakao
-
-security:
+  security:
     oauth2:
       client:
         registration:
@@ -71,6 +46,9 @@ security:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             token-uri: https://kauth.kakao.com/oauth/token
             user-name-attribute: id
+  config:
+    activate:
+      on-profile: kakao
 
 logging:
   level:
