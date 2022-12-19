@@ -47,6 +47,7 @@ public class Expert {
     private boolean isApproval; // 레슨 판매 권한 있으면 true
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private User user;
 
     @OneToMany(mappedBy = "expert", fetch = FetchType.LAZY)
