@@ -221,6 +221,16 @@ public class LessonRepositoryQuery {
     sql += " INNER JOIN (SELECT COUNT(id) AS totalReview, AVG(grade) AS avgGrade, lesson_id as lessonId FROM review GROUP BY lesson_id) r";
     sql += " ON l.id = r.lessonId";
     sql += " WHERE s.user_id = :userId";
+    String sql = "SELECT l.id AS lessonId,";
+    sql += " l.name AS lessonName,";
+    sql += " l.price AS lessonPrice,";
+    sql += " r.totalReview AS totalReviews,";
+    sql += " r.avgGrade AS avgGrade,";
+    sql += " (case when s.id IS NOT NULL then true ELSE false END) AS subscribed";
+    sql += " FROM lesson l INNER JOIN subscribe s ON l.id = s.lesson_id";
+    sql += " INNER JOIN (SELECT COUNT(id) AS totalReview, AVG(grade) AS avgGrade, lesson_id as lessonId FROM review GROUP BY lesson_id) r";
+    sql += " ON l.id = r.lessonId";
+    sql += " WHERE s.user_id = :userId";
     sql += " GROUP BY l.id";
     sql += " ORDER BY s.created_at DESC";
 
