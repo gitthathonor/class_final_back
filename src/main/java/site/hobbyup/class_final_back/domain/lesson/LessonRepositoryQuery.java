@@ -235,4 +235,36 @@ public class LessonRepositoryQuery {
     return result;
   }
 
+  // 전문가가 판매하고 있는 레슨 리스트 목록
+  // public LessonSellingByExpertDto findAllLessonByExpertId(Long userId) {
+  // log.debug("디버그 : LessonRepositoryQuery - findAllLessonBySubscribed실행");
+
+  // String sql = "select l.id as lessonId, l.name as lessonName,";
+  // sql += " l.price as lessonPrice,";
+  // sql += " COUNT(r.id) AS totalReviews,";
+  // sql += " (case when AVG(r.grade) IS null then 0.0 ELSE AVG(r.grade) END) AS
+  // avgGrade,";
+  // sql += " (case when s.lesson_id IS NOT NULL then true ELSE false END) AS
+  // subscribed";
+  // sql += " FROM lesson l LEFT OUTER JOIN review r ON l.id = r.lesson_id";
+  // sql += " LEFT OUTER JOIN (SELECT lesson_id FROM subscribe WHERE user_id =
+  // :userId) s";
+  // sql += " ON l.id = s.lesson_id";
+  // sql += " GROUP BY l.id";
+  // sql += " ORDER BY l.created_at DESC";
+
+  // log.debug("디버그 : sql = " + sql);
+
+  // // 쿼리 완성
+  // JpaResultMapper jpaResultMapper = new JpaResultMapper();
+  // Query query = em.createNativeQuery(sql)
+  // .setParameter("userId", userId);
+
+  // log.debug("디버그 : query = " + query);
+
+  // List<LessonSubscribedListRespDto> result = jpaResultMapper.list(query,
+  // LessonSubscribedListRespDto.class);
+  // log.debug("디버그 : result = " + result);
+  // return result;
+  // }
 }
