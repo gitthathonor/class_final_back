@@ -20,6 +20,7 @@ import site.hobbyup.class_final_back.domain.expert.ExpertRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepositoryQuery;
+import site.hobbyup.class_final_back.domain.payment.PaymentRepository;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.review.Review;
@@ -31,12 +32,12 @@ import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonUpdateReqDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonBuyingByUserRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSearchListRespDto;
-import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSellingByExpertDto;
-import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSellingByExpertDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSellingByExpertRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSubscribedListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonUpdateRespDto;
 import site.hobbyup.class_final_back.util.DecodeUtil;
@@ -54,6 +55,7 @@ public class LessonService {
   private final SubscribeRepository subscribeRepository;
   private final ExpertRepository expertRepository;
   private final LessonRepositoryQuery lessonRepositoryQuery;
+  private final PaymentRepository paymentRepository;
 
   // 클래스 생성하기
   @Transactional
@@ -295,12 +297,22 @@ public class LessonService {
   }
 
   // 전문가가 판매중인 레슨 리스트 보기
-  public LessonSellingByExpertDto getSellingLessonList(Long userId) {
+  public LessonSellingByExpertRespDto getSellingLessonList(Long userId) {
     log.debug("디버그 : LessonService - getSellingLessonList실행");
     Expert expert = expertRepository.findByUserId(userId)
         .orElseThrow(() -> new CustomApiException("전문가 등록이 필요합니다.", HttpStatus.BAD_REQUEST));
     Expert expertPS = expertRepository.findAllLessonByExpertId(expert.getId());
-    return new LessonSellingByExpertDto(expertPS);
+    return new LessonSellingByExpertRespDto(expertPS);
+  }
+
+  // 일반회원이 수강중인 레슨 리스트 보기
+  public List<LessonBuyingByUserRespDto> getBuyingLessonList(Long userId) {
+    log.debug("디버그 : LessonService - getBuyingLessonList실행");
+    User userPS = userRepository.findById(userId)
+        .orElseThrow(() -> new CustomApiException("유저가 없습니다.", HttpStatus.BAD_REQUEST));
+    List<LessonBuyingByUserRespDto> lessonBuyingByUserRespDtoList = lessonRepositoryQuery
+        .findAllLessonWithPayment(userId);
+    return lessonBuyingByUserRespDtoList;
   }
 
 }
