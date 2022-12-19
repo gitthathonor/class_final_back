@@ -296,18 +296,24 @@ public class LessonRespDto {
   @Setter
   @Getter
   public static class LessonSellingByExpertDto {
-    private Expert expert;
+    private ExpertDto expertDto;
     private List<LessonDto> lessonDtoList = new ArrayList<>();
 
     public LessonSellingByExpertDto(Expert expert) {
-      this.expert = expert;
+      this.expertDto = new ExpertDto(expert);
+      this.lessonDtoList = expert.getLessonList().stream().map((lesson) -> new LessonDto(lesson))
+          .collect(Collectors.toList());
     }
 
-    public LessonSellingByExpertDto(Expert expert, List<Lesson> lessonList) {
-      this.expert = expert;
-      this.lessonDtoList = lessonList.stream().map((lesson) -> new LessonDto(lesson))
-          .collect(Collectors.toList());
-      ;
+    @Setter
+    @Getter
+    public class ExpertDto {
+      private String expertName;
+
+      public ExpertDto(Expert expert) {
+        this.expertName = expert.getUser().getUsername();
+      }
+
     }
 
     @Setter

@@ -201,19 +201,6 @@ public class LessonService {
     return lessonDetailRespDto;
   }
 
-  // 클래스 최신순 정렬
-  // @Transactional
-  // public LessonLatestListRespDto getLatestLessonList() {
-  // List<Lesson> lessonList = lessonRepository.findAllLatest();
-  // if (lessonList.size() == 0) {
-  // throw new CustomApiException("게시글이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
-  // }
-
-  // return new LessonLatestListRespDto(lessonList);
-  // }
-
-  // 클래스 삭제하기
-
   // 메인 페이지 보기
   public List<LessonCommonListDto> getLessonCommonList(Long userId) {
     return lessonRepository.findAllWithReview(userId);
@@ -308,16 +295,22 @@ public class LessonService {
 
   // 전문가가 판매중인 레슨 리스트 보기
   public LessonSellingByExpertDto getSellingLessonList(Long userId) {
-    Expert expertPS = expertRepository.findByUserId(userId)
-        .orElseThrow(() -> new CustomApiException("전문가 등록이 필요합니다.",
-            HttpStatus.BAD_REQUEST));
+    // Expert expertPS = expertRepository.findByUserId(userId)
+    // .orElseThrow(() -> new CustomApiException("전문가 등록이 필요합니다.",
+    // HttpStatus.BAD_REQUEST));
 
-    List<Lesson> lessonListPS = lessonRepository.findAllLessonByExpertId(expertPS.getId());
+    // List<Lesson> lessonListPS =
+    // lessonRepository.findAllLessonByExpertId(expertPS.getId());
 
-    if (lessonListPS.size() == 0) {
-      return new LessonSellingByExpertDto(expertPS);
-    }
-    return new LessonSellingByExpertDto(expertPS, lessonListPS);
+    // if (lessonListPS.size() == 0) {
+    // return new LessonSellingByExpertDto(expertPS);
+    // }
+    // return new LessonSellingByExpertDto(expertPS, lessonListPS);
+    log.debug("디버그 : LessonService - getSellingLessonList실행");
+    Expert expert = expertRepository.findByUserId(userId)
+        .orElseThrow(() -> new CustomApiException("전문가 등록이 필요합니다.", HttpStatus.BAD_REQUEST));
+    Expert expertPS = expertRepository.findAllLessonByExpertId(expert.getId());
+    return new LessonSellingByExpertDto(expertPS);
   }
 
 }
