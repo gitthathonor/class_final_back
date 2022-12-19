@@ -29,6 +29,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import site.hobbyup.class_final_back.config.dummy.DummyEntity;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
+import site.hobbyup.class_final_back.domain.coupon.Coupon;
+import site.hobbyup.class_final_back.domain.coupon.CouponRepository;
 import site.hobbyup.class_final_back.domain.expert.Expert;
 import site.hobbyup.class_final_back.domain.expert.ExpertRepository;
 import site.hobbyup.class_final_back.domain.interest.Interest;
@@ -36,6 +38,10 @@ import site.hobbyup.class_final_back.domain.interest.InterestRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepositoryQuery;
+import site.hobbyup.class_final_back.domain.payment.Payment;
+import site.hobbyup.class_final_back.domain.payment.PaymentRepository;
+import site.hobbyup.class_final_back.domain.paymentType.PaymentType;
+import site.hobbyup.class_final_back.domain.paymentType.PaymentTypeRepository;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.review.Review;
@@ -91,6 +97,15 @@ public class LessonApiControllerTest extends DummyEntity {
   private LessonRepositoryQuery lessonRepositoryQuery;
 
   @Autowired
+  private PaymentRepository paymentRepository;
+
+  @Autowired
+  private PaymentTypeRepository paymentTypeRepository;
+
+  @Autowired
+  private CouponRepository couponRepository;
+
+  @Autowired
   private EntityManager em;
 
   @BeforeEach
@@ -104,6 +119,10 @@ public class LessonApiControllerTest extends DummyEntity {
     Category game = categoryRepository.save(newCategory("게임"));
     Category others = categoryRepository.save(newCategory("기타"));
 
+    PaymentType card = paymentTypeRepository.save(newPaymentType("신용카드"));
+    PaymentType vBank = paymentTypeRepository.save(newPaymentType("무통장입금"));
+    PaymentType kakaoPay = paymentTypeRepository.save(newPaymentType("카카오페이"));
+
     User ssar = userRepository.save(newUser("ssar"));
     User cos = userRepository.save(newUser("cos"));
     User hong = userRepository.save(newUser("expert"));
@@ -115,6 +134,8 @@ public class LessonApiControllerTest extends DummyEntity {
 
     Expert expert1 = expertRepository.save(newExpert(hong));
     Expert expert2 = expertRepository.save(newExpert(kim));
+
+    Coupon ssarCoupon = couponRepository.save(newCoupon("쿠폰1", 1000L, "2022-12-25", ssar));
 
     Profile ssarProfile = profileRepository
         .save(newProfile("", "안녕하세요 부산에서 가장 뷰티한 강사 ssar입니다.", "부산", "미용사", "5년", "박준 뷰티랩 양정점 원장 10년", ssar));
@@ -153,6 +174,8 @@ public class LessonApiControllerTest extends DummyEntity {
     Subscribe subscribe5 = subscribeRepository.save(newSubscribe(cos, lesson9));
     Subscribe subscribe6 = subscribeRepository.save(newSubscribe(ssar, lesson11));
     Subscribe subscribe7 = subscribeRepository.save(newSubscribe(ssar, lesson9));
+
+    Payment ssarPayment1 = paymentRepository.save(newPayment(ssar, lesson1, card, ssarCoupon, 1));
 
   }
 
@@ -248,12 +271,15 @@ public class LessonApiControllerTest extends DummyEntity {
     lessonUpdateReqDto.setCurriculum("주 2회, 1시간 동안 고객님에게 딱 맞는 화장법을 캐치해드립니다.");
     lessonUpdateReqDto.setPhoto(photo);
     lessonUpdateReqDto.setPlace("강남구");
+    lessonUpdateReqDto.setLessonCount(5L);
+    lessonUpdateReqDto.setLessonTime(2L);
     lessonUpdateReqDto.setDeadline(new Timestamp(8225L));
     lessonUpdateReqDto.setPolicy("취소 및 환불정책");
     lessonUpdateReqDto.setPossibleDays("월요일,화요일,수요일,목요일");
     lessonUpdateReqDto.setPrice(250000L);
 
     String requestBody = om.writeValueAsString(lessonUpdateReqDto);
+    System.out.println("테스트 : " + requestBody);
 
     // when
     ResultActions resultActions = mvc
@@ -339,6 +365,25 @@ public class LessonApiControllerTest extends DummyEntity {
     // when
     ResultActions resultActions = mvc
         .perform(get("/api/expert/" + userId + "/sellingList"));
+    String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+    System.out.println("테스트 : " + responseBody);
+
+    // then
+    resultActions.andExpect(status().isOk());
+    // resultActions.andExpect(jsonPath("$.data[6].lessonName").value("더미1"));
+
+  }
+
+  // 일반회원이 수강중인 레슨 리스트 보기 테스트
+  @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @Test
+  public void getBuyingLessonList_test() throws Exception {
+    // given
+    Long userId = 1L;
+
+    // when
+    ResultActions resultActions = mvc
+        .perform(get("/api/user/" + userId + "/buyingList"));
     String responseBody = resultActions.andReturn().getResponse().getContentAsString();
     System.out.println("테스트 : " + responseBody);
 

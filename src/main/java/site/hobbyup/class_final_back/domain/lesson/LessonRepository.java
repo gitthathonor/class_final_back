@@ -29,7 +29,4 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
                         + " ORDER BY l.created_at DESC LIMIT 12", nativeQuery = true)
         List<LessonCommonListDto> findAllWithReviewNotLogin();
 
-        @Query("select l from Lesson l join fetch l.expert e where l.expert.id = :expertId")
-        List<Lesson> findAllLessonByExpertId(@Param("expertId") Long expertId);
-
 }
