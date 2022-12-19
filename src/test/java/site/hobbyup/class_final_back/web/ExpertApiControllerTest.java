@@ -28,7 +28,6 @@ import site.hobbyup.class_final_back.domain.expert.Expert;
 import site.hobbyup.class_final_back.domain.expert.ExpertRepository;
 import site.hobbyup.class_final_back.domain.interest.Interest;
 import site.hobbyup.class_final_back.domain.interest.InterestRepository;
-import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;

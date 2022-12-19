@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.bytebuddy.implementation.FieldAccessor.PropertyConfigurable;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.review.Review;
@@ -136,10 +137,12 @@ public class LessonRespDto {
     @Getter
     public class ProfileDto {
       private String expertPhoto;
+      private String expertName;
       private String expertIntroduction;
 
       public ProfileDto(Profile profile) {
         this.expertPhoto = profile.getFilePath();
+        this.expertName = profile.getUser().getUsername();
         this.expertIntroduction = profile.getIntroduction();
       }
     }
@@ -161,31 +164,31 @@ public class LessonRespDto {
 
   }
 
-  @Setter
-  @Getter
-  public static class LessonLatestListRespDto {
-    List<LessonLatestRespDto> lessonList = new ArrayList<>();
+  // @Setter
+  // @Getter
+  // public static class LessonLatestListRespDto {
+  // List<LessonLatestRespDto> lessonList = new ArrayList<>();
 
-    public LessonLatestListRespDto(List<Lesson> lessonList) {
-      this.lessonList = lessonList.stream().map(
-          (lesson) -> new LessonLatestRespDto(lesson))
-          .collect(Collectors.toList());
-    }
-  }
+  // public LessonLatestListRespDto(List<Lesson> lessonList) {
+  // this.lessonList = lessonList.stream().map(
+  // (lesson) -> new LessonLatestRespDto(lesson))
+  // .collect(Collectors.toList());
+  // }
+  // }
 
-  @Setter
-  @Getter
-  public static class LessonLatestRespDto {
-    private String name;
-    private Long price;
-    private String photo;
+  // @Setter
+  // @Getter
+  // public static class LessonLatestRespDto {
+  // private String name;
+  // private Long price;
+  // private String photo;
 
-    public LessonLatestRespDto(Lesson lesson) {
-      this.name = lesson.getName();
-      this.price = lesson.getPrice();
-      this.photo = lesson.getPhoto();
-    }
-  }
+  // public LessonLatestRespDto(Lesson lesson) {
+  // this.name = lesson.getName();
+  // this.price = lesson.getPrice();
+  // this.photo = lesson.getPhoto();
+  // }
+  // }
 
   @Setter
   @Getter
@@ -216,9 +219,6 @@ public class LessonRespDto {
     private Double avgGrade;
     private Long totalReviews;
     private boolean isSubscribed;
-    private boolean recommand;
-    private Long ranking;
-    private String recent;
 
     public LessonCategoryListRespDto(BigInteger lessonId, String lessonName, BigInteger lessonPrice,
         BigInteger avgGrade,
@@ -230,9 +230,6 @@ public class LessonRespDto {
       this.avgGrade = avgGrade.doubleValue();
       this.totalReviews = totalReviews.longValue();
       this.isSubscribed = isSubscribed.booleanValue();
-      this.recommand = recommand.booleanValue();
-      this.ranking = ranking.longValue();
-      this.recent = recent.toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
   }
@@ -263,6 +260,31 @@ public class LessonRespDto {
       this.recommand = recommand.booleanValue();
       this.ranking = ranking.longValue();
       this.recent = recent.toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
+  }
+
+  // 찜한 클래스 목록보기
+  @Setter
+  @Getter
+  public static class LessonSubscribedListRespDto {
+    private Long lessonId;
+    private String lessonName;
+    private Long lessonPrice;
+    private Double avgGrade;
+    private Long totalReviews;
+    private boolean isSubscribed;
+
+    public LessonSubscribedListRespDto(BigInteger lessonId, String lessonName, BigInteger lessonPrice,
+        BigInteger avgGrade,
+        BigDecimal totalReviews,
+        Boolean isSubscribed) {
+      this.lessonId = lessonId.longValue();
+      this.lessonName = lessonName;
+      this.lessonPrice = lessonPrice.longValue();
+      this.avgGrade = avgGrade.doubleValue();
+      this.totalReviews = totalReviews.longValue();
+      this.isSubscribed = isSubscribed;
     }
 
   }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import lombok.RequiredArgsConstructor;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSearchListRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSubscribedListRespDto;
 
 @RequiredArgsConstructor
 @Repository
@@ -201,6 +202,35 @@ public class LessonRepositoryQuery {
     log.debug("디버그 : query = " + query);
 
     List<LessonSearchListRespDto> result = jpaResultMapper.list(query, LessonSearchListRespDto.class);
+    log.debug("디버그 : result = " + result);
+    return result;
+  }
+
+  // 찜한 클래스 목록
+  public List<LessonSubscribedListRespDto> findAllLessonBySubscribed(Long userId) {
+    log.debug("디버그 : LessonRepositoryQuery - findAllLessonBySubscribed실행");
+
+    String sql = "select l.id as lessonId, l.name as lessonName,";
+    sql += " l.price as lessonPrice,";
+    sql += " COUNT(r.id) AS totalReviews,";
+    sql += " (case when AVG(r.grade) IS null then 0.0 ELSE AVG(r.grade) END) AS avgGrade,";
+    sql += " (case when s.lesson_id IS NOT NULL then true ELSE false END) AS subscribed";
+    sql += " FROM lesson l LEFT OUTER JOIN review r ON l.id = r.lesson_id";
+    sql += " LEFT OUTER JOIN (SELECT lesson_id FROM subscribe WHERE user_id = :userId) s";
+    sql += " ON l.id = s.lesson_id";
+    sql += " GROUP BY l.id";
+    sql += " ORDER BY l.created_at DESC";
+
+    log.debug("디버그 : sql = " + sql);
+
+    // 쿼리 완성
+    JpaResultMapper jpaResultMapper = new JpaResultMapper();
+    Query query = em.createNativeQuery(sql)
+        .setParameter("userId", userId);
+
+    log.debug("디버그 : query = " + query);
+
+    List<LessonSubscribedListRespDto> result = jpaResultMapper.list(query, LessonSubscribedListRespDto.class);
     log.debug("디버그 : result = " + result);
     return result;
   }

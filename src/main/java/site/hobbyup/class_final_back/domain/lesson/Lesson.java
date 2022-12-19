@@ -74,9 +74,6 @@ public class Lesson extends AuditingTime {
   @ManyToOne(fetch = FetchType.LAZY)
   private Category category;
 
-  // @OneToMany(mappedBy = "lesson", fetch = FetchType.LAZY)
-  // private List<Review> reviews = new ArrayList<>();
-
   @Builder
   public Lesson(Long id, String name, String photo, Long price, String place, Long lessonTime, Long lessonCount,
       String possibleDays, String curriculum, String policy, Timestamp deadline, Expert expert, Category category) {
