@@ -21,16 +21,18 @@ public class KakaoApiController {
     private final KakaoService kakaoService;
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    @GetMapping("/auth/kakao")
+    @GetMapping("/oauth/kakao")
     public ResponseEntity<?> kakaoCallback(@RequestParam("code") String code) {
 
+        // 토큰 요청
         OAuthToken oAuthToken = kakaoService.tokenRequest(code);
+        // 받은 토큰으로 유저정보 요청
         KakaoProfile kakaoProfile = kakaoService.userInfoRequest(oAuthToken);
 
         String email = kakaoProfile.getKakao_account().getEmail();
-        int idx = email.indexOf("@");
+        int index = email.indexOf("@");
         String username = (kakaoProfile.getKakao_account().getEmail().substring(0,
-                idx));
+                index));
 
         KakaoRespDto kakaoUser = KakaoRespDto.builder()
                 .username(username)
@@ -41,5 +43,4 @@ public class KakaoApiController {
 
         return new ResponseEntity<>(new ResponseDto<>("카카오 유저정보", kakaoUser), HttpStatus.OK);
     }
-
 }
