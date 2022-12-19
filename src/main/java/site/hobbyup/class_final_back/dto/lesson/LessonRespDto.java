@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.hobbyup.class_final_back.domain.expert.Expert;
+import site.hobbyup.class_final_back.domain.expert.Expert;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.review.Review;
@@ -296,28 +297,36 @@ public class LessonRespDto {
   @Setter
   @Getter
   public static class LessonSellingByExpertDto {
-    private Expert expert;
+    private ExpertDto expertDto;
     private List<LessonDto> lessonDtoList = new ArrayList<>();
 
     public LessonSellingByExpertDto(Expert expert) {
-      this.expert = expert;
+      this.expertDto = new ExpertDto(expert);
+      this.lessonDtoList = expert.getLessonList().stream().map((lesson) -> new LessonDto(lesson))
+          .collect(Collectors.toList());
     }
 
-    public LessonSellingByExpertDto(Expert expert, List<Lesson> lessonList) {
-      this.expert = expert;
-      this.lessonDtoList = lessonList.stream().map((lesson) -> new LessonDto(lesson))
-          .collect(Collectors.toList());
-      ;
+    @Setter
+    @Getter
+    public class ExpertDto {
+      private String expertName;
+
+      public ExpertDto(Expert expert) {
+        this.expertName = expert.getUser().getUsername();
+      }
+
     }
 
     @Setter
     @Getter
     public class LessonDto {
+      private String lessonPhoto;
       private String lessonName;
       private Long lessonPrice;
       private String lessonDeadLine;
 
       public LessonDto(Lesson lesson) {
+        this.lessonPhoto = lesson.getPhoto();
         this.lessonName = lesson.getName();
         this.lessonPrice = lesson.getPrice();
         this.lessonDeadLine = lesson.getDeadline().toLocalDateTime()

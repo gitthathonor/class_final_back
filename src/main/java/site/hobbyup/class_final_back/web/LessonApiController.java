@@ -131,6 +131,7 @@ public class LessonApiController {
                                 HttpStatus.OK);
         }
 
+        // 찜한 레슨 목록보기
         @GetMapping()
         public ResponseEntity<?> getLessonSubscribedList(@AuthenticationPrincipal LoginUser loginUser) {
                 List<LessonSubscribedListRespDto> lessonSubscribedListRespDtoList = lessonService
@@ -143,6 +144,7 @@ public class LessonApiController {
         @GetMapping("/api/expert/{userId}/sellingList")
         public ResponseEntity<?> getSellingLessonList(@PathVariable Long userId,
                         @AuthenticationPrincipal LoginUser loginUser) {
+                log.debug("디버그 : LessonApiController - getSellingLessonList실행");
                 if (userId != loginUser.getUser().getId()) {
                         throw new CustomApiException("권한이 없습니다.", HttpStatus.FORBIDDEN);
                 }
