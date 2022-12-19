@@ -3,14 +3,8 @@ package site.hobbyup.class_final_back.oauth.dto;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.DynamicInsert;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -33,9 +27,6 @@ public class KakaoRespDto {
 
     @Column(nullable = false, length = 100, unique = true)
     private String email;
-
-    @CreationTimestamp
-    private Timestamp createdAt;
 
     private String oauth;
 
