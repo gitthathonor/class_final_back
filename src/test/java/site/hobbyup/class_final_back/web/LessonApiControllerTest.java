@@ -230,46 +230,7 @@ public class LessonApiControllerTest extends DummyEntity {
     resultActions.andExpect(jsonPath("$.data.subscribed").value(true));
   }
 
-  // @WithUserDetails(value = "ssar", setupBefore =
-  // TestExecutionEvent.TEST_EXECUTION)
-  // @Test
-  // public void getLessonCommonList_test() throws Exception {
-  // // when
-  // ResultActions resultActions = mvc
-  // .perform(get("/api/main"));
-  // String responseBody =
-  // resultActions.andReturn().getResponse().getContentAsString();
-  // System.out.println("테스트 : " + responseBody);
-
-  // // then
-  // resultActions.andExpect(status().isOk());
-  // resultActions.andExpect(jsonPath("$.data[0].lessonPrice").value(70000L));
-  // resultActions.andExpect(jsonPath("$.data[9].avgGrade").value(4.25));
-  // resultActions.andExpect(jsonPath("$.data[8].subscribed").value(false));
-  // resultActions.andExpect(jsonPath("$.data[8].totalReview").value(2L));
-
-  // }
-
-  // @WithUserDetails(value = "ssar", setupBefore =
-  // TestExecutionEvent.TEST_EXECUTION)
-  // @Test
-  // public void getLessonSubscribeList_test() throws Exception {
-  // // when
-  // ResultActions resultActions = mvc
-  // .perform(get("/api/lesson/subscribe"));
-  // String responseBody =
-  // resultActions.andReturn().getResponse().getContentAsString();
-  // System.out.println("테스트 : " + responseBody);
-
-  // // then
-  // resultActions.andExpect(status().isOk());
-  // resultActions.andExpect(jsonPath("$.data[0].lessonPrice").value(10000L));
-  // resultActions.andExpect(jsonPath("$.data[0].avgGrade").value(4.25));
-  // resultActions.andExpect(jsonPath("$.data[1].subscribed").value(true));
-  // resultActions.andExpect(jsonPath("$.data[2].totalReview").value(1L));
-
-  // }
-
+  // 레슨 수정하기 테스트
   @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
   @Test
   public void updateLesson_test() throws Exception {
@@ -307,66 +268,6 @@ public class LessonApiControllerTest extends DummyEntity {
     resultActions.andExpect(jsonPath("$.data.id").value(1L));
 
   }
-
-  // 카테고리별 레슨 리스트(추천순)
-  // @WithUserDetails(value = "ssar", setupBefore =
-  // TestExecutionEvent.TEST_EXECUTION)
-  // @Test
-  // public void getLessonListByRecommand_test() throws Exception {
-  // // given
-  // Long categoryId = 1L;
-
-  // // when
-  // ResultActions resultActions = mvc
-  // .perform(get("/api/category/" + categoryId + "/recommand"));
-  // String responseBody =
-  // resultActions.andReturn().getResponse().getContentAsString();
-  // System.out.println("테스트 : " + responseBody);
-
-  // // then
-  // resultActions.andExpect(status().isOk());
-
-  // }
-
-  // 카테고리별 레슨 리스트(인기순)
-  // @WithUserDetails(value = "ssar", setupBefore =
-  // TestExecutionEvent.TEST_EXECUTION)
-  // @Test
-  // public void getLessonListByRanking_test() throws Exception {
-  // // given
-  // Long categoryId = 6L;
-
-  // // when
-  // ResultActions resultActions = mvc
-  // .perform(get("/api/category/" + categoryId + "/ranking"));
-  // String responseBody =
-  // resultActions.andReturn().getResponse().getContentAsString();
-  // System.out.println("테스트 : " + responseBody);
-
-  // // then
-  // resultActions.andExpect(status().isOk());
-
-  // }
-
-  // 카테고리별 레슨 리스트(등록순)
-  // @WithUserDetails(value = "ssar", setupBefore =
-  // TestExecutionEvent.TEST_EXECUTION)
-  // @Test
-  // public void getLessonListByRecent_test() throws Exception {
-  // // given
-  // Long categoryId = 1L;
-
-  // // when
-  // ResultActions resultActions = mvc
-  // .perform(get("/api/category/" + categoryId + "/recent"));
-  // String responseBody =
-  // resultActions.andReturn().getResponse().getContentAsString();
-  // System.out.println("테스트 : " + responseBody);
-
-  // // then
-  // resultActions.andExpect(status().isOk());
-
-  // }
 
   // 카테고리별 레슨 리스트(쿼리스트링)
   @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
