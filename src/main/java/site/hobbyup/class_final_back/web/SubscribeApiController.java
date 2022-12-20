@@ -46,13 +46,17 @@ public class SubscribeApiController {
         return new ResponseEntity<>(new ResponseDto<>("구독 취소", null), HttpStatus.CREATED);
     }
 
-    @GetMapping("api/user/{userId}/subscribe")
-    public ResponseEntity<?> getSubscribeList(@PathVariable Long userId, @AuthenticationPrincipal LoginUser loginUser) {
-        log.debug("디버그 : 구독목록보기 controller");
-        if (userId != loginUser.getUser().getId()) { // 권한체크 - 세션의 id, userid가 같으면 상세보기
-            throw new CustomApiException("권한이 없습니다.", HttpStatus.FORBIDDEN);
-        }
-        SubscribeListRespDto subscribeListRespDto = subscribeService.getSubscribeList(userId);
-        return new ResponseEntity<>(new ResponseDto<>("구독리스트보기", subscribeListRespDto), HttpStatus.OK);
-    }
+    // @GetMapping("api/user/{userId}/subscribe")
+    // public ResponseEntity<?> getSubscribeList(@PathVariable Long userId,
+    // @AuthenticationPrincipal LoginUser loginUser) {
+    // log.debug("디버그 : 구독목록보기 controller");
+    // if (userId != loginUser.getUser().getId()) { // 권한체크 - 세션의 id, userid가 같으면
+    // 상세보기
+    // throw new CustomApiException("권한이 없습니다.", HttpStatus.FORBIDDEN);
+    // }
+    // SubscribeListRespDto subscribeListRespDto =
+    // subscribeService.getSubscribeList(userId);
+    // return new ResponseEntity<>(new ResponseDto<>("구독리스트보기",
+    // subscribeListRespDto), HttpStatus.OK);
+    // }
 }

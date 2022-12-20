@@ -25,10 +25,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import site.hobbyup.class_final_back.config.dummy.DummyEntity;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
+import site.hobbyup.class_final_back.domain.coupon.Coupon;
+import site.hobbyup.class_final_back.domain.coupon.CouponRepository;
 import site.hobbyup.class_final_back.domain.expert.Expert;
 import site.hobbyup.class_final_back.domain.expert.ExpertRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
+import site.hobbyup.class_final_back.domain.payment.Payment;
+import site.hobbyup.class_final_back.domain.payment.PaymentRepository;
+import site.hobbyup.class_final_back.domain.paymentType.PaymentType;
+import site.hobbyup.class_final_back.domain.paymentType.PaymentTypeRepository;
 import site.hobbyup.class_final_back.domain.review.Review;
 import site.hobbyup.class_final_back.domain.review.ReviewRepository;
 import site.hobbyup.class_final_back.domain.user.User;
@@ -65,6 +71,15 @@ public class ReviewApiControllerTest extends DummyEntity {
   private ReviewRepository reviewRepository;
 
   @Autowired
+  private PaymentRepository paymentRepository;
+
+  @Autowired
+  private PaymentTypeRepository paymentTypeRepository;
+
+  @Autowired
+  private CouponRepository couponRepository;
+
+  @Autowired
   private EntityManager em;
 
   @BeforeEach
@@ -84,6 +99,12 @@ public class ReviewApiControllerTest extends DummyEntity {
     Category game = categoryRepository.save(newCategory("게임"));
     Category others = categoryRepository.save(newCategory("기타"));
 
+    PaymentType card = paymentTypeRepository.save(newPaymentType("신용카드"));
+    PaymentType vBank = paymentTypeRepository.save(newPaymentType("무통장입금"));
+    PaymentType kakaoPay = paymentTypeRepository.save(newPaymentType("카카오페이"));
+
+    Coupon ssarCoupon = couponRepository.save(newCoupon("ssar의 쿠폰", 1000L, "2022-12-25", ssar));
+
     Lesson lesson1 = lessonRepository.save(newLesson("더미1", 10000L, expert1, beauty));
     Lesson lesson2 = lessonRepository.save(newLesson("더미2", 20000L, expert1, sports));
     Lesson lesson3 = lessonRepository.save(newLesson("더미3", 50000L, expert1, music));
@@ -101,6 +122,9 @@ public class ReviewApiControllerTest extends DummyEntity {
     Review review4 = reviewRepository.save(newReivew("도대체 이 강의 하시는 이유가 뭐죠?", 2.5, ssar, lesson3));
     Review review5 = reviewRepository.save(newReivew("피곤하다", 2.0, cos, lesson2));
     Review review6 = reviewRepository.save(newReivew("이정도 퀄리티면 좋은 거 같아요, 다만 목소리가...", 3.5, cos, lesson8));
+
+    Payment ssarPayment = paymentRepository.save(newPayment(ssar, lesson1, card, ssarCoupon, 1));
+
   }
 
   @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -117,7 +141,7 @@ public class ReviewApiControllerTest extends DummyEntity {
 
     // when
     ResultActions resultActions = mvc
-        .perform(post("/api/user/" + userId + "/lesson/" + lessonId + "/review").content(requestBody)
+        .perform(post("/api/user/" + userId + "/buyingList/" + lessonId + "/review").content(requestBody)
             .contentType(APPLICATION_JSON_UTF8));
     String responseBody = resultActions.andReturn().getResponse().getContentAsString();
     System.out.println("테스트 : " + responseBody);
@@ -128,18 +152,5 @@ public class ReviewApiControllerTest extends DummyEntity {
     resultActions.andExpect(jsonPath("$.data.grade").value(4.5));
 
   }
-
-  // @Test
-  // public void getReviews_test() throws Exception {
-  // // when
-  // ResultActions resultActions = mvc
-  // .perform(get("/api/review/test"));
-  // String responseBody =
-  // resultActions.andReturn().getResponse().getContentAsString();
-  // System.out.println("테스트 : " + responseBody);
-
-  // // then
-  // resultActions.andExpect(status().isOk());
-  // }
 
 }

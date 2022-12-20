@@ -16,6 +16,7 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -31,7 +32,12 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation group: 'com.auth0', name: 'java-jwt', version: '3.19.2'
-	implementation group: 'org.qlrm', name: 'qlrm', version: '3.0.4'
+    implementation group: 'org.qlrm', name: 'qlrm', version: '3.0.4'
+	
+	// 아임포트 결제 API
+	implementation 'com.github.iamport:iamport-rest-client-java:0.2.22'
+     // OAuth 2.0
+    implementation "org.springframework.boot:spring-boot-starter-oauth2-client"
 
 }
 

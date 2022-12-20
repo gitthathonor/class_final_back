@@ -4,13 +4,13 @@ server:
     encoding:
       charset: utf-8
       force: true
-  
+
 spring:
   datasource:
     url: jdbc:h2:mem:test;MODE=MySQL
     driver-class-name: org.h2.Driver
     username: sa
-    password: 
+    password:
   h2:
     console:
       enabled: true
@@ -20,12 +20,38 @@ spring:
       ddl-auto: create
     properties:
       #'[hibernate.default_batch_fetch_size]': 100
-      '[hibernate.format_sql]': true
+      "[hibernate.format_sql]": true
     show-sql: true
-  output: 
+  output:
     ansi:
       enabled: always
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-name: kakao
+            client-id: ff4464b0234d6ac15b780cbac3a127cb
+            client-secret: kIGwb67gUKqHuI2Jk7QFObSE0wbLinRH
+            redirect-uri: "http://localhost:8000/oauth/kakao"
+            authorization-grant-type: authorization_code
+            scope:
+              - account_email
+              - profile_nickname
+              - profile_image
+            client-authentication-method: POST
+        provider:
+          #서비스 제공하는 곳
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            # 카카오 로그인 인증을 요청하는 uri
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            # 카카오 회원의 프로필을 조회하는 uri
+            token-uri: https://kauth.kakao.com/oauth/token
+            # access 토큰의 발급, 갱신, 삭제를 요청하는 uri
+            user-name-attribute: id
+            # 카카오로부터 요청이 승인되면 출력 결과가 id의 이름을 가진 json으로 반환
 
 logging:
   level:
-    '[site.hobbyup.class_final_back]': DEBUG
+    "[site.hobbyup.class_final_back]": DEBUG

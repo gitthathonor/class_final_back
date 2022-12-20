@@ -13,8 +13,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import lombok.RequiredArgsConstructor;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonBuyingByUserRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSearchListRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSubscribedListRespDto;
 
 @RequiredArgsConstructor
 @Repository
@@ -201,6 +203,59 @@ public class LessonRepositoryQuery {
     log.debug("디버그 : query = " + query);
 
     List<LessonSearchListRespDto> result = jpaResultMapper.list(query, LessonSearchListRespDto.class);
+    log.debug("디버그 : result = " + result);
+    return result;
+  }
+
+  // 찜한 클래스 목록
+  public List<LessonSubscribedListRespDto> findAllLessonBySubscribed(Long userId) {
+    log.debug("디버그 : LessonRepositoryQuery - findAllLessonBySubscribed실행");
+
+    String sql = "SELECT l.id AS lessonId,";
+    sql += " l.name AS lessonName,";
+    sql += " l.price AS lessonPrice,";
+    sql += " r.totalReview AS totalReviews,";
+    sql += " r.avgGrade AS avgGrade,";
+    sql += " (case when s.id IS NOT NULL then true ELSE false END) AS subscribed";
+    sql += " FROM lesson l INNER JOIN subscribe s ON l.id = s.lesson_id";
+    sql += " INNER JOIN (SELECT COUNT(id) AS totalReview, AVG(grade) AS avgGrade, lesson_id as lessonId FROM review GROUP BY lesson_id) r";
+    sql += " ON l.id = r.lessonId";
+    sql += " WHERE s.user_id = :userId";
+    sql += " GROUP BY l.id";
+    sql += " ORDER BY s.created_at DESC";
+
+    log.debug("디버그 : sql = " + sql);
+
+    // 쿼리 완성
+    JpaResultMapper jpaResultMapper = new JpaResultMapper();
+    Query query = em.createNativeQuery(sql)
+        .setParameter("userId", userId);
+
+    log.debug("디버그 : query = " + query);
+
+    List<LessonSubscribedListRespDto> result = jpaResultMapper.list(query, LessonSubscribedListRespDto.class);
+    log.debug("디버그 : result = " + result);
+    return result;
+  }
+
+  // 일반회원 수강중인 레슨 목록 보기
+  public List<LessonBuyingByUserRespDto> findAllLessonWithPayment(Long userId) {
+    log.debug("디버그 : LessonRepositoryQuery - findAllLessonBySubscribed실행");
+
+    String sql = "SELECT l.id AS lessonId, l.photo AS lessonPhoto, l.name AS lessonName, l.price AS lessonPrice, l.deadline AS lessonDeadline";
+    sql += " FROM lesson l INNER JOIN (SELECT distinct lesson_id from payment where user_id = :userId) p";
+    sql += " ON l.id = p.lesson_id;";
+
+    log.debug("디버그 : sql = " + sql);
+
+    // 쿼리 완성
+    JpaResultMapper jpaResultMapper = new JpaResultMapper();
+    Query query = em.createNativeQuery(sql)
+        .setParameter("userId", userId);
+
+    log.debug("디버그 : query = " + query);
+
+    List<LessonBuyingByUserRespDto> result = jpaResultMapper.list(query, LessonBuyingByUserRespDto.class);
     log.debug("디버그 : result = " + result);
     return result;
   }

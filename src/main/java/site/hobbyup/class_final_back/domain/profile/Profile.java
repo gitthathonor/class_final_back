@@ -1,6 +1,5 @@
 package site.hobbyup.class_final_back.domain.profile;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +14,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import site.hobbyup.class_final_back.domain.AuditingTime;
 import site.hobbyup.class_final_back.domain.user.User;
@@ -23,6 +23,7 @@ import site.hobbyup.class_final_back.dto.profile.ProfileReqDto.ProfileUpdateReqD
 
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
 @Getter
 @Table(name = "profile")
 @Entity
@@ -30,7 +31,7 @@ public class Profile extends AuditingTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = true)
+    @Column(nullable = true, columnDefinition = "LONGTEXT")
     private String filePath;
     @Column(nullable = true, length = 50)
     private String introduction;

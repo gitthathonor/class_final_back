@@ -12,6 +12,8 @@ import site.hobbyup.class_final_back.domain.expert.ExpertRepository;
 import site.hobbyup.class_final_back.domain.interest.InterestRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
+import site.hobbyup.class_final_back.domain.paymentType.PaymentType;
+import site.hobbyup.class_final_back.domain.paymentType.PaymentTypeRepository;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.review.Review;
@@ -30,9 +32,22 @@ public class DevInit extends DummyEntity {
     public CommandLineRunner dataSetting(UserRepository userRepository, CategoryRepository categoryRepository,
             InterestRepository interestRepository, LessonRepository lessonRepository, ReviewRepository reviewRepository,
             SubscribeRepository subscribeRepository, ExpertRepository expertRepository,
-            ProfileRepository profileRepository) {
+            ProfileRepository profileRepository, PaymentTypeRepository paymentTypeRepository) {
 
         return (args) -> {
+            Category beauty = categoryRepository.save(newCategory("뷰티"));
+            Category sports = categoryRepository.save(newCategory("스포츠"));
+            Category dance = categoryRepository.save(newCategory("댄스"));
+            Category music = categoryRepository.save(newCategory("음악"));
+            Category art = categoryRepository.save(newCategory("미술"));
+            Category crafts = categoryRepository.save(newCategory("공예"));
+            Category game = categoryRepository.save(newCategory("게임"));
+            Category others = categoryRepository.save(newCategory("기타"));
+
+            PaymentType card = paymentTypeRepository.save(newPaymentType("신용카드"));
+            PaymentType vBank = paymentTypeRepository.save(newPaymentType("무통장입금"));
+            PaymentType kakaoPay = paymentTypeRepository.save(newPaymentType("카카오페이"));
+
             User ssar = userRepository.save(newUser("ssar"));
             User cos = userRepository.save(newUser("cos"));
             User aa = userRepository.save(newUser("aa"));
@@ -42,15 +57,6 @@ public class DevInit extends DummyEntity {
 
             Profile profile = profileRepository.save(newProfile("", "expert1의 프로필입니다.", "부산진구", "expert1의 자격증입니다.",
                     "5년", "강남의 매장에서 10년간 점장으로 일함", hong));
-
-            Category beauty = categoryRepository.save(newCategory("뷰티"));
-            Category sports = categoryRepository.save(newCategory("스포츠"));
-            Category dance = categoryRepository.save(newCategory("댄스"));
-            Category music = categoryRepository.save(newCategory("음악"));
-            Category art = categoryRepository.save(newCategory("미술"));
-            Category crafts = categoryRepository.save(newCategory("공예"));
-            Category game = categoryRepository.save(newCategory("게임"));
-            Category others = categoryRepository.save(newCategory("기타"));
 
             Lesson lesson1 = lessonRepository.save(newLesson("더미1", 10000L, expert, beauty));
             Lesson lesson2 = lessonRepository.save(newLesson("더미2", 20000L, expert, sports));

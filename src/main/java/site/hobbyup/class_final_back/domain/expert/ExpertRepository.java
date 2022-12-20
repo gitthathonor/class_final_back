@@ -10,4 +10,8 @@ public interface ExpertRepository extends JpaRepository<Expert, Long> {
 
     @Query("select e from Expert e where e.user.id = :userId")
     Optional<Expert> findByUserId(@Param("userId") Long userId);
+
+    @Query("select e from Expert e left join e.lessonList l where e.id = :expertId")
+    Expert findAllLessonByExpertId(@Param("expertId") Long expertId);
+
 }

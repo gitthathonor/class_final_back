@@ -18,14 +18,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import site.hobbyup.class_final_back.config.auth.LoginUser;
+import site.hobbyup.class_final_back.config.exception.CustomApiException;
+import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.dto.ResponseDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonUpdateReqDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonBuyingByUserRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonReviewDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSearchListRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSellingByExpertRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSubscribedListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonUpdateRespDto;
 import site.hobbyup.class_final_back.service.LessonService;
 
@@ -45,20 +51,6 @@ public class LessonApiController {
                 return new ResponseEntity<>(new ResponseDto<>("클래스 생성 성공", lessonSaveRespDto), HttpStatus.CREATED);
         }
 
-        // lesson 리스트 보기(쿼리스트링으로 예산별 필터까지 적용)(이것도 안씀)
-        // @GetMapping("/api/category/{categoryId}/test2")
-        // public ResponseEntity<?> getLessonCategoryList(@PathVariable Long categoryId,
-        // @RequestParam(name = "min_price") Long minPrice,
-        // @RequestParam(name = "max_price") Long maxPrice) {
-        // LessonCategoryListRespDto lessonCategoryListRespDto =
-        // lessonService.getLessonCategoryList(categoryId,
-        // minPrice,
-        // maxPrice);
-        // return new ResponseEntity<>(new ResponseDto<>("클래스 리스트 불러오기 성공",
-        // lessonCategoryListRespDto),
-        // HttpStatus.OK);
-        // }
-
         // lesson 상세보기
         @GetMapping("/api/category/lesson/{id}")
         public ResponseEntity<?> getLessonDetail(@PathVariable Long id,
@@ -72,15 +64,6 @@ public class LessonApiController {
                                 loginUser.getUser().getId());
                 return new ResponseEntity<>(new ResponseDto<>("클래스 상세보기 성공", lessonDetailRespDto), HttpStatus.OK);
         }
-
-        // 최신순 정렬(이거 안씀)
-        // @GetMapping("/api/lesson/latest")
-        // public ResponseEntity<?> getLatestLessonList() {
-        // LessonLatestListRespDto lessonLatestListRespDto =
-        // lessonService.getLatestLessonList();
-        // return new ResponseEntity<>(new ResponseDto<>("클래스 최신순으로 정렬",
-        // lessonLatestListRespDto), HttpStatus.OK);
-        // }
 
         // 메인 페이지
         @GetMapping("/api/main")
@@ -104,59 +87,6 @@ public class LessonApiController {
                                 loginUser.getUser().getId());
                 return new ResponseEntity<>(new ResponseDto<>(" 레슨 수정완료", lessonUpdateRespDto), HttpStatus.OK);
         }
-
-        // 구독순 정렬(이거 안 씀)
-        // @GetMapping("/api/lesson/subscribe")
-        // public ResponseEntity<?> getLessonSubscribeList(@AuthenticationPrincipal
-        // LoginUser loginUser) {
-        // if (loginUser == null) {
-        // List<LessonSubscribeListDto> lessonSubscribeListDtos = lessonService
-        // .getLessonSubscribeListNotLogin();
-        // return new ResponseEntity<>(new ResponseDto<>("클래스 구독순으로 정렬",
-        // lessonSubscribeListDtos),
-        // HttpStatus.OK);
-        // }
-        // List<LessonSubscribeListDto> lessonSubscribeListDtos = lessonService
-        // .getLessonSubscribeList(loginUser.getUser().getId());
-        // return new ResponseEntity<>(new ResponseDto<>("클래스 구독순으로 정렬",
-        // lessonSubscribeListDtos), HttpStatus.OK);
-        // }
-
-        // 카테고리별 리스트(추천순)
-        // @GetMapping("/api/category/{categoryId}/recommand")
-        // public ResponseEntity<?> getLessonListByRecommand(@AuthenticationPrincipal
-        // LoginUser loginUser,
-        // @PathVariable Long categoryId) {
-        // List<LessonSortListRespDto> lessonSortListRespDtoList = lessonService
-        // .getLessonListByRecommand(loginUser.getUser().getId(), categoryId);
-        // return new ResponseEntity<>(new ResponseDto<>("추천순 정렬 완료",
-        // lessonSortListRespDtoList),
-        // HttpStatus.OK);
-        // }
-
-        // 카테고리별 리스트(인기순)
-        // @GetMapping("/api/category/{categoryId}/ranking")
-        // public ResponseEntity<?> getLessonListByRanking(@AuthenticationPrincipal
-        // LoginUser loginUser,
-        // @PathVariable Long categoryId) {
-        // List<LessonSortListRespDto> lessonSortListRespDtoList = lessonService
-        // .getLessonListByRanking(loginUser.getUser().getId(), categoryId);
-        // return new ResponseEntity<>(new ResponseDto<>("인기순 정렬 완료",
-        // lessonSortListRespDtoList),
-        // HttpStatus.OK);
-        // }
-
-        // 카테고리별 리스트(최신순)
-        // @GetMapping("/api/category/{categoryId}/recent")
-        // public ResponseEntity<?> getLessonListByRecent(@AuthenticationPrincipal
-        // LoginUser loginUser,
-        // @PathVariable Long categoryId) {
-        // List<LessonSortListRespDto> lessonSortListRespDtoList = lessonService
-        // .getLessonListByRecent(loginUser.getUser().getId(), categoryId);
-        // return new ResponseEntity<>(new ResponseDto<>("최신순 정렬 완료",
-        // lessonSortListRespDtoList),
-        // HttpStatus.OK);
-        // }
 
         // 카테고리 별 레슨 리스트 출력 시에 쿼리 스트링 및 정렬까지 한 번에 처리하기
         @GetMapping("/api/category/{categoryId}")
@@ -184,6 +114,7 @@ public class LessonApiController {
                                 HttpStatus.OK);
         }
 
+        // 검색하기
         @GetMapping("/api/lesson/search")
         public ResponseEntity<?> getLessonListBySearch(@AuthenticationPrincipal LoginUser loginUser,
                         @RequestParam(name = "keyword") String keyword) {
@@ -201,4 +132,53 @@ public class LessonApiController {
                 return new ResponseEntity<>(new ResponseDto<>("로그인 시, 검색 성공", lessonSearchListRespDtoList),
                                 HttpStatus.OK);
         }
+
+        // 찜한 레슨 목록보기
+        @GetMapping("/api/user/{userId}/subscribe")
+        public ResponseEntity<?> getLessonSubscribedList(@AuthenticationPrincipal LoginUser loginUser) {
+                List<LessonSubscribedListRespDto> lessonSubscribedListRespDtoList = lessonService
+                                .getLessonSubscribedList(loginUser.getUser().getId());
+                return new ResponseEntity<>(new ResponseDto<>("찜한 레슨 목록 보기 성공", lessonSubscribedListRespDtoList),
+                                HttpStatus.OK);
+        }
+
+        // 전문가가 판매중인 레슨 리스트 보기
+        @GetMapping("/api/expert/{userId}/sellingList")
+        public ResponseEntity<?> getSellingLessonList(@PathVariable Long userId,
+                        @AuthenticationPrincipal LoginUser loginUser) {
+                log.debug("디버그 : LessonApiController - getSellingLessonList실행");
+                if (userId != loginUser.getUser().getId()) {
+                        throw new CustomApiException("권한이 없습니다.", HttpStatus.FORBIDDEN);
+                }
+                LessonSellingByExpertRespDto lessonSellingByExpertRespDto = lessonService.getSellingLessonList(userId);
+                return new ResponseEntity<>(new ResponseDto<>("판매중인 레슨 리스트 보기", lessonSellingByExpertRespDto),
+                                HttpStatus.OK);
+        }
+
+        // 일반회원이 수강중인 레슨 리스트 보기
+        @GetMapping("/api/user/{userId}/buyingList")
+        public ResponseEntity<?> getBuyingLessonList(@PathVariable Long userId,
+                        @AuthenticationPrincipal LoginUser loginUser) {
+                log.debug("디버그 : LessonApiController - getBuyingLessonList실행");
+                if (userId != loginUser.getUser().getId()) {
+                        throw new CustomApiException("권한이 없습니다.", HttpStatus.FORBIDDEN);
+                }
+                List<LessonBuyingByUserRespDto> lessonBuyingByUserRespDtoList = lessonService
+                                .getBuyingLessonList(userId);
+                return new ResponseEntity<>(new ResponseDto<>("수강중인 레슨 리스트 보기", lessonBuyingByUserRespDtoList),
+                                HttpStatus.OK);
+        }
+
+        // 리뷰 작성 페이지 보기
+        @GetMapping("/api/user/{userId}/buyingList/{lessonId}")
+        public ResponseEntity<?> getLessonForReview(@PathVariable("userId") Long userId,
+                        @PathVariable("lessonId") Long lessonId, @AuthenticationPrincipal LoginUser loginUser) {
+                if (userId != loginUser.getUser().getId()) {
+                        throw new CustomApiException("권한이 없습니다.", HttpStatus.FORBIDDEN);
+                }
+                LessonReviewDto lessonReviewDto = lessonService.getLessonForReview(lessonId);
+                return new ResponseEntity<>(new ResponseDto<>("리뷰 작성 페이지 보기 성공", lessonReviewDto),
+                                HttpStatus.OK);
+        }
+
 }

@@ -41,9 +41,11 @@ public class Payment extends AuditingTime {
   @OneToOne(fetch = FetchType.LAZY)
   private PaymentType paymentType;
 
+  private String impId; // 아임포트 고유 결제번호
+
   @Builder
   public Payment(Long id, Long totalPrice, Integer totalCount, Long discountPrice, Long finalPrice, User user,
-      Lesson lesson, PaymentType paymentType) {
+      Lesson lesson, PaymentType paymentType, String impId) {
     this.id = id;
     this.totalPrice = totalPrice;
     this.totalCount = totalCount;
@@ -52,6 +54,7 @@ public class Payment extends AuditingTime {
     this.user = user;
     this.lesson = lesson;
     this.paymentType = paymentType;
+    this.impId = impId;
   }
 
 }

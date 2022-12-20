@@ -1,6 +1,6 @@
 package site.hobbyup.class_final_back.dto.payment;
 
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +21,7 @@ public class PaymentRespDto {
     private String paymentTypeName;
     private String lessonName;
     private String username;
-    private LocalDateTime paymentDate;
+    private String paymentDate;
 
     public PaymentSaveRespDto(Payment payment) {
       this.paymentId = payment.getId();
@@ -32,7 +32,7 @@ public class PaymentRespDto {
       this.paymentTypeName = payment.getPaymentType().getName();
       this.lessonName = payment.getLesson().getName();
       this.username = payment.getUser().getUsername();
-      this.paymentDate = payment.getCreatedAt();
+      this.paymentDate = payment.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
   }
@@ -52,13 +52,41 @@ public class PaymentRespDto {
       private String lessonName;
       private Long finalPrice;
       private String paymentType;
-      private LocalDateTime paymentDate;
+      private String paymentDate;
 
       public PaymentDto(Payment payment) {
         this.lessonName = payment.getLesson().getName();
         this.finalPrice = payment.getFinalPrice();
         this.paymentType = payment.getPaymentType().getName();
-        this.paymentDate = payment.getCreatedAt();
+        this.paymentDate = payment.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+      }
+
+    }
+
+  }
+
+  @Setter
+  @Getter
+  public static class PaymentForSellingRespDto {
+    private List<PaymentDto> paymentDtoList = new ArrayList<>();
+
+    public PaymentForSellingRespDto(List<Payment> paymentList) {
+      this.paymentDtoList = paymentList.stream().map((payment) -> new PaymentDto(payment)).collect(Collectors.toList());
+    }
+
+    @Setter
+    @Getter
+    public class PaymentDto {
+      private String lessonName;
+      private Long finalPrice;
+      private String paymentType;
+      private String paymentDate;
+
+      public PaymentDto(Payment payment) {
+        this.lessonName = payment.getLesson().getName();
+        this.finalPrice = payment.getFinalPrice();
+        this.paymentType = payment.getPaymentType().getName();
+        this.paymentDate = payment.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
       }
 
     }

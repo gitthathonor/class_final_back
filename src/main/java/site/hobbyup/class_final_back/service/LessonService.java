@@ -20,6 +20,7 @@ import site.hobbyup.class_final_back.domain.expert.ExpertRepository;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepository;
 import site.hobbyup.class_final_back.domain.lesson.LessonRepositoryQuery;
+import site.hobbyup.class_final_back.domain.payment.PaymentRepository;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.review.Review;
@@ -31,10 +32,14 @@ import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.lesson.LessonCommonListDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonSaveReqDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonReqDto.LessonUpdateReqDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonBuyingByUserRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonCategoryListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonDetailRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonReviewDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSaveRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSearchListRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSellingByExpertRespDto;
+import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSubscribedListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonUpdateRespDto;
 import site.hobbyup.class_final_back.util.DecodeUtil;
 
@@ -51,6 +56,7 @@ public class LessonService {
   private final SubscribeRepository subscribeRepository;
   private final ExpertRepository expertRepository;
   private final LessonRepositoryQuery lessonRepositoryQuery;
+  private final PaymentRepository paymentRepository;
 
   // 클래스 생성하기
   @Transactional
@@ -93,23 +99,6 @@ public class LessonService {
 
     return new LessonSaveRespDto(lessonPS, dayList);
   }
-
-  // 클래스 리스트 보기(카테고리별 + 예산별 필터링 적용)
-  // public LessonCategoryListRespDto getLessonCategoryList(Long categoryId, Long
-  // minPrice, Long maxPrice) {
-
-  // // @PathVariable로 넘겨받은 categoryId를 통해서 카테고리를 영속화
-  // Category categoryPS = categoryRepository.findById(categoryId)
-  // .orElseThrow(() -> new CustomApiException("존재하지 않는 카테고리 입니다.",
-  // HttpStatus.BAD_REQUEST));
-
-  // // 영속화시킨 카테고리의 id로 where절을 걸어서 Lesson의 list를 반환
-  // List<Lesson> lessonListPS =
-  // lessonRepository.findByCategory(categoryPS.getId(), minPrice, maxPrice);
-
-  // // 영속화시킨 lesson의
-  // return new LessonCategoryListRespDto(categoryPS, lessonListPS);
-  // }
 
   // 레슨 상세보기(로그인 시)
   @Transactional
@@ -199,19 +188,6 @@ public class LessonService {
     return lessonDetailRespDto;
   }
 
-  // 클래스 최신순 정렬
-  // @Transactional
-  // public LessonLatestListRespDto getLatestLessonList() {
-  // List<Lesson> lessonList = lessonRepository.findAllLatest();
-  // if (lessonList.size() == 0) {
-  // throw new CustomApiException("게시글이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
-  // }
-
-  // return new LessonLatestListRespDto(lessonList);
-  // }
-
-  // 클래스 삭제하기
-
   // 메인 페이지 보기
   public List<LessonCommonListDto> getLessonCommonList(Long userId) {
     return lessonRepository.findAllWithReview(userId);
@@ -242,59 +218,6 @@ public class LessonService {
     return new LessonUpdateRespDto(lessonPS);
   }
 
-  // 로그인 구독순 리스트(사용안함)
-  // public List<LessonSubscribeListDto> getLessonSubscribeList(Long userId) {
-  // return lessonRepository.findAllBySubscribe(userId);
-  // }
-
-  // 비로그인 구독순 리스트(사용안함)
-  // public List<LessonSubscribeListDto> getLessonSubscribeListNotLogin() {
-  // return lessonRepository.findAllBySubscribeNotLogin();
-  // }
-
-  // 카테고리별 리스트(추천순)
-  // public List<LessonSortListRespDto> getLessonListByRecommand(Long userId, Long
-  // categoryId) {
-
-  // // 회원 여부 체크
-  // User userPS = userRepository.findById(userId)
-  // .orElseThrow(() -> new CustomApiException("권한이 없습니다.",
-  // HttpStatus.BAD_REQUEST));
-
-  // List<LessonSortListRespDto> lessonSortListRespDtoList =
-  // lessonRepository.findAllByRecommand(userId,
-  // categoryId);
-  // return lessonSortListRespDtoList;
-  // }
-
-  // 카테고리별 리스트(인기순)
-  // public List<LessonSortListRespDto> getLessonListByRanking(Long userId, Long
-  // categoryId) {
-  // // 회원 여부 체크
-  // User userPS = userRepository.findById(userId)
-  // .orElseThrow(() -> new CustomApiException("권한이 없습니다.",
-  // HttpStatus.BAD_REQUEST));
-
-  // List<LessonSortListRespDto> lessonSortListRespDtoList =
-  // lessonRepository.findAllByRanking(userId,
-  // categoryId);
-  // return lessonSortListRespDtoList;
-  // }
-
-  // 카테고리별 리스트(최신순)
-  // public List<LessonSortListRespDto> getLessonListByRecent(Long userId, Long
-  // categoryId) {
-  // // 회원 여부 체크
-  // User userPS = userRepository.findById(userId)
-  // .orElseThrow(() -> new CustomApiException("권한이 없습니다.",
-  // HttpStatus.BAD_REQUEST));
-
-  // List<LessonSortListRespDto> lessonSortListRespDtoList =
-  // lessonRepository.findAllByRecent(userId,
-  // categoryId);
-  // return lessonSortListRespDtoList;
-  // }
-
   // 카테고리별 레슨 리스트 보기(정렬 및 예산 필터까지 적용)(로그인 시)
   public List<LessonCategoryListRespDto> getLessonCategoryList(Long userId, Long categoryId, String sort, Long minPrice,
       Long maxPrice) {
@@ -309,7 +232,8 @@ public class LessonService {
             categoryId,
             sort, minPrice, maxPrice);
     if (lessonCategoryListRespDtoList.size() == 0) {
-      throw new CustomApiException("조건에 맞는 서비스가 없습니다.", HttpStatus.BAD_REQUEST);
+      return null;
+      // throw new CustomApiException("조건에 맞는 서비스가 없습니다.", HttpStatus.BAD_REQUEST);
     }
     log.debug("디버그 : lessonCategoryListRespDtoList = " + lessonCategoryListRespDtoList.get(0).getLessonName());
     return lessonCategoryListRespDtoList;
@@ -346,6 +270,40 @@ public class LessonService {
         .findAllLessonWithNotLoginByKeyword(keyword);
     log.debug("디버그 : lessonSearchListRespDtoList = " + lessonSearchListRespDtoList.get(0).getLessonName());
     return lessonSearchListRespDtoList;
+  }
+
+  // 찜한 클래스 목록보기
+  public List<LessonSubscribedListRespDto> getLessonSubscribedList(Long userId) {
+    log.debug("디버그 : LessonService - getLessonSubscribedList() 실행");
+    List<LessonSubscribedListRespDto> lessonSubscribedListRespDtoList = lessonRepositoryQuery
+        .findAllLessonBySubscribed(userId);
+    return lessonSubscribedListRespDtoList;
+  }
+
+  // 전문가가 판매중인 레슨 리스트 보기
+  public LessonSellingByExpertRespDto getSellingLessonList(Long userId) {
+    log.debug("디버그 : LessonService - getSellingLessonList실행");
+    Expert expert = expertRepository.findByUserId(userId)
+        .orElseThrow(() -> new CustomApiException("전문가 등록이 필요합니다.", HttpStatus.BAD_REQUEST));
+    Expert expertPS = expertRepository.findAllLessonByExpertId(expert.getId());
+    return new LessonSellingByExpertRespDto(expertPS);
+  }
+
+  // 일반회원이 수강중인 레슨 리스트 보기
+  public List<LessonBuyingByUserRespDto> getBuyingLessonList(Long userId) {
+    log.debug("디버그 : LessonService - getBuyingLessonList실행");
+    User userPS = userRepository.findById(userId)
+        .orElseThrow(() -> new CustomApiException("유저가 없습니다.", HttpStatus.BAD_REQUEST));
+    List<LessonBuyingByUserRespDto> lessonBuyingByUserRespDtoList = lessonRepositoryQuery
+        .findAllLessonWithPayment(userId);
+    return lessonBuyingByUserRespDtoList;
+  }
+
+  // 리뷰 작성 페이지 이동
+  public LessonReviewDto getLessonForReview(Long lessonId) {
+    Lesson lessonPS = lessonRepository.findById(lessonId)
+        .orElseThrow(() -> new CustomApiException("개설되지 않은 레슨입니다.", HttpStatus.BAD_REQUEST));
+    return new LessonReviewDto(lessonPS);
   }
 
 }
