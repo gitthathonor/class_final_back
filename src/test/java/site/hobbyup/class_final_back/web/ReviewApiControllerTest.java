@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import site.hobbyup.class_final_back.config.dummy.DummyEntity;
+import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
 import site.hobbyup.class_final_back.domain.expert.Expert;
@@ -69,9 +70,9 @@ public class ReviewApiControllerTest extends DummyEntity {
 
   @BeforeEach
   public void setUp() {
-    User ssar = userRepository.save(newUser("ssar"));
-    User cos = userRepository.save(newUser("cos"));
-    User hong = userRepository.save(newUser("expert"));
+    User ssar = userRepository.save(newUser("ssar", UserEnum.USER));
+    User cos = userRepository.save(newUser("cos", UserEnum.USER));
+    User hong = userRepository.save(newUser("hong", UserEnum.EXPERT));
 
     Expert expert1 = expertRepository.save(newExpert(hong));
 

@@ -27,6 +27,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import site.hobbyup.class_final_back.config.dummy.DummyEntity;
+import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
 import site.hobbyup.class_final_back.domain.expert.Expert;
@@ -104,9 +105,9 @@ public class LessonApiControllerTest extends DummyEntity {
     Category game = categoryRepository.save(newCategory("게임"));
     Category others = categoryRepository.save(newCategory("기타"));
 
-    User ssar = userRepository.save(newUser("ssar"));
-    User cos = userRepository.save(newUser("cos"));
-    User hong = userRepository.save(newUser("expert"));
+    User ssar = userRepository.save(newUser("ssar", UserEnum.USER));
+    User cos = userRepository.save(newUser("cos", UserEnum.USER));
+    User hong = userRepository.save(newUser("hong", UserEnum.EXPERT));
 
     Interest ssarInterest = interestRepository.save(newInterest(ssar, beauty));
     Interest ssarInterest2 = interestRepository.save(newInterest(ssar, sports));

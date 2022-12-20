@@ -59,7 +59,7 @@ public class UserApiControllerTest extends DummyEntity {
 
     @BeforeEach
     public void setUp() {
-        User cos = userRepository.save(newUser("cos"));
+        User ssar = userRepository.save(newUser("ssar", UserEnum.USER));
         // Profile cosProfile = profileRepository.save(newProfile("", "안녕", "부산", "없음",
         // "신입", "없음", cos));
 

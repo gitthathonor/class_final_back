@@ -6,6 +6,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.category.Category;
+import site.hobbyup.class_final_back.domain.claim.Claim;
 import site.hobbyup.class_final_back.domain.coupon.Coupon;
 import site.hobbyup.class_final_back.domain.expert.Expert;
 import site.hobbyup.class_final_back.domain.interest.Interest;
@@ -18,7 +19,7 @@ import site.hobbyup.class_final_back.domain.subscribe.Subscribe;
 import site.hobbyup.class_final_back.domain.user.User;
 
 public class DummyEntity {
-    protected User newUser(String username) {
+    protected User newUser(String username, UserEnum userEnum) {
         Long phoneNum = 1L;
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encPassword = passwordEncoder.encode("1234");
@@ -27,7 +28,7 @@ public class DummyEntity {
                 .password(encPassword)
                 .email(username + "@nate.com")
                 .phoneNum("010" + (++phoneNum))
-                .role(username.equals("expert") ? UserEnum.EXPERT : UserEnum.USER)
+                .role(userEnum)
                 .build();
         return user;
     }
@@ -126,6 +127,12 @@ public class DummyEntity {
         return Interest.builder()
                 .user(user)
                 .category(category)
+                .build();
+    }
+
+    protected Claim newClaim(Expert expert) {
+        return Claim.builder()
+                .expert(expert)
                 .build();
     }
 
