@@ -128,24 +128,4 @@ public class SubscribeApiControllerTest extends DummyEntity {
 
         }
 
-        // @WithUserDetails(value = "ssar", setupBefore =
-        // TestExecutionEvent.TEST_EXECUTION)
-        // @Test
-        // public void getSubscribeList_test() throws Exception {
-        // // given
-        // Long userId = 1L;
-
-        // // when
-        // ResultActions resultActions = mvc
-        // .perform(get("/api/user/" + userId + "/subscribe"));
-
-        // String responseBody =
-        // resultActions.andReturn().getResponse().getContentAsString();
-        // System.out.println("테스트 : " + responseBody);
-
-        // // then
-        // resultActions.andExpect(status().isOk());
-        // resultActions.andExpect(jsonPath("$.data.subscribes.length()").value(2));
-        // }
-
 }

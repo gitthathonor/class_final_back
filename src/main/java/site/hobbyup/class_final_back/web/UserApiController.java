@@ -87,4 +87,9 @@ public class UserApiController {
         return new ResponseEntity<>(new ResponseDto<>("마이페이지 클래스 보기", myLessonRespDto), HttpStatus.OK);
     }
 
+    @GetMapping("/")
+    public ResponseEntity<?> getIndexPage() {
+        return new ResponseEntity<>(new ResponseDto<>("배포 메인 페이지", null), HttpStatus.OK);
+    }
+
 }

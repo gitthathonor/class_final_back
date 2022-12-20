@@ -272,12 +272,15 @@ public class LessonApiControllerTest extends DummyEntity {
     lessonUpdateReqDto.setPlace("강남구");
     lessonUpdateReqDto.setLessonCount(5L);
     lessonUpdateReqDto.setLessonTime(2L);
+    lessonUpdateReqDto.setLessonCount(5L);
+    lessonUpdateReqDto.setLessonTime(2L);
     lessonUpdateReqDto.setDeadline(new Timestamp(8225L));
     lessonUpdateReqDto.setPolicy("취소 및 환불정책");
     lessonUpdateReqDto.setPossibleDays("월요일,화요일,수요일,목요일");
     lessonUpdateReqDto.setPrice(250000L);
 
     String requestBody = om.writeValueAsString(lessonUpdateReqDto);
+    System.out.println("테스트 : " + requestBody);
     System.out.println("테스트 : " + requestBody);
 
     // when
