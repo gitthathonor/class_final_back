@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import site.hobbyup.class_final_back.config.dummy.DummyEntity;
+import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.profile.ProfileRepository;
 import site.hobbyup.class_final_back.domain.user.User;
@@ -49,8 +50,8 @@ public class ProfileApiControllerTest extends DummyEntity {
 
     @BeforeEach
     public void setUp() {
-        User ssar = userRepository.save(newUser("ssar"));
-        User cos = userRepository.save(newUser("cos"));
+        User ssar = userRepository.save(newUser("ssar", UserEnum.USER));
+        User cos = userRepository.save(newUser("cos", UserEnum.USER));
         Profile cosProfile = profileRepository.save(newProfile("", "안녕", "부산", "없음", "신입", "없음", cos));
     }
 

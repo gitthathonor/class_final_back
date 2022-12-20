@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import site.hobbyup.class_final_back.config.dummy.DummyEntity;
+import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
 import site.hobbyup.class_final_back.dto.user.UserReqDto.LoginReqDto;
@@ -42,7 +43,7 @@ public class JwtAuthenticationFilterTest extends DummyEntity {
 
   @BeforeEach
   public void setUp() {
-    User user = newUser("ssar");
+    User user = newUser("ssar", UserEnum.USER);
     userRepository.save(user);
   }
 

@@ -27,6 +27,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import site.hobbyup.class_final_back.config.dummy.DummyEntity;
+import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
 import site.hobbyup.class_final_back.domain.coupon.Coupon;
@@ -123,17 +124,15 @@ public class LessonApiControllerTest extends DummyEntity {
     PaymentType vBank = paymentTypeRepository.save(newPaymentType("무통장입금"));
     PaymentType kakaoPay = paymentTypeRepository.save(newPaymentType("카카오페이"));
 
-    User ssar = userRepository.save(newUser("ssar"));
-    User cos = userRepository.save(newUser("cos"));
-    User hong = userRepository.save(newUser("expert"));
-    User kim = userRepository.save(newUser("expertKim"));
+    User ssar = userRepository.save(newUser("ssar", UserEnum.USER));
+    User cos = userRepository.save(newUser("cos", UserEnum.USER));
+    User hong = userRepository.save(newUser("hong", UserEnum.EXPERT));
 
     Interest ssarInterest = interestRepository.save(newInterest(ssar, beauty));
     Interest ssarInterest2 = interestRepository.save(newInterest(ssar, sports));
     Interest ssarInterest3 = interestRepository.save(newInterest(ssar, dance));
 
     Expert expert1 = expertRepository.save(newExpert(hong));
-    Expert expert2 = expertRepository.save(newExpert(kim));
 
     Coupon ssarCoupon = couponRepository.save(newCoupon("쿠폰1", 1000L, "2022-12-25", ssar));
 
