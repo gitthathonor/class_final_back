@@ -181,7 +181,7 @@ public class PaymentApiControllerTest extends DummyEntity {
     resultActions.andExpect(jsonPath("$.data.paymentDtoList[0].finalPrice").value(57000L));
   }
 
-  @WithUserDetails(value = "expert", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @WithUserDetails(value = "hong", setupBefore = TestExecutionEvent.TEST_EXECUTION)
   @Test
   public void getExpertSellingList_test() throws Exception {
     // given

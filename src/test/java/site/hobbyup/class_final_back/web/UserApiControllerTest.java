@@ -82,10 +82,10 @@ public class UserApiControllerTest extends DummyEntity {
         categoryIds.add(3L);
 
         JoinReqDto joinReqDto = new JoinReqDto();
-        joinReqDto.setUsername("ssar");
+        joinReqDto.setUsername("hello");
         joinReqDto.setPassword("1234");
-        joinReqDto.setEmail("ssar@nate.com");
-        joinReqDto.setPhoneNum("01011112222");
+        joinReqDto.setEmail("hello@nate.com");
+        joinReqDto.setPhoneNum("01037896969");
         joinReqDto.setRole(UserEnum.USER);
         joinReqDto.setCategoryIds(categoryIds);
         String requestBody = om.writeValueAsString(joinReqDto);
@@ -100,11 +100,11 @@ public class UserApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(status().isCreated());
-        resultActions.andExpect(jsonPath("$.data.username").value("ssar"));
+        resultActions.andExpect(jsonPath("$.data.username").value("hello"));
         resultActions.andExpect(jsonPath("$.data.interestList[0].categoryName").value("뷰티"));
     }
 
-    @WithUserDetails(value = "cos", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     public void deleteUser_test() throws Exception {
         // given
@@ -119,10 +119,10 @@ public class UserApiControllerTest extends DummyEntity {
         // then
         resultActions.andExpect(status().isOk());
         resultActions.andExpect(jsonPath("$.data.disabled").value(true));
-        resultActions.andExpect(jsonPath("$.data.username").value("cos"));
+        resultActions.andExpect(jsonPath("$.data.username").value("ssar"));
     }
 
-    @WithUserDetails(value = "cos", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     public void getMyPage_test() throws Exception {
         // given
