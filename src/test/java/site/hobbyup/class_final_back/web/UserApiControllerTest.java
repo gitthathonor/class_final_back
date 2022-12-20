@@ -136,7 +136,6 @@ public class UserApiControllerTest extends DummyEntity {
 
         // then
         resultActions.andExpect(status().isOk());
-
     }
 
 }
