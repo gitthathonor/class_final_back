@@ -302,8 +302,8 @@ public class LessonApiControllerTest extends DummyEntity {
   @Test
   public void getLessonCategoryList_test() throws Exception {
     // given
-    Long categoryId = 8L;
-    String sort = "recommand";
+    Long categoryId = 6L;
+    String sort = "ranking";
     Long minPrice = 0L;
     Long maxPrice = 0L;
 
