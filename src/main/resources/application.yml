@@ -1,8 +1,4 @@
 spring:
     profiles:
         active:
-<<<<<<< HEAD
             - prod
-=======
-            - dev
->>>>>>> 06c1739d773472eaeaff1491b05c780605b22beb
