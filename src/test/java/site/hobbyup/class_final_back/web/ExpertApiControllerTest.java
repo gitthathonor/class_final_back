@@ -91,7 +91,7 @@ public class ExpertApiControllerTest extends DummyEntity {
 
   }
 
-  @WithUserDetails(value = "expert", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @WithUserDetails(value = "hong", setupBefore = TestExecutionEvent.TEST_EXECUTION)
   @Test
   public void getExpertPage_test() throws Exception {
     // given

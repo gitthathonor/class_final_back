@@ -178,7 +178,7 @@ public class LessonApiControllerTest extends DummyEntity {
 
   }
 
-  @WithUserDetails(value = "expert", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @WithUserDetails(value = "hong", setupBefore = TestExecutionEvent.TEST_EXECUTION)
   @Test
   public void saveLesson_test() throws Exception {
     // given
@@ -358,7 +358,7 @@ public class LessonApiControllerTest extends DummyEntity {
   }
 
   // 전문가가 판매한 레슨 리스트 보기 테스트
-  @WithUserDetails(value = "expert", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+  @WithUserDetails(value = "hong", setupBefore = TestExecutionEvent.TEST_EXECUTION)
   @Test
   public void getSellingLessonList_test() throws Exception {
     // given
