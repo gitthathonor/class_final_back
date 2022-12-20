@@ -1,10 +1,6 @@
 package site.hobbyup.class_final_back.oauth.dto;
 
-import java.sql.Timestamp;
-
 import javax.persistence.Column;
-
-import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

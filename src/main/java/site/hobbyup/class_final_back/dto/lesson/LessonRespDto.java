@@ -16,7 +16,6 @@ import site.hobbyup.class_final_back.domain.expert.Expert;
 import site.hobbyup.class_final_back.domain.lesson.Lesson;
 import site.hobbyup.class_final_back.domain.profile.Profile;
 import site.hobbyup.class_final_back.domain.review.Review;
-import site.hobbyup.class_final_back.domain.user.User;
 
 public class LessonRespDto {
   @Setter

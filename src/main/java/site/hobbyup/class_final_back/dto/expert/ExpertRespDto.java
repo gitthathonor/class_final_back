@@ -10,6 +10,7 @@ public class ExpertRespDto {
     @Setter
     @Getter
     public static class ExpertPageRespDto {
+        private Long profileId;
         private String profilePhoto; // null이면 보낼 디폴트 사진파일이 필요하다.
         private String username;
         private Long satisfaction;
@@ -17,6 +18,7 @@ public class ExpertRespDto {
         private boolean isApproval;
 
         public ExpertPageRespDto(Profile profile, Expert expert) {
+            this.profileId = profile.getId();
             this.profilePhoto = profile.getFilePath();
             this.username = expert.getUser().getUsername();
             this.satisfaction = expert.getSatisfaction();
