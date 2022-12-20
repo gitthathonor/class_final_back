@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import site.hobbyup.class_final_back.config.dummy.DummyEntity;
+import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.user.User;
 import site.hobbyup.class_final_back.domain.user.UserRepository;
 
@@ -32,7 +33,7 @@ public class ProfileRepositoryTest extends DummyEntity {
     @BeforeEach
     public void setUp() {
         // 유저 만들기
-        User ssar = userRepository.save(newUser("ssar"));
+        User ssar = userRepository.save(newUser("ssar", UserEnum.USER));
         Profile ssarProfile = profileRepository.save(newProfile("", "안녕", "부산", "없음", "신입", "없음", ssar));
     }
 

@@ -1,11 +1,13 @@
 package site.hobbyup.class_final_back.config.jwt;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.ActiveProfiles;
 
 import site.hobbyup.class_final_back.config.auth.LoginUser;
 import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.user.User;
 
+@ActiveProfiles("test")
 public class JwtProcessTest {
 
   @Test

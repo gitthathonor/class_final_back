@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.DynamicInsert;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hobbyup.class_final_back.domain.expert.Expert;
@@ -27,4 +28,11 @@ public class Claim {
 
   @ManyToOne(fetch = FetchType.LAZY)
   private Expert expert;
+
+  @Builder
+  public Claim(Long id, Expert expert) {
+    this.id = id;
+    this.expert = expert;
+  }
+
 }

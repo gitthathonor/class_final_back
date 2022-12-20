@@ -6,6 +6,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.io.IOException;
 
+import javax.validation.executable.ExecutableType;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import site.hobbyup.class_final_back.config.dummy.DummyEntity;
+import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
 import site.hobbyup.class_final_back.domain.coupon.Coupon;
@@ -64,9 +67,9 @@ public class CouponApiControllerTest extends DummyEntity {
 
         @BeforeEach
         public void setUp() throws IOException {
-                User ssar = userRepository.save(newUser("ssar"));
-                User cos = userRepository.save(newUser("cos"));
-                User hong = userRepository.save(newUser("expert"));
+                User ssar = userRepository.save(newUser("ssar", UserEnum.USER));
+                User cos = userRepository.save(newUser("cos", UserEnum.USER));
+                User hong = userRepository.save(newUser("hong", UserEnum.EXPERT));
 
                 Expert expert1 = expertRepository.save(newExpert(hong));
 
