@@ -27,6 +27,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import site.hobbyup.class_final_back.config.dummy.DummyEntity;
+import site.hobbyup.class_final_back.config.enums.UserEnum;
 import site.hobbyup.class_final_back.domain.category.Category;
 import site.hobbyup.class_final_back.domain.category.CategoryRepository;
 import site.hobbyup.class_final_back.domain.coupon.Coupon;
@@ -123,17 +124,15 @@ public class LessonApiControllerTest extends DummyEntity {
     PaymentType vBank = paymentTypeRepository.save(newPaymentType("무통장입금"));
     PaymentType kakaoPay = paymentTypeRepository.save(newPaymentType("카카오페이"));
 
-    User ssar = userRepository.save(newUser("ssar"));
-    User cos = userRepository.save(newUser("cos"));
-    User hong = userRepository.save(newUser("expert"));
-    User kim = userRepository.save(newUser("expertKim"));
+    User ssar = userRepository.save(newUser("ssar", UserEnum.USER));
+    User cos = userRepository.save(newUser("cos", UserEnum.USER));
+    User hong = userRepository.save(newUser("hong", UserEnum.EXPERT));
 
     Interest ssarInterest = interestRepository.save(newInterest(ssar, beauty));
     Interest ssarInterest2 = interestRepository.save(newInterest(ssar, sports));
     Interest ssarInterest3 = interestRepository.save(newInterest(ssar, dance));
 
     Expert expert1 = expertRepository.save(newExpert(hong));
-    Expert expert2 = expertRepository.save(newExpert(kim));
 
     Coupon ssarCoupon = couponRepository.save(newCoupon("쿠폰1", 1000L, "2022-12-25", ssar));
 
@@ -273,12 +272,15 @@ public class LessonApiControllerTest extends DummyEntity {
     lessonUpdateReqDto.setPlace("강남구");
     lessonUpdateReqDto.setLessonCount(5L);
     lessonUpdateReqDto.setLessonTime(2L);
+    lessonUpdateReqDto.setLessonCount(5L);
+    lessonUpdateReqDto.setLessonTime(2L);
     lessonUpdateReqDto.setDeadline(new Timestamp(8225L));
     lessonUpdateReqDto.setPolicy("취소 및 환불정책");
     lessonUpdateReqDto.setPossibleDays("월요일,화요일,수요일,목요일");
     lessonUpdateReqDto.setPrice(250000L);
 
     String requestBody = om.writeValueAsString(lessonUpdateReqDto);
+    System.out.println("테스트 : " + requestBody);
     System.out.println("테스트 : " + requestBody);
 
     // when
@@ -302,8 +304,8 @@ public class LessonApiControllerTest extends DummyEntity {
   @Test
   public void getLessonCategoryList_test() throws Exception {
     // given
-    Long categoryId = 6L;
-    String sort = "ranking";
+    Long categoryId = 8L;
+    String sort = "recommand";
     Long minPrice = 0L;
     Long maxPrice = 0L;
 
