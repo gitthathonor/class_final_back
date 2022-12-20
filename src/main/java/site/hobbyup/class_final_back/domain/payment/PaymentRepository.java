@@ -15,4 +15,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
   @Query("select p from Payment p where p.user.id = :userId and p.lesson.id = :lessonId")
   Optional<Payment> findByUserIdAndLessonId(@Param("userId") Long userId, @Param("lessonId") Long lessonId);
 
+  @Query("select p from Payment p where p.user.id = :userId")
+  List<Payment> findAllLessonByUserId(@Param("userId") Long userId);
 }

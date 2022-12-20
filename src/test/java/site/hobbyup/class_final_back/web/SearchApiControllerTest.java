@@ -81,5 +81,4 @@ public class SearchApiControllerTest extends DummyEntity {
     // resultActions.andExpect(status().isCreated());
     // resultActions.andExpect(jsonPath("$.data.searchList.length()").value(2));
     // }
-
 }
