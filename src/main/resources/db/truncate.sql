@@ -1,0 +1,14 @@
+SET REFERENTIAL_INTEGRITY FALSE;
+truncate table users;
+truncate table profile;
+truncate table category;
+truncate table lesson;
+truncate table review;
+truncate table subscribe;
+truncate table payment;
+truncate table payment_type;
+truncate table expert;
+truncate table interest;
+truncate table claim;
+truncate table coupon;
+SET REFERENTIAL_INTEGRITY TRUE;
