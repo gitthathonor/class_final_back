@@ -184,30 +184,54 @@ public class DevInit extends DummyEntity {
                         Coupon coupon5 = couponRepository.save(newCoupon("회원가입 쿠폰", 10000L, "2022-12-22", lala));
 
                         Payment ssarPayment1 = paymentRepository.save(newPayment(ssar, lesson1, card, coupon1, 2));
-                        Payment ssarPayment2 = paymentRepository.save(newPayment(ssar, lesson12, kakaoPay, null, 1));
-                        Payment ssarPayment3 = paymentRepository.save(newPayment(ssar, lesson17, card, null, 2));
-                        Payment ssarPayment4 = paymentRepository.save(newPayment(ssar, lesson20, vBank, null, 3));
-                        Payment ssarPayment5 = paymentRepository.save(newPayment(ssar, lesson30, vBank, null, 1));
-                        Payment ssarPayment6 = paymentRepository.save(newPayment(cos, lesson5, card, coupon1, 2));
-                        Payment ssarPayment7 = paymentRepository.save(newPayment(cos, lesson10, kakaoPay, null, 1));
-                        Payment ssarPayment8 = paymentRepository.save(newPayment(cos, lesson17, card, null, 2));
-                        Payment ssarPayment9 = paymentRepository.save(newPayment(cos, lesson32, vBank, null, 3));
-                        Payment ssarPayment10 = paymentRepository.save(newPayment(cos, lesson45, vBank, null, 1));
-                        Payment ssarPayment11 = paymentRepository.save(newPayment(aa, lesson7, card, coupon1, 2));
-                        Payment ssarPayment12 = paymentRepository.save(newPayment(aa, lesson15, kakaoPay, null, 1));
-                        Payment ssarPayment13 = paymentRepository.save(newPayment(aa, lesson27, card, null, 2));
-                        Payment ssarPayment14 = paymentRepository.save(newPayment(aa, lesson33, vBank, null, 3));
-                        Payment ssarPayment15 = paymentRepository.save(newPayment(aa, lesson40, vBank, null, 1));
-                        Payment ssarPayment16 = paymentRepository.save(newPayment(hong, lesson10, card, coupon1, 2));
-                        Payment ssarPayment17 = paymentRepository.save(newPayment(hong, lesson19, kakaoPay, null, 1));
-                        Payment ssarPayment18 = paymentRepository.save(newPayment(hong, lesson36, card, null, 2));
-                        Payment ssarPayment19 = paymentRepository.save(newPayment(hong, lesson41, vBank, null, 3));
-                        Payment ssarPayment20 = paymentRepository.save(newPayment(hong, lesson48, vBank, null, 1));
-                        Payment ssarPayment21 = paymentRepository.save(newPayment(lala, lesson8, card, coupon1, 2));
-                        Payment ssarPayment22 = paymentRepository.save(newPayment(lala, lesson11, kakaoPay, null, 1));
-                        Payment ssarPayment23 = paymentRepository.save(newPayment(lala, lesson31, card, null, 2));
-                        Payment ssarPayment24 = paymentRepository.save(newPayment(lala, lesson44, vBank, null, 3));
-                        Payment ssarPayment25 = paymentRepository.save(newPayment(lala, lesson45, vBank, null, 1));
+                        // Payment ssarPayment2 = paymentRepository.save(newPayment(ssar, lesson12,
+                        // kakaoPay, null, 1));
+                        // Payment ssarPayment3 = paymentRepository.save(newPayment(ssar, lesson17,
+                        // card, null, 2));
+                        // Payment ssarPayment4 = paymentRepository.save(newPayment(ssar, lesson20,
+                        // vBank, null, 3));
+                        // Payment ssarPayment5 = paymentRepository.save(newPayment(ssar, lesson30,
+                        // vBank, null, 1));
+                        // Payment ssarPayment6 = paymentRepository.save(newPayment(cos, lesson5, card,
+                        // coupon1, 2));
+                        // Payment ssarPayment7 = paymentRepository.save(newPayment(cos, lesson10,
+                        // kakaoPay, null, 1));
+                        // Payment ssarPayment8 = paymentRepository.save(newPayment(cos, lesson17, card,
+                        // null, 2));
+                        // Payment ssarPayment9 = paymentRepository.save(newPayment(cos, lesson32,
+                        // vBank, null, 3));
+                        // Payment ssarPayment10 = paymentRepository.save(newPayment(cos, lesson45,
+                        // vBank, null, 1));
+                        // Payment ssarPayment11 = paymentRepository.save(newPayment(aa, lesson7, card,
+                        // coupon1, 2));
+                        // Payment ssarPayment12 = paymentRepository.save(newPayment(aa, lesson15,
+                        // kakaoPay, null, 1));
+                        // Payment ssarPayment13 = paymentRepository.save(newPayment(aa, lesson27, card,
+                        // null, 2));
+                        // Payment ssarPayment14 = paymentRepository.save(newPayment(aa, lesson33,
+                        // vBank, null, 3));
+                        // Payment ssarPayment15 = paymentRepository.save(newPayment(aa, lesson40,
+                        // vBank, null, 1));
+                        // Payment ssarPayment16 = paymentRepository.save(newPayment(hong, lesson10,
+                        // card, coupon1, 2));
+                        // Payment ssarPayment17 = paymentRepository.save(newPayment(hong, lesson19,
+                        // kakaoPay, null, 1));
+                        // Payment ssarPayment18 = paymentRepository.save(newPayment(hong, lesson36,
+                        // card, null, 2));
+                        // Payment ssarPayment19 = paymentRepository.save(newPayment(hong, lesson41,
+                        // vBank, null, 3));
+                        // Payment ssarPayment20 = paymentRepository.save(newPayment(hong, lesson48,
+                        // vBank, null, 1));
+                        // Payment ssarPayment21 = paymentRepository.save(newPayment(lala, lesson8,
+                        // card, coupon1, 2));
+                        // Payment ssarPayment22 = paymentRepository.save(newPayment(lala, lesson11,
+                        // kakaoPay, null, 1));
+                        // Payment ssarPayment23 = paymentRepository.save(newPayment(lala, lesson31,
+                        // card, null, 2));
+                        // Payment ssarPayment24 = paymentRepository.save(newPayment(lala, lesson44,
+                        // vBank, null, 3));
+                        // Payment ssarPayment25 = paymentRepository.save(newPayment(lala, lesson45,
+                        // vBank, null, 1));
 
                         Interest ssarInterest1 = interestRepository.save(newInterest(ssar, beauty));
                         Interest ssarInterest2 = interestRepository.save(newInterest(ssar, sports));

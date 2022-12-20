@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -41,7 +42,6 @@ import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSearchListRe
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSellingByExpertRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonSubscribedListRespDto;
 import site.hobbyup.class_final_back.dto.lesson.LessonRespDto.LessonUpdateRespDto;
-import site.hobbyup.class_final_back.util.DecodeUtil;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -62,8 +62,9 @@ public class LessonService {
   @Transactional
   public LessonSaveRespDto saveLesson(LessonSaveReqDto lessonSaveReqDto, LoginUser loginUser) throws IOException {
 
-    // 이미지 파일 디코딩 후, 경로값 가져오기
-    String photoPath = DecodeUtil.saveDecodingImage(lessonSaveReqDto.getPhoto());
+    // 파일 디코딩
+    byte[] decodeByte = Base64.decodeBase64(lessonSaveReqDto.getPhoto());
+    String photoPath = new String(decodeByte);
     lessonSaveReqDto.setPhoto(photoPath);
 
     // 입력받은 카테고리 정보를 db의 정보와 비교해서 카테고리값 가져오기
@@ -210,6 +211,11 @@ public class LessonService {
     // 3. 카테고리 체크 후 영속화
     Category categoryPS = categoryRepository.findById(lessonUpdateReqDto.getCategoryId())
         .orElseThrow(() -> new CustomApiException("해당 카테고리가 없습니다.", HttpStatus.BAD_REQUEST));
+
+    // 파일 디코딩
+    byte[] decodeByte = Base64.decodeBase64(lessonUpdateReqDto.getPhoto());
+    String photoPath = new String(decodeByte);
+    lessonUpdateReqDto.setPhoto(photoPath);
 
     // 4. 더티체킹 후 수정
     lessonPS.update(lessonUpdateReqDto);
