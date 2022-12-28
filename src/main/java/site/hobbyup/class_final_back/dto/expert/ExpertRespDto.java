@@ -27,6 +27,8 @@ public class ExpertRespDto {
         }
 
         public ExpertPageRespDto(Expert expert) {
+            this.profileId = null;
+            this.profilePhoto = null;
             this.username = expert.getUser().getUsername();
             this.satisfaction = expert.getSatisfaction();
             this.totalLesson = expert.getTotalLesson();
