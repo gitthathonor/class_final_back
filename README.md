@@ -1,162 +1,49 @@
-### 최종 프로젝트 - 온라인 취미 클래스 수강 사이트 hobbyup
+> 
+> > **정수영 Back**
+> > 
+> > - 회원가입, 로그인, 레슨 CRUD, 검색, 카테고리 추천, 결제 기능 작업
+> > - 백엔드 서버 세팅
+> > - Spring Security, JWT 적용
+> > - 테이블 구성
+> > - AWS의 EBS를 이용해 RDS와 함께 배포
 
-### 테이블 생성 구문
+<br/>
 
-```sql
+## :wrench: 2. 개발 환경
+- Tool
+![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white)
 
-CREATE TABLE users (
-	id	bigint	NOT NULL,
-	username	varchar	NOT NULL,
-	password	varchar	NOT NULL,
-	email	varchar	NOT NULL,
-	phone_num	varchar	NOT NULL,
-	created_at	TimeStamp	NOT NULL,
-	updated_at	TimeStamp	NOT NULL,
-	role	varchar	NOT NULL default 'USER'
-);
+- FrontEnd
+![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)
+![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white)
 
-CREATE TABLE profile (
-	id	bigint	NOT NULL,
-	photo	varchar	NOT NULL,
-	introduction	longtext	NOT NULL,
-	region	varchar	NOT NULL,
-	certification	varchar	NOT NULL,
-	career_year	varchar	NOT NULL,
-	career	varchar	NOT NULL,
-	user_profile_id	bigint	NOT NULL
-);
+- BackEnd
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white)
+![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
+![Gradle](https://img.shields.io/badge/Gradle-02303A.svg?style=for-the-badge&logo=Gradle&logoColor=white)
+![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
 
-CREATE TABLE subscribe (
-	id	bigint	NOT NULL,
-	created_at	TimeStamp	NOT NULL,
-	user_id	bigint	NOT NULL,
-	lecture_id	bigint	NOT NULL
-);
+- Database
+![MariaDB](https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white)
+![h20](https://img.shields.io/badge/-h2-lightgrey)
 
+- Team
+![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
+![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
+![Markdown](https://img.shields.io/badge/markdown-%23000000.svg?style=for-the-badge&logo=markdown&logoColor=white)
+![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
+![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)
+![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)
 
-CREATE TABLE lesson (
-	id	bigint	NOT NULL,
-	name	varchar	NOT NULL,
-	photo	varchar	NOT NULL
-	price	bigint	NOT NULL,
-	curriculum	longtext	NOT NULL,
-	lesson_time	int	NOT NULL,
-	lesson_count	int	NOT NULL,
-	possible_days	varchar	NOT NULL,
-	place	varchar	NOT NULL,
-	policy longtext	NOT NULL,
-	expired_at	TimeStamp	NOT NULL,
-	user_id	bigint	NOT NULL,
-	category_id	bigint	NOT NULL
-);
+## :bulb: 3. 사용자 시나리오
 
-CREATE TABLE alarm (
-	id	bigint	NOT NULL
-);
+### 회원가입 및 로그인
+![회원가입_hobbyup](https://user-images.githubusercontent.com/95184357/209790064-d0dd06fb-2684-471d-8bf7-54d7d98aa311.gif)
+![로그인_hobbyup](https://user-images.githubusercontent.com/95184357/209790173-675d3fcd-bb4e-4264-ad4a-9b80995f1486.gif)
 
-CREATE TABLE coupon (
-	id	bigint	NOT NULL,
-	title	varchar	NOT NULL,
-	price	bigint	NOT NULL,
-	expired_date	TimeStamp	NOT NULL,
-	created_at	TimeStamp	NOT NULL,
-	user_coupon_id	bigint	NOT NULL
-);
-
-CREATE TABLE payment (
-	id	bigint	NOT NULL,
-	total_price	bigint	NOT NULL,
-	total_count	int	NOT NULL,
-	discount_price	bigint	NOT NULL,
-	final_price	bigint	NOT NULL,
-	created_at	TimeStamp	NOT NULL,
-	user_id	bigint	NOT NULL,
-	lecture_id	bigint	NOT NULL,
-	payment_type_id	bigint	NOT NULL
-);
-
-CREATE TABLE admin (
-	id	bigint	NOT NULL,
-	password	varchar	NOT NULL,
-	name	varchar	NOT NULL,
-	created_at	TimeStamp	NOT NULL
-);
-
-CREATE TABLE review (
-	id	bigint	NOT NULL,
-	content	longtext	NOT NULL,
-	grade	double	NOT NULL,
-	lecture_id	bigint	NOT NULL,
-	user_id	bigint	NOT NULL
-);
-
-CREATE TABLE payment_type (
-	id	bigint	NOT NULL,
-	type varchar	NOT NULL
-);
-
-
-CREATE TABLE category (
-	id	bigint	NOT NULL,
-	name	varchar	NOT NULL
-);
-
-CREATE TABLE interest (
-	id	bigint	NOT NULL,
-	user_id	bigint	NOT NULL,
-	category_id	bigint	NOT NULL
-);
-
-ALTER TABLE user ADD CONSTRAINT PK_USER PRIMARY KEY (
-	id
-);
-
-ALTER TABLE profile ADD CONSTRAINT PK_PROFILE PRIMARY KEY (
-	id
-);
-
-ALTER TABLE subscribe ADD CONSTRAINT PK_SUBSCRIBE PRIMARY KEY (
-	id
-);
-
-ALTER TABLE lesson ADD CONSTRAINT PK_LESSON PRIMARY KEY (
-	id
-);
-
-ALTER TABLE alarm ADD CONSTRAINT PK_ALARM PRIMARY KEY (
-	notice_id
-);
-
-ALTER TABLE coupon ADD CONSTRAINT PK_COUPON PRIMARY KEY (
-	id
-);
-
-ALTER TABLE payment ADD CONSTRAINT PK_PAYMENT PRIMARY KEY (
-	id
-);
-
-ALTER TABLE admin ADD CONSTRAINT PK_ADMIN PRIMARY KEY (
-	id
-);
-
-ALTER TABLE review ADD CONSTRAINT PK_REVIEW PRIMARY KEY (
-	id
-);
-
-ALTER TABLE payment_type ADD CONSTRAINT PK_PAYMENT_TYPE PRIMARY KEY (
-	id
-);
-
-
-ALTER TABLE category ADD CONSTRAINT PK_CATEGORY PRIMARY KEY (
-	id
-);
-
-ALTER TABLE interest ADD CONSTRAINT PK_INTEREST PRIMARY KEY (
-	id
-);
-
-
-
-
-```
+### 프로필 등록, 수정
+![프로필 등록하기_hobbypup](https://user-images.githubusercontent.com/95184357/209791540-2f6a1a65-ec25-4c01-b1dd-96413fb79108.gif)
+![프로필 수정하기_hobbyup](https://user-images.githubusercontent.com/95184357/209791659-5ad4cf41-9121-4171-8561-ccf98ca4ca71.gif)
