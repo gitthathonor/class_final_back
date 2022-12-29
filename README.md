@@ -255,31 +255,31 @@ ALTER TABLE `claim` ADD CONSTRAINT `PK_CLAIM` PRIMARY KEY (
 ## :bulb: 3. 사용자 시나리오
 
 ### 회원가입 및 로그인
-![image](https://user-images.githubusercontent.com/95184357/209914141-509bb479-83a5-47a8-8de5-ff7cd1131a4b.png)
+![image](https://user-images.githubusercontent.com/95184357/209919272-aa826fbc-fe69-4b3e-bccc-158298b08f2f.png)
 
 ### 구매한 레슨 확인 및 리뷰작성
-![image](https://user-images.githubusercontent.com/95184357/209914212-f62f296c-e577-4819-85f6-43a1129f72ff.png)
+![image](https://user-images.githubusercontent.com/95184357/209919235-eee7cfd8-a333-40da-bc73-51128d162909.png)
 
 ### 프로필 등록/수정/삭제
-![image](https://user-images.githubusercontent.com/95184357/209914236-25f40010-51d6-4c41-ad54-27419693dcdf.png)
+![image](https://user-images.githubusercontent.com/95184357/209919301-ddc3d1ea-094f-41ee-b533-9cc9e357c377.png)
 
 ### 레슨 상세보기 및 결제하기
-![image](https://user-images.githubusercontent.com/95184357/209914265-a89555d1-2509-4cb4-bc12-6fafcbd3e668.png)
+![image](https://user-images.githubusercontent.com/95184357/209919333-6c1a7fd7-2c7b-4a36-b9b2-ba10b910bf0f.png)
 
 ### 결제/취소 내역 보기
-![image](https://user-images.githubusercontent.com/95184357/209914286-74ee8126-95a2-4f24-adfe-ed301efd1063.png)
+![image](https://user-images.githubusercontent.com/95184357/209919361-fe583760-4a3b-411a-a103-524ee695ba6d.png)
 
 ### 1:1 문의하기
-![image](https://user-images.githubusercontent.com/95184357/209914305-882d74a3-13ac-4e9b-9210-14d4fa591b78.png)
+![image](https://user-images.githubusercontent.com/95184357/209919384-51a39723-ccb7-4124-8e7b-288d957fef99.png)
 
 ### 찜한 레슨 목록보기
-![image](https://user-images.githubusercontent.com/95184357/209914321-0299dd9b-f924-4698-abfb-c1311704cadd.png)
+![image](https://user-images.githubusercontent.com/95184357/209919400-6eebfe7f-2c0f-4015-92cb-f84ffb31e0cf.png)
 
 ### 검색하기
-![image](https://user-images.githubusercontent.com/95184357/209914334-ddd2f03f-7f32-4953-8754-ee0bdbe4f11d.png)
+![image](https://user-images.githubusercontent.com/95184357/209919415-9d3dcce8-edf9-4cca-9a36-52dddee9252c.png)
 
 ### 전문가 서비스 - 레슨 등록, 판매내역보기
-![image](https://user-images.githubusercontent.com/95184357/209914373-5d8f91cf-f823-4b01-ba65-bb12392ce3d5.png)
+![image](https://user-images.githubusercontent.com/95184357/209919436-c9940fc6-e59c-412b-89cd-db290d9d5062.png)
 
 ### 관리자 페이지
 ![image](https://user-images.githubusercontent.com/95184357/209914395-e5b86f85-4c3d-41a7-a213-411e974af575.png)
@@ -324,8 +324,34 @@ hobbyup(https://www.youtube.com/watch?v=8IVljJ7U0zk0)
 
 ### Front 
 - 상태 관리를 위해서 Riverpod 라이브러리 적용
-```dart
-
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_rating_bar: ^4.0.1
+  google_fonts: ^3.0.1
+  font_awesome_flutter: ^10.2.1
+  intl: ^0.17.0
+  cached_network_image: ^3.2.1
+  extended_image: ^6.0.1
+  dropdown_button2: ^1.9.1
+  fluttertoast: ^8.1.1
+  cupertino_icons: ^1.0.2
+  flutter_lints: ^2.0.0
+  multi_select_flutter: ^4.1.3
+  image_picker: ^0.8.6
+  flutter_riverpod: ^2.0.0-dev.9
+  http: ^0.13.5
+  http_parser: ^4.0.1
+  shared_preferences: ^2.0.15
+  validators: ^3.0.0
+  logger: ^1.1.0
+  get: ^4.6.5
+  flutter_secure_storage: ^7.0.0 #토큰 저장 및 자동 로그인 
+  iamport_webview_flutter: 3.0.4
+  url_launcher: ^6.0.4
+  uni_links: ^0.5.1
+  json_annotation: ^4.7.0
 ```
 
 
