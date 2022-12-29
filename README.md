@@ -16,7 +16,7 @@
 ### 프롤로그
 ![image](https://user-images.githubusercontent.com/95184357/209767132-57089374-cb4e-4d9b-8011-18257704d31b.png)
 
-### 깃허브 주소
+### 개발 리포지토리 주소
 - front-end(https://github.com/jungchungsub/class_project_front)
 - back-end(https://github.com/gitthathonor/class_final_back)
 - admin(https://github.com/gitthathonor/class_final_back_admin)
@@ -353,6 +353,105 @@ dependencies:
   uni_links: ^0.5.1
   json_annotation: ^4.7.0
 ```
+</br>
+
+### Back
+</br>
+#### 아임포트 API를 이용한 결제API
+- 라이브러리 DI & jitpack 
+```groovy
+repositories {
+	mavenCentral()
+	maven { url 'https://jitpack.io' } 
+}
+
+dependencies {
+  ...
+  ...
+  
+  
+  // 아임포트 결제 API
+  implementation 'com.github.iamport:iamport-rest-client-java:0.2.22'
+
+}
+```
+- API 사용을 위해서 발급받은 key를 매개변수로 넣어서 아임포트 서버에 요청
+```java
+// flutter에서 결제페이지에 요청한 데이터가 아임포트 서버에 입력된 데이터와 일치 하는지 검증하는 컨트롤러
+  @PostMapping("/verifyIamport/{imp_uid}")
+  public IamportResponse<Payment> paymentByImpUid(@PathVariable String imp_uid)
+      throws IamportResponseException, IOException {
+    log.info("paymentByImpUid 진입");
+    return iamportClient.paymentByImpUid(imp_uid);
+  }
+```
+- 인증된 상태에서 결제기록을 저장하는 컨트롤러
+```java
+// 결제정보 입력
+  @PostMapping("/api/lesson/{lessonId}/payment")
+  public ResponseEntity<?> savePayment(@RequestBody PaymentSaveReqDto paymentSaveReqDto,
+      @AuthenticationPrincipal LoginUser loginUser, @PathVariable Long lessonId) {
+    PaymentSaveRespDto paymentSaveRespDto = paymentService.savePayment(paymentSaveReqDto, loginUser.getUser().getId(),
+        lessonId);
+    return new ResponseEntity<>(new ResponseDto<>("결제 완료", paymentSaveRespDto), HttpStatus.CREATED);
+  }
+```
+
+#### 카카오 OAuth2.0 적용
+- 라이브러리 DI
+```groovy
+dependencies {
+  ...
+  ...
+  
+  
+  // OAuth 2.0
+  implementation "org.springframework.boot:spring-boot-starter-oauth2-client"
+
+}
+```
+- OAuth2.0 방식을 이용해서 외부 리소스 서버의 정보를 토큰을 요청해서 필요한 정보만 담아오는 컨트롤러
+```java
+@GetMapping("/oauth/kakao")
+    public ResponseEntity<?> kakaoCallback(@RequestParam("code") String code) {
+
+        // 토큰 요청
+        OAuthToken oAuthToken = kakaoService.tokenRequest(code);
+        // 받은 토큰으로 유저정보 요청
+        KakaoProfile kakaoProfile = kakaoService.userInfoRequest(oAuthToken);
+
+        String email = kakaoProfile.getKakao_account().getEmail();
+        int index = email.indexOf("@");
+        String username = (kakaoProfile.getKakao_account().getEmail().substring(0,
+                index));
+
+        KakaoRespDto kakaoUser = KakaoRespDto.builder()
+                .username(username)
+                .password(kakaoProfile.getKakao_account().getEmail() + kakaoProfile.getId())
+                .email(email)
+                .oauth("kakao")
+                .build();
+
+        return new ResponseEntity<>(new ResponseDto<>("카카오 유저정보", kakaoUser), HttpStatus.OK);
+    }
+```
+- API 문서에 맞게 토큰DTO를 설정
+```java
+package site.hobbyup.class_final_back.oauth.dto;
+
+import lombok.Data;
+
+@Data
+public class OAuthToken {
+    private String access_token;
+    private String token_type;
+    private String refresh_token;
+    private int expires_in;
+    private String scope;
+    private int refresh_token_expires_in;
+}
+```
+
 
 
 
