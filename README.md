@@ -282,8 +282,8 @@ ALTER TABLE `claim` ADD CONSTRAINT `PK_CLAIM` PRIMARY KEY (
 ![image](https://user-images.githubusercontent.com/95184357/209919436-c9940fc6-e59c-412b-89cd-db290d9d5062.png)
 
 ### 관리자 페이지
-![image](https://user-images.githubusercontent.com/95184357/209914395-e5b86f85-4c3d-41a7-a213-411e974af575.png)
-![image](https://user-images.githubusercontent.com/95184357/209914413-dec9a9b0-9c86-4c9c-b523-8d6c43da4fd4.png)
+![image](https://user-images.githubusercontent.com/95184357/209921221-3997b158-7e05-4145-869d-f64050306565.png)
+![image](https://user-images.githubusercontent.com/95184357/209921243-ecb44cf3-c043-4238-ab4d-aff93e352107.png)
 </br></br>
 
 ## :video_camera: 4. 시연영상
