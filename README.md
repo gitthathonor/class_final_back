@@ -16,6 +16,11 @@
 ### 프롤로그
 ![image](https://user-images.githubusercontent.com/95184357/209767132-57089374-cb4e-4d9b-8011-18257704d31b.png)
 
+### 깃허브 주소
+- front-end(https://github.com/jungchungsub/class_project_front)
+- back-end(https://github.com/gitthathonor/class_final_back)
+- admin(https://github.com/gitthathonor/class_final_back_admin)
+
 ### 테이블 구성
 ![image](https://user-images.githubusercontent.com/95184357/209767385-a37e2ea3-8898-4e1c-941c-4455ded5d9a5.png)
 ```sql
@@ -174,7 +179,7 @@ ALTER TABLE `claim` ADD CONSTRAINT `PK_CLAIM` PRIMARY KEY (
 ```
 </br></br>
 
-## :movie_camera: 1. 제작 기간 & 팀원 소개
+## :ferris_wheel: 1. 제작 기간 & 팀원 소개
 * 2022년 11월 16일 ~ 2022년 12월 22일
 
 | 이름 | 깃허브 링크 | 프론트&백엔드 |
@@ -245,13 +250,88 @@ ALTER TABLE `claim` ADD CONSTRAINT `PK_CLAIM` PRIMARY KEY (
 ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
 ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)
 ![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)
+</br></br>
 
 ## :bulb: 3. 사용자 시나리오
 
 ### 회원가입 및 로그인
-![회원가입_hobbyup](https://user-images.githubusercontent.com/95184357/209790064-d0dd06fb-2684-471d-8bf7-54d7d98aa311.gif)
-![로그인_hobbyup](https://user-images.githubusercontent.com/95184357/209790173-675d3fcd-bb4e-4264-ad4a-9b80995f1486.gif)
+![image](https://user-images.githubusercontent.com/95184357/209914141-509bb479-83a5-47a8-8de5-ff7cd1131a4b.png)
 
-### 프로필 등록, 수정
-![프로필 등록하기_hobbypup](https://user-images.githubusercontent.com/95184357/209791540-2f6a1a65-ec25-4c01-b1dd-96413fb79108.gif)
-![프로필 수정하기_hobbyup](https://user-images.githubusercontent.com/95184357/209791659-5ad4cf41-9121-4171-8561-ccf98ca4ca71.gif)
+### 구매한 레슨 확인 및 리뷰작성
+![image](https://user-images.githubusercontent.com/95184357/209914212-f62f296c-e577-4819-85f6-43a1129f72ff.png)
+
+### 프로필 등록/수정/삭제
+![image](https://user-images.githubusercontent.com/95184357/209914236-25f40010-51d6-4c41-ad54-27419693dcdf.png)
+
+### 레슨 상세보기 및 결제하기
+![image](https://user-images.githubusercontent.com/95184357/209914265-a89555d1-2509-4cb4-bc12-6fafcbd3e668.png)
+
+### 결제/취소 내역 보기
+![image](https://user-images.githubusercontent.com/95184357/209914286-74ee8126-95a2-4f24-adfe-ed301efd1063.png)
+
+### 1:1 문의하기
+![image](https://user-images.githubusercontent.com/95184357/209914305-882d74a3-13ac-4e9b-9210-14d4fa591b78.png)
+
+### 찜한 레슨 목록보기
+![image](https://user-images.githubusercontent.com/95184357/209914321-0299dd9b-f924-4698-abfb-c1311704cadd.png)
+
+### 검색하기
+![image](https://user-images.githubusercontent.com/95184357/209914334-ddd2f03f-7f32-4953-8754-ee0bdbe4f11d.png)
+
+### 전문가 서비스 - 레슨 등록, 판매내역보기
+![image](https://user-images.githubusercontent.com/95184357/209914373-5d8f91cf-f823-4b01-ba65-bb12392ce3d5.png)
+
+### 관리자 페이지
+![image](https://user-images.githubusercontent.com/95184357/209914395-e5b86f85-4c3d-41a7-a213-411e974af575.png)
+![image](https://user-images.githubusercontent.com/95184357/209914413-dec9a9b0-9c86-4c9c-b523-8d6c43da4fd4.png)
+</br></br>
+
+## :video_camera: 4. 시연영상
+hobbyup(https://www.youtube.com/watch?v=8IVljJ7U0zk0)
+</br></br>
+
+## :traffic_light: 5. 코드 컨벤션
+
+### 프론트엔드
+- 페이지 이동과 관련한 메서드는 move, 페이지 갱신과 관련된 메서드는 refresh를 붙임
+- 라우팅 주소는 동사+명사
+
+### 백엔드
+- 카멜케이스를 원칙으로 해서 적용
+- Controller와 Service의 메서드명을 일치
+- 본 코드에서는 Logger사용, 테스트 코드에서는 System.out을 사용해서 디버깅
+</br></br>
+
+## :construction: 6. 아키텍쳐
+
+### 프론트엔드 - MVVM
+![image](https://user-images.githubusercontent.com/95184357/209915569-c9c7583b-7068-469b-81d1-d1d542dea292.png)
+- view : 클라이언트에게 직접적으로 보여지는 레이어
+- model : 데이터를 들고 있는 레이어
+- viewModel : 데이터에 이벤트가 발생하면 model에 변화된 값을 적용시킴. view는 viewModel을 watch하고 있다. 
+#### 장점
+- view와 model이 독립적이므로 비즈니스 로직을 분리할 수 있다.
+- 모듈화하여 개발 가능
+- 여러개의 view가 하나의 viewModel을 의존할 수 있다.
+
+### 백엔드 - MC
+![image](https://user-images.githubusercontent.com/95184357/209915869-3d65d413-ac37-46ff-aed4-7f7108cd5c36.png)
+- 스프링 기반의 개발에서 가장 보편적으로 사용되는 MVC 패턴에서 view만 빠진 형태
+- flutter를 이용해서 프론트를 따로 개발하기 때문에 데이터 송수신을 위한 RESTful한 서버만이 필요해서 MC패턴이 되었다.
+</br></br>
+
+## :gem: 7. 주요 기술 및 로직
+
+### Front 
+- 상태 관리를 위해서 Riverpod 라이브러리 적용
+```dart
+
+```
+
+
+
+
+
+
+
+
