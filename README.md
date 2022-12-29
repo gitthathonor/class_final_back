@@ -356,8 +356,9 @@ dependencies:
 </br>
 
 ### Back
-</br>
+
 #### 아임포트 API를 이용한 결제API
+
 - 라이브러리 DI & jitpack 
 ```groovy
 repositories {
@@ -451,12 +452,6 @@ public class OAuthToken {
     private int refresh_token_expires_in;
 }
 ```
-
-
-
-
-
-
 
 
 
