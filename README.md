@@ -323,7 +323,7 @@ hobbyup(https://www.youtube.com/watch?v=8IVljJ7U0zk0)
 ## :gem: 7. 주요 기술 및 로직
 
 ### Front 
-- 상태 관리를 위해서 Riverpod 라이브러리 적용
+#### 상태 관리를 위해서 Riverpod 라이브러리 적용
 ```yaml
 dependencies:
   flutter:
@@ -353,6 +353,47 @@ dependencies:
   uni_links: ^0.5.1
   json_annotation: ^4.7.0
 ```
+
+#### StateNotifierProvider를 통한 상태관리
+- 카테고리별 페이지에서 상태관리를 하기 위한 코드
+```dart
+import 'package:finalproject_front/dto/response/respone_dto.dart';
+import 'package:finalproject_front/main.dart';
+import 'package:finalproject_front/pages/category/components/category_page_model.dart';
+import 'package:finalproject_front/service/category_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
+
+final categoryPageViewModel = StateNotifierProvider.family.autoDispose<CategoryPageViewModel, CategoryPageModel, int>((ref, cateogryId) {
+  return CategoryPageViewModel(CategoryPageModel(null), cateogryId)..notifyViewModel("등록순");
+});
+
+class CategoryPageViewModel extends StateNotifier<CategoryPageModel> {
+  final CategoryService categoryService = CategoryService();
+  final mContext = navigatorKey.currentContext;
+  final int categoryId;
+
+  CategoryPageViewModel(super.state, this.categoryId);
+
+  Future<void> notifyViewModel(String dropdownValue) async {
+    String? jwtToken;
+
+    ResponseDto responseDto = await categoryService.fetchCategoryList(categoryId, drowdownValue: dropdownValue);
+
+    // if (responseDto.data == null) {
+    //   state =
+    // }
+    Logger().d("상태메시지 : ${responseDto.msg}");
+    Logger().d("상태데이터 : ${responseDto.data}");
+    Logger().d("상태코드 : ${responseDto.statusCode}");
+
+    if (responseDto.statusCode < 300) {
+      state = CategoryPageModel(responseDto.data);
+    }
+  }
+}
+```
+
 </br>
 
 ### Back
@@ -453,5 +494,269 @@ public class OAuthToken {
 }
 ```
 
+#### 추천순, 인기순, 등록순 매칭 
+- QLRM 라이브러리를 이용해서 JPA기술에 DTO 리턴 적용
+```java
+public List<LessonCategoryListRespDto> findAllLessonCategoryListByUserId(Long userId, Long categoryId, String sort,
+      Long minPrice,
+      Long maxPrice) {
+    log.debug("디버그 : LessonRepositoryQuery - findAllLessonCategoryListByUserId실행");
+    String sql = "select l.id as lessonId, l.name as lessonName,";
+    sql += " l.price as lessonPrice,";
+    sql += " COUNT(r.id) AS totalReviews,";
+    sql += " (case when AVG(r.grade) IS null then 0.0 ELSE AVG(r.grade) END) AS avgGrade,";
+    sql += " (case when s.lesson_id IS NOT NULL then true ELSE false END) AS subscribed,";
+    sql += " (case when i.category_id IS NOT NULL then true ELSE false END) AS recommand,";
+    sql += " (case when s2.count IS null then 0 ELSE s2.count END) AS ranking,";
+    sql += " l.created_at AS recent";
+    sql += " FROM lesson l LEFT OUTER JOIN review r ON l.id = r.lesson_id";
+    sql += " LEFT OUTER JOIN (SELECT lesson_id FROM subscribe WHERE user_id = :userId) s";
+    sql += " ON l.id = s.lesson_id";
+    sql += " LEFT OUTER JOIN (SELECT category_id FROM interest WHERE user_id = :userId) i";
+    sql += " ON l.category_id = i.category_id";
+    sql += " LEFT OUTER JOIN (SELECT COUNT(*) count, lesson_id FROM subscribe GROUP BY lesson_id) s2";
+    sql += " ON l.id = s2.lesson_id";
+    sql += " WHERE l.category_id = :categoryId";
+    sql += " GROUP BY lessonId";
 
+    if (minPrice != 0L || maxPrice != 0L) {
+      sql += " HAVING :minPrice < lessonPrice AND lessonPrice < :maxPrice";
+    }
 
+    if (sort.equals("recommand")) {
+      sql += " ORDER BY recommand DESC";
+    } else if (sort.equals("ranking")) {
+      sql += " ORDER BY ranking DESC";
+    } else if (sort.equals("recent")) {
+      sql += " ORDER BY recent DESC";
+    }
+    log.debug("디버그 : sql = " + sql);
+
+    // 쿼리 완성
+    JpaResultMapper jpaResultMapper = new JpaResultMapper();
+    Query query = em.createNativeQuery(sql)
+        .setParameter("userId", userId)
+        .setParameter("categoryId", categoryId);
+    if (minPrice != 0L || maxPrice != 0L) {
+      query.setParameter("minPrice", minPrice)
+          .setParameter("maxPrice", maxPrice);
+    }
+
+    log.debug("디버그 : query = " + query);
+
+    List<LessonCategoryListRespDto> result = jpaResultMapper.list(query, LessonCategoryListRespDto.class);
+    log.debug("디버그 : result = " + result);
+    return result;
+  }
+```
+
+#### Entity생성 시, AuditingTime 설정
+- Entity에서 상속받게 할 AuditingTime 추상 클래스 생성
+```java
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import lombok.Getter;
+
+@Getter
+@MappedSuperclass // 이 클래스를 상속받은 Entity를 생성 시, 아래의 필드값을 추가해서 컬럼지정
+@EntityListeners(AuditingEntityListener.class)
+public abstract class AuditingTime {
+
+    @LastModifiedDate // Insert, update시에 현재시간 들어감
+    @Column(nullable = false)
+    protected LocalDateTime updatedAt;
+
+    @CreatedDate // Insert시에 현재시간 들어감
+    @Column(nullable = false)
+    protected LocalDateTime createdAt;
+
+}
+```
+- 전체 프로그램 실행 시, 적용시키는 @EnableJpaAuditing
+```java
+package site.hobbyup.class_final_back;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+
+@EnableJpaAuditing
+@SpringBootApplication
+public class ClassFinalBackApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(ClassFinalBackApplication.class, args);
+	}
+
+}
+```
+
+#### 더미데이터 설정을 위한 코드
+```java
+@RequiredArgsConstructor
+@Configuration
+public class DevInit extends DummyEntity {
+
+        @org.springframework.context.annotation.Profile("dev")
+        @Bean
+        public CommandLineRunner dataSetting(UserRepository userRepository, ...) {
+	...
+	...
+	...
+	
+	}
+```
+
+#### JWT로 인증 및 인가
+- jwt를 변환해서 리턴해주는 프로세스 코드
+```java
+package site.hobbyup.class_final_back.config.jwt;
+
+import java.util.Date;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
+
+import site.hobbyup.class_final_back.config.auth.LoginUser;
+import site.hobbyup.class_final_back.config.enums.UserEnum;
+import site.hobbyup.class_final_back.domain.user.User;
+
+public class JwtProcess {
+
+    public static String create(LoginUser loginUser) {
+        String jwtToken = JWT.create()
+                .withSubject(loginUser.getUsername())
+                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
+                .withClaim("id", loginUser.getUser().getId())
+                .withClaim("role", loginUser.getUser().getRole().name())
+                .sign(Algorithm.HMAC512(JwtProperties.SECRET));
+
+        return JwtProperties.TOKEN_PREFIX + jwtToken;
+    }
+
+    public static LoginUser verify(String token) {
+        DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(token);
+        Long id = decodedJWT.getClaim("id").asLong();
+        String role = decodedJWT.getClaim("role").asString();
+        User user = User.builder().id(id).role(UserEnum.valueOf(role)).build();
+        LoginUser loginUser = new LoginUser(user);
+        return loginUser;
+    }
+}
+```
+- jwt 인증 코드
+```java
+    // post의 /login
+    @Override
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+            throws AuthenticationException {
+
+        log.debug("디버그 : attemptAuthentication 요청됨");
+
+        try {
+            ObjectMapper om = new ObjectMapper();
+            LoginReqDto loginReqDto = om.readValue(request.getInputStream(), LoginReqDto.class);
+
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                    loginReqDto.getUsername(),
+                    loginReqDto.getPassword());
+
+            Authentication authentication = authenticationManager.authenticate(authenticationToken);
+            return authentication;
+        } catch (Exception e) {
+            throw new InternalAuthenticationServiceException(e.getMessage());
+        }
+    }
+
+    @Override
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
+            Authentication authResult) throws IOException, ServletException {
+        log.debug("디버그 : successfulAuthentication 요청됨");
+        // 1. 세션에 있는 UserDetails 가져오기
+        LoginUser loginUser = (LoginUser) authResult.getPrincipal();
+
+        // 2. 세션값으로 토큰 생성
+        String jwtToken = JwtProcess.create(loginUser);
+
+        // 3. 토큰을 헤더에 담기
+        response.addHeader(JwtProperties.HEADER_KEY, jwtToken);
+
+        // 4. 토큰 담아서 성공 응답하기
+        LoginRespDto loginRespDto = new LoginRespDto(loginUser.getUser());
+        CustomResponseUtil.success(response, loginRespDto);
+    }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+            AuthenticationException failed) throws IOException, ServletException {
+        log.debug("디버그 : unsuccessfulAuthentication 요청됨");
+        CustomResponseUtil.fail(response, "로그인 실패");
+    }
+```
+- jwt 인가 코드
+```java
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+
+        // 1. 헤더검증 후 헤더가 있다면 토큰 검증 후 임시 세션 생성
+        if (isHeaderVerify(request, response)) {
+            // 토큰 파싱하기 (Bearer 없애기)
+            String token = request.getHeader(JwtProperties.HEADER_KEY)
+                    .replace(JwtProperties.TOKEN_PREFIX, "");
+            // 토큰 검증
+            LoginUser loginUser = JwtProcess.verify(token);
+
+            // 임시 세션 생성
+            Authentication authentication = new UsernamePasswordAuthenticationToken(loginUser,
+                    null, loginUser.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            log.debug("디버그 : 토큰 검증 완료, 필터탐");
+        }
+
+        // 2. 세션이 있는 경우와 없는 경우로 나뉘어서 컨트롤러로 진입함
+        log.debug("디버그 : 그냥 필터 탐");
+        chain.doFilter(request, response);
+    }
+
+    private boolean isHeaderVerify(HttpServletRequest request, HttpServletResponse response) {
+        String header = request.getHeader(JwtProperties.HEADER_KEY);
+        if (header == null || !header.startsWith(JwtProperties.TOKEN_PREFIX)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+```
+
+#### Base64를 활용한 이미지 변환
+- 파일 decoding 코드
+```java
+	// base64 디코딩
+        // byte[] stringToByte = encodeFile.getBytes(); // 문자열을 바이트로 변환
+        byte[] decodeByte = Base64.decodeBase64(encodeFile);
+
+        // 이미지 이름
+        // String fileName = UUID.randomUUID().toString();
+        String filePath = "C:\\Temp\\upload\\" + decodeByte + ".jpg";
+
+        // 이미지 저장
+        fos = new FileOutputStream(filePath); // 현위치에 path명으로 파일생성
+        fos.write(decodeByte); // 파일에 buffer의 모든 내용 출력
+        fos.close();
+        return filePath;
+```
+
+## :gift: 8. 프로젝트 소감
+> 3번의 프로젝트를 진행하고, 3번의 팀장을 맡아서 다양한 사람들과 협업을 할 수 있었던 기회가 생겨서 아주 좋았습니다. 특히, 최종 프로젝트는 6개월간 우리가 배우면서 다졌던 것들을 전부 쏟아내는 것이였기 때문에 더욱 가치가 있어습니다. 프로젝트를 진행하면서 실제 서비스는 우리가 보이는 것보다 훨씬 복잡하다는 것을 알게되었고 특히 프론트엔드와의 협업은 정말 세심한 대처가 필요하다는 점에 대해서 알게 되었습니다. 저를 끝까지 믿고 4주간 프로젝트를 위해서 고생한 저희 팀원들에게 무한한 감사를 드리고 앞으로 저는 배운 내용을 바탕으로 멋진 개발자가 되겠습니다. ***정수영***
+
+> 이전 프로젝트와는 다르게 파이널 프로젝트에서는 다양한 기능들을 맡게 되면서 기능이 동작할 때, 어떤 과정으로 진행이 되는지 많이 생각해보면서 코드를 작성하였습니다. 이는 기능 구현에 많은 도움이 되었고 앞으로 개발자의 삶에 있어서도 중요한 경험이 되었습니다. 다만 짧은 기간내에 배웠던 개념들을 전부 다 공부하기 쉽지 않아서 해보고 싶던 기능들을 다 구현해보지 못한 점은 아쉽습니다. ***조현나***
+
+> 6개월동안 수업을 들으면서 학교에서 이론으로만 배워서 아쉬웠던 부분을 실무적인 측면에서도 배우게 되고 팀원들과 협업을 하면서 3번의 프로젝트를 하게 되어서 너무 좋았습니다. 
+>
+> 1,2차 프로젝트에서는 백엔드를 맡아서 했지만 이번 최종에서는 프론트를 맡아서 하게 되었는데, java에 비해서 flutter는 생소한 기술이어서 적응에 시간이 오래걸렸습니다. 그래서 뭔가 완벽하게 MVVM패턴을 구현해내지 못한 것이 가장 아쉬움에 남았습니다. *** 이현성 ***
+>
+> flutter로 프론트엔드 쪽을 맡아서 진행을 하였는데, 위젯을 사용하는 부분이 상당히 마음에 들었습니다. 남들에 비해서 저는 습득하고 활용하는 부분이 느려서 고민이 많았는데, 이번 프로젝트를 진행하면서 provider를 통해서 상태관리를 하는 부분에 있어서 어려움이 많아서 제가 맡았던 기능들을 완벽하게 만들진 못한 것 같아서 팀원들에게 미안했습니다. ***정충섭***
